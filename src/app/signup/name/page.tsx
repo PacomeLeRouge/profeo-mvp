@@ -7,7 +7,7 @@ import { useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GraduationCap } from "lucide-react";
-import splashBackground from "../../img/Design a modern UI splash screen for a tutoring platform called “Profeo”._The concept should illustrate connection between students and tutors in an intuitive and minimal way.__Style_ Splash screen for Profeo tutoring app, clear UI layo.png";
+import splashBackground from "../../img/splash.png";
 
 export default function SignupNamePage() {
   const [name, setName] = useState("");
