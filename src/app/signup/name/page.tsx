@@ -27,7 +27,7 @@ export default function SignupNamePage() {
       <div className="relative flex flex-col justify-between overflow-hidden bg-black px-8 py-8 text-white md:px-12 md:py-10 lg:min-h-0">
         <Image
           src={splashBackground}
-          alt="Illustration Profeo"
+          alt="Illustration Clutch"
           fill
           priority
           className="object-cover object-center"
@@ -39,7 +39,7 @@ export default function SignupNamePage() {
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
             <GraduationCap className="h-6 w-6" />
           </div>
-          <span>Profeo</span>
+          <span>Clutch</span>
         </div>
 
         <div className="relative z-10 max-w-2xl space-y-8 py-10 lg:py-0">
@@ -51,7 +51,7 @@ export default function SignupNamePage() {
               Commencez simplement.
             </h1>
             <p className="max-w-xl text-lg leading-8 text-white/72 md:text-xl">
-              Quelques informations suffisent pour configurer votre profil et démarrer sur Profeo.
+              Quelques informations suffisent pour configurer votre profil et démarrer sur Clutch.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 text-sm text-white/78">
@@ -65,7 +65,7 @@ export default function SignupNamePage() {
 
       <div className="flex min-h-screen flex-col justify-between bg-black px-8 py-6 pb-8 text-white md:px-12 md:py-8 md:pb-10 lg:min-h-0 lg:py-6 lg:pb-8">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold tracking-tight lg:hidden">profeo</div>
+          <div className="text-2xl font-bold tracking-tight lg:hidden">clutch</div>
         </div>
 
         <div className="flex flex-1 items-center justify-center py-6 md:py-8 lg:py-6">

@@ -1,4 +1,4 @@
-# Profeo MVP
+# Clutch MVP
 
 Plateforme de mise en relation entre étudiants et tuteurs pour des cours particuliers.
 
@@ -66,4 +66,4 @@ src/
 
 ---
 
-Projet développé dans le cadre du MVP Profeo.
+Projet développé dans le cadre du MVP Clutch.

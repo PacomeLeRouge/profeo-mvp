@@ -30,7 +30,7 @@ export function Navbar() {
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-black text-white">
                 <GraduationCap className="h-5 w-5" />
               </div>
-              <span className="block text-2xl font-bold leading-none text-black">Profeo</span>
+              <span className="block text-2xl font-bold leading-none text-black">Clutch</span>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">

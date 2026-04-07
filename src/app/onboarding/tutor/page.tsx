@@ -128,7 +128,7 @@ function TutorOnboardingContent() {
           onClick={() => router.push(isEditing ? `/dashboard/${user.role}` : roleSelectionHref)}
           className="text-2xl font-bold tracking-tight"
         >
-          profeo
+          clutch
         </button>
         <span className="text-sm font-medium text-black/50">
           {isEditing ? "Modification du profil" : `Étape ${step} sur ${totalSteps}`}

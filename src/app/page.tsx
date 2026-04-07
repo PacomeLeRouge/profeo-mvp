@@ -38,7 +38,7 @@ export default function Home() {
       <div className="relative flex flex-col justify-between overflow-hidden bg-black px-8 py-8 text-white md:px-12 md:py-10">
         <Image
           src={splashBackground}
-          alt="Illustration Profeo"
+          alt="Illustration Clutch"
           fill
           priority
           className="object-cover object-center"
@@ -50,7 +50,7 @@ export default function Home() {
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
             <GraduationCap className="h-6 w-6" />
           </div>
-          <span>Profeo</span>
+          <span>Clutch</span>
         </div>
 
         <div className="relative z-10 max-w-2xl space-y-8 py-10 lg:py-0">
@@ -75,7 +75,7 @@ export default function Home() {
 
       <div className="flex min-h-screen flex-col justify-between bg-black px-8 py-8 text-white md:px-12 md:py-10">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold tracking-tight lg:hidden">profeo</div>
+          <div className="text-2xl font-bold tracking-tight lg:hidden">clutch</div>
           <span className="text-sm font-medium text-white/40">Connexion sécurisée</span>
         </div>
 

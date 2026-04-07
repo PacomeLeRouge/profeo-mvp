@@ -35,7 +35,7 @@ function RoleSelectionContent() {
           onClick={() => router.push(backHref)}
           className="text-2xl font-bold tracking-tight"
         >
-          profeo
+          clutch
         </button>
       </div>
 
@@ -56,11 +56,11 @@ function RoleSelectionContent() {
                   <ArrowLeft className="h-6 w-6 md:h-7 md:w-7" />
                 </button>
                 <h1 className="text-4xl font-semibold leading-tight tracking-tight md:text-6xl xl:text-[4.5rem]">
-                  Comment allez-vous utiliser Profeo ?
+                  Comment allez-vous utiliser Clutch ?
                 </h1>
               </div>
               <p className="mx-auto max-w-2xl text-lg leading-7 text-black/50 md:leading-8">
-                Choisissez le parcours qui correspond à votre besoin. Profeo adaptera ensuite les prochaines questions pour aller à l&apos;essentiel.
+                Choisissez le parcours qui correspond à votre besoin. Clutch adaptera ensuite les prochaines questions pour aller à l&apos;essentiel.
               </p>
             </div>
 
