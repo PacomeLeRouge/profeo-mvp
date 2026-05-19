@@ -124,7 +124,7 @@ export function AnimatedNumberField({
         className={cn(
           "rounded-[2rem] border bg-muted px-6 py-8 transition-shadow duration-300 sm:px-8 sm:py-10",
           isFocused
-            ? "border-black/20 shadow-[0_24px_60px_-32px_rgba(0,0,0,0.18)]"
+            ? "border-primary/25 shadow-[0_24px_60px_-32px_rgba(143,73,30,0.15)]"
             : "border-border"
         )}
       >
@@ -138,7 +138,7 @@ export function AnimatedNumberField({
             aria-label={`Diminuer ${label.toLowerCase()}`}
             disabled={isValidNumber && numericValue <= min}
             onClick={(e) => applyDelta(-step, e.currentTarget)}
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:border-black/20 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-30 sm:h-16 sm:w-16"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:border-primary/30 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-30 sm:h-16 sm:w-16"
           >
             <Minus className="h-5 w-5" strokeWidth={2.25} />
           </button>

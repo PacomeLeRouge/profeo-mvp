@@ -33,7 +33,7 @@ export function HomeSignIn() {
                 Tutorat entre étudiants
               </p>
               <div className="space-y-5">
-                <h1 className="text-4xl font-semibold leading-[0.95] tracking-tight sm:text-5xl md:text-6xl xl:text-7xl">
+                <h1 className="font-display text-4xl font-bold leading-[0.95] tracking-tight sm:text-5xl md:text-6xl xl:text-7xl">
                   Le bon tuteur,
                   <br />
                   au bon moment.
@@ -77,7 +77,7 @@ export function HomeSignIn() {
                 <p className="text-sm uppercase tracking-[0.25em] text-white/45">
                   Connexion
                 </p>
-                <h2 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.05]">
+                <h2 className="font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.05]">
                   Bon retour sur Clutch.
                 </h2>
                 <p className="text-base leading-7 text-white/60 md:text-lg">

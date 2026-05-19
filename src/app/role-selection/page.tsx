@@ -37,7 +37,7 @@ function RoleSelectionContent() {
         <button
           type="button"
           onClick={() => router.push(backHref)}
-          className="text-2xl font-bold tracking-tight"
+          className="font-display text-2xl font-bold tracking-tight"
         >
           clutch
         </button>
@@ -47,7 +47,7 @@ function RoleSelectionContent() {
         <div className="flex flex-1 flex-col items-center justify-center text-center">
           <div className="w-full max-w-6xl space-y-6 md:space-y-8">
             <div className="mx-auto max-w-3xl space-y-4">
-              <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">
+              <p className="text-eyebrow text-muted-foreground">
                 {isSignupFlow ? "Création de compte" : "Choix du profil"}
               </p>
               <div className="flex items-start justify-center gap-3 text-left md:-ml-10 md:gap-4">
@@ -59,7 +59,7 @@ function RoleSelectionContent() {
                 >
                   <ArrowLeft className="h-6 w-6 md:h-7 md:w-7" />
                 </button>
-                <h1 className="text-4xl font-semibold leading-tight tracking-tight md:text-6xl xl:text-[4.5rem]">
+                <h1 className="font-display text-4xl font-bold leading-tight tracking-tight md:text-6xl xl:text-[4.5rem]">
                   Comment allez-vous utiliser Clutch ?
                 </h1>
               </div>
@@ -72,7 +72,7 @@ function RoleSelectionContent() {
               <button
                 type="button"
                 onClick={() => handleSelectRole("student")}
-                className="group flex min-h-[260px] flex-col rounded-[2rem] border border-border bg-white p-6 text-left transition-all hover:border-primary/30 hover:bg-muted hover:shadow-[0_24px_80px_-48px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-4 md:min-h-[300px] md:p-8"
+                className="group flex min-h-[260px] flex-col rounded-[2rem] border border-border bg-card p-6 text-left transition-all hover:border-primary/30 hover:bg-muted hover:shadow-[0_24px_80px_-48px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-4 md:min-h-[300px] md:p-8"
               >
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white md:mb-10 md:h-16 md:w-16">
                   <BookOpen className="h-6 w-6" />
@@ -94,7 +94,7 @@ function RoleSelectionContent() {
               <button
                 type="button"
                 onClick={() => handleSelectRole("tutor")}
-                className="group flex min-h-[260px] flex-col rounded-[2rem] border border-border bg-white p-6 text-left transition-all hover:border-primary/30 hover:bg-muted hover:shadow-[0_24px_80px_-48px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-4 md:min-h-[300px] md:p-8"
+                className="group flex min-h-[260px] flex-col rounded-[2rem] border border-border bg-card p-6 text-left transition-all hover:border-primary/30 hover:bg-muted hover:shadow-[0_24px_80px_-48px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-4 md:min-h-[300px] md:p-8"
               >
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white md:mb-10 md:h-16 md:w-16">
                   <GraduationCap className="h-6 w-6" />

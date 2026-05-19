@@ -26,7 +26,7 @@ export default function DevHubPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white px-6 py-16 text-foreground md:px-12">
+    <div className="min-h-screen bg-card px-6 py-16 text-foreground md:px-12">
       <div className="mx-auto max-w-3xl space-y-10">
         <div className="space-y-3">
           <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">Développement local</p>

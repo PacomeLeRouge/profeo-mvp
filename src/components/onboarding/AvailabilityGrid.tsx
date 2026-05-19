@@ -69,13 +69,13 @@ export function AvailabilityGrid({ selectedSlots, onToggle, stepKey }: Availabil
                   onClick={(e) => handleToggle(day, time, e.currentTarget)}
                   className={cn(
                     "border-r border-border px-2 py-3 transition-colors duration-200 last:border-r-0",
-                    isSelected ? "bg-primary/90" : "bg-white hover:bg-muted"
+                    isSelected ? "bg-primary/90" : "bg-card hover:bg-muted"
                   )}
                 >
                   <div
                     className={cn(
                       "h-12 rounded-2xl transition-all duration-200",
-                      isSelected ? "bg-white/15 shadow-inner" : "bg-transparent"
+                      isSelected ? "bg-card/15 shadow-inner" : "bg-transparent"
                     )}
                   />
                 </button>

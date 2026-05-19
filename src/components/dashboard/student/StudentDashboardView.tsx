@@ -134,7 +134,7 @@ export function StudentDashboardView({
           {onEditProfile ? (
             <Button
               variant="outline"
-              className="rounded-full border-border bg-white"
+              className="rounded-full border-border bg-card"
               onClick={onEditProfile}
             >
               Modifier mon profil
@@ -162,7 +162,7 @@ export function StudentDashboardView({
         <section className="space-y-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-xl font-semibold tracking-tight">Tuteurs disponibles</h2>
-            <span className="inline-flex w-fit items-center rounded-full border border-border bg-white px-3 py-1.5 text-sm font-medium text-foreground/65">
+            <span className="inline-flex w-fit items-center rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground/65">
               {filteredTutors.length} résultat{filteredTutors.length > 1 ? "s" : ""}
             </span>
           </div>
@@ -202,7 +202,7 @@ function StatCard({
   return (
     <div
       data-dashboard-stat
-      className="rounded-2xl border border-border bg-white px-5 py-4 shadow-sm"
+      className="rounded-2xl border border-border bg-card px-5 py-4 shadow-sm"
     >
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted">

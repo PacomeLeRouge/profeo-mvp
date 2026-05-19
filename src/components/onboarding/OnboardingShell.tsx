@@ -83,7 +83,7 @@ export function OnboardingShell({
         <button
           type="button"
           onClick={() => router.push(brandHref)}
-          className="text-2xl font-bold tracking-tight transition-opacity hover:opacity-70"
+          className="font-display text-2xl font-bold tracking-tight transition-opacity hover:opacity-70"
         >
           clutch
         </button>

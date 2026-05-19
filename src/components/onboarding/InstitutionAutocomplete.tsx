@@ -170,7 +170,7 @@ export function InstitutionAutocomplete({
               ref={listRef}
               id={listId}
               role="listbox"
-              className="absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto rounded-3xl border border-border bg-white py-2 text-left shadow-[0_24px_60px_-32px_rgba(0,0,0,0.35)]"
+              className="absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto rounded-3xl border border-border bg-card py-2 text-left shadow-[0_24px_60px_-32px_rgba(0,0,0,0.35)]"
             >
               {suggestions.map((university) => (
                 <li key={`${university.name}-${university.city}`} role="option">

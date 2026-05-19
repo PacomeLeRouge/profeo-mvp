@@ -32,7 +32,7 @@ export function Navbar() {
   const role = user?.role;
 
   return (
-    <nav className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+    <nav className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex min-h-16 flex-col justify-center gap-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-0">
           <div className="flex min-w-0 flex-1 items-center justify-between gap-3 sm:justify-start">
@@ -46,11 +46,11 @@ export function Navbar() {
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
                 <GraduationCap className="h-5 w-5" />
               </div>
-              <span className="block text-2xl font-bold leading-none text-foreground">Clutch</span>
+              <span className="font-display block text-2xl font-bold leading-none text-foreground">Clutch</span>
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <div className="inline-flex max-w-full items-center rounded-full border border-border bg-white px-3 py-2 text-sm text-muted-foreground shadow-sm">
+            <div className="inline-flex max-w-full items-center rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground shadow-sm">
               <span className="truncate font-medium text-foreground">{displayName}</span>
             </div>
             <Button variant="outline" size="sm" className="rounded-full" onClick={handleLogout}>

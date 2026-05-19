@@ -51,7 +51,7 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
   return (
     <article
       ref={cardRef}
-      className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-[0_24px_60px_-36px_rgba(0,0,0,0.25)]"
+      className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_24px_60px_-36px_rgba(143,73,30,0.12)]"
     >
       <div className="border-b border-border p-5">
         <div className="flex items-start justify-between gap-3">
@@ -115,7 +115,7 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
             {visibleSlots.map((slot) => (
               <span
                 key={`${tutor.id}-${slot}`}
-                className="rounded-full border border-border bg-white px-2.5 py-1 text-xs text-foreground/65"
+                className="rounded-full border border-border bg-card px-2.5 py-1 text-xs text-foreground/65"
               >
                 {slot}
               </span>

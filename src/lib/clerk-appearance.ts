@@ -42,7 +42,7 @@ export const clerkAppearanceDark = {
     formFieldInput__input:
       "h-14! bg-transparent! border-0! rounded-none! px-0! text-left! text-lg! font-medium! text-white! shadow-none! placeholder:text-white/22! focus:ring-0! focus:outline-none!",
     formButtonPrimary:
-      "mt-1! h-12! w-full! rounded-full! bg-white! text-[15px]! font-semibold! text-foreground! shadow-none! hover:bg-white/90!",
+      "mt-1! h-12! w-full! rounded-full! bg-white! text-[15px]! font-semibold! text-black! shadow-none! hover:bg-white/90!",
     formButtonReset: "text-white/60 hover:text-white",
     footer: "hidden",
     footerAction: "hidden",

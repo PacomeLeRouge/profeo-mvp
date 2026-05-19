@@ -70,7 +70,7 @@ export function AnimatedTextarea({
       </p>
       <div
         ref={borderRef}
-        className="overflow-hidden rounded-[2rem] border border-border bg-white will-change-transform"
+        className="overflow-hidden rounded-[2rem] border border-border bg-card will-change-transform"
         style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.08)" }}
       >
         <textarea

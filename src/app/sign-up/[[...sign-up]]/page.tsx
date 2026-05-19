@@ -6,10 +6,10 @@ import splashBackground from "../../img/splash.png";
 
 export default function SignUpPage() {
   return (
-    <motion.div className="grid min-h-screen bg-background text-foreground lg:grid-cols-[1.05fr_0.95fr]">
+    <div className="grid min-h-screen bg-background text-foreground lg:grid-cols-[1.05fr_0.95fr]">
       <SplashPanel />
       <div className="flex min-h-screen flex-col bg-background px-6 py-8 sm:px-8 md:px-12 md:py-10">
-        <motion.div className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div className="font-display text-2xl font-bold tracking-tight lg:hidden">clutch</div>
           <Link
             href="/"
@@ -55,7 +55,7 @@ function SplashPanel() {
         priority
         className="object-cover object-center opacity-90"
       />
-      <motion.div className="absolute inset-0 bg-background/55" />
+      <div className="absolute inset-0 bg-background/55" />
       <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/30 to-background/70" />
       <div className="relative z-10 flex items-center gap-3 font-display text-3xl font-bold tracking-tight">
         <div className="glass-panel flex h-12 w-12 items-center justify-center rounded-2xl">

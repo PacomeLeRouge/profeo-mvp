@@ -41,7 +41,7 @@ export function RequestList({ requests }: RequestListProps) {
         {requests.map((request) => (
           <article
             key={request.id}
-            className="flex flex-col gap-4 rounded-[1.25rem] border border-border bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-4 rounded-[1.25rem] border border-border bg-card p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="space-y-1">
               <p className="font-medium text-foreground">{request.tutorName}</p>
