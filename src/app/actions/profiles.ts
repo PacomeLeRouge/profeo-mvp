@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { studentProfiles, tutorProfiles, users } from "@/db/schema";
 import { ensureDbUser, requireAuthUserId } from "@/lib/auth";
+import { listPublishedTutorProfiles } from "@/lib/data/dashboard";
 import { mapStudentProfile, mapTutorProfile } from "@/lib/mappers";
 import { assertValidSubjects } from "@/lib/subjects";
 import type { Format, Subject } from "@/lib/types";
@@ -26,10 +27,8 @@ export async function getTutorProfileAction() {
 }
 
 export async function listTutorProfilesAction() {
-  const rows = await db.query.tutorProfiles.findMany({
-    orderBy: (t, { desc }) => [desc(t.createdAt)],
-  });
-  return rows.map(mapTutorProfile);
+  await requireAuthUserId();
+  return listPublishedTutorProfiles();
 }
 
 export async function saveStudentProfileAction(data: {
