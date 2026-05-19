@@ -18,9 +18,11 @@ function TutorOnboardingContent() {
   return (
     <TutorOnboardingFlow
       exitHref={tutorProfile ? `/dashboard/${user.role}` : roleSelectionHref}
+      initialFirstName={user.name}
       initialProfile={tutorProfile}
       onSubmit={async (data) => {
         await saveTutorProfileAction(data);
+        router.refresh();
         router.push("/dashboard/tutor");
       }}
     />

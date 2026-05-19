@@ -4,7 +4,7 @@
   --clerk-border-radius: 0;
   --clerk-color-background: transparent;
   --clerk-color-input: transparent;
-  --clerk-color-primary: #ffffff;
+  --clerk-color-primary: #ccff00;
   --clerk-color-primary-foreground: #000000;
   --clerk-color-foreground: #ffffff;
   --clerk-color-muted-foreground: rgba(255, 255, 255, 0.55);
@@ -216,7 +216,7 @@
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #54433b;
+  color: rgb(143 138 130);
   margin-bottom: 0.25rem;
 }
 
@@ -227,7 +227,7 @@
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #54433b;
+  color: rgb(143 138 130);
   margin-bottom: 0.125rem;
 }
 

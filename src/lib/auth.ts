@@ -4,6 +4,36 @@ import { db } from "@/db";
 import { studentProfiles, tutorProfiles, users } from "@/db/schema";
 import type { Role } from "@/lib/types";
 
+/** Nom affiché à partir de Clerk (prénom prioritaire, avant onboarding complet). */
+export function resolveClerkDisplayName(input: {
+  firstName?: string | null;
+  lastName?: string | null;
+  username?: string | null;
+  email?: string;
+}) {
+  const first = input.firstName?.trim();
+  if (first) return first;
+
+  const full = [input.firstName, input.lastName].filter(Boolean).join(" ").trim();
+  if (full) return full;
+
+  if (input.username?.trim()) return input.username.trim();
+  if (input.email) {
+    const local = input.email.split("@")[0]?.trim();
+    if (local) return local;
+  }
+  return "Utilisateur";
+}
+
+export async function syncClerkFirstName(userId: string, firstName: string) {
+  const trimmed = firstName.trim();
+  if (!trimmed) return;
+
+  const { clerkClient } = await import("@clerk/nextjs/server");
+  const clerk = await clerkClient();
+  await clerk.users.updateUser(userId, { firstName: trimmed });
+}
+
 export async function requireAuthUserId() {
   const { userId } = await auth();
   if (!userId) {
@@ -30,11 +60,12 @@ export async function ensureDbUser() {
     clerkUser.emailAddresses[0]?.emailAddress ??
     "";
 
-  const name =
-    [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ").trim() ||
-    clerkUser.username ||
-    email.split("@")[0] ||
-    "Utilisateur";
+  const name = resolveClerkDisplayName({
+    firstName: clerkUser.firstName,
+    lastName: clerkUser.lastName,
+    username: clerkUser.username,
+    email,
+  });
 
   const [created] = await db
     .insert(users)

@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { Subject, Format, TutorProfile } from "@/lib/types";
 import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
 import { OnboardingStepPanel } from "@/components/onboarding/OnboardingStepPanel";
-import { AnimatedTitle } from "@/components/onboarding/AnimatedTitle";
+import { OnboardingStepTitle } from "@/components/onboarding/OnboardingStepTitle";
 import { AnimatedNumberField } from "@/components/onboarding/AnimatedNumberField";
+import { AnimatedTextField } from "@/components/onboarding/AnimatedTextField";
 import { InstitutionAutocomplete } from "@/components/onboarding/InstitutionAutocomplete";
 import { ChoiceChipGroup } from "@/components/onboarding/ChoiceChip";
 import { AvailabilityGrid } from "@/components/onboarding/AvailabilityGrid";
@@ -14,14 +15,19 @@ import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
 import { SUBJECTS, subjectTranslations } from "@/lib/subjects";
 import { tutorEducationLevels } from "@/components/onboarding/onboarding-shared";
 import { Button } from "@/components/ui/button";
+import { onboardingThemeClass } from "@/lib/onboarding-theme";
+import { getOnboardingSymbol, getOnboardingSymbolAlt } from "@/lib/onboarding-symbols";
+import { cn } from "@/lib/utils";
 
-const totalSteps = 7;
+const totalSteps = 8;
 
 type TutorOnboardingFlowProps = {
   preview?: boolean;
   exitHref: string;
+  initialFirstName?: string;
   initialProfile?: TutorProfile | null;
   onSubmit: (data: {
+    firstName: string;
     age?: number;
     subjects: Subject[];
     hourlyRate: number;
@@ -36,6 +42,7 @@ type TutorOnboardingFlowProps = {
 export function TutorOnboardingFlow({
   preview = false,
   exitHref,
+  initialFirstName = "",
   initialProfile = null,
   onSubmit,
 }: TutorOnboardingFlowProps) {
@@ -45,6 +52,7 @@ export function TutorOnboardingFlow({
 
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [firstName, setFirstName] = useState(initialFirstName || initialProfile?.name || "");
   const [age, setAge] = useState(initialProfile?.age ? String(initialProfile.age) : "");
   const [educationLevel, setEducationLevel] = useState(initialProfile?.educationLevel || "");
   const [institution, setInstitution] = useState(initialProfile?.institution || "");
@@ -98,6 +106,7 @@ export function TutorOnboardingFlow({
       selectedSlots.length > 0 ? selectedSlots.join(" • ") : "Non précisé";
 
     await onSubmit({
+      firstName: firstName.trim(),
       age: age ? Number(age) : undefined,
       subjects,
       hourlyRate: Number(hourlyRate),
@@ -116,6 +125,7 @@ export function TutorOnboardingFlow({
   const handleRestartPreview = () => {
     setCompleted(false);
     setStep(1);
+    setFirstName(initialFirstName || initialProfile?.name || "");
     setAge("");
     setEducationLevel("");
     setInstitution("");
@@ -127,17 +137,18 @@ export function TutorOnboardingFlow({
   };
 
   const canContinue =
-    (step === 1 && !!age) ||
-    (step === 2 && !!educationLevel) ||
-    (step === 3 && !!institution.trim()) ||
-    (step === 4 && subjects.length > 0) ||
-    (step === 5 && !!hourlyRate) ||
-    (step === 6 && !!format) ||
-    (step === 7 && selectedSlots.length > 0);
+    (step === 1 && firstName.trim().length >= 2) ||
+    (step === 2 && !!age) ||
+    (step === 3 && !!educationLevel) ||
+    (step === 4 && !!institution.trim()) ||
+    (step === 5 && subjects.length > 0) ||
+    (step === 6 && !!hourlyRate) ||
+    (step === 7 && !!format) ||
+    (step === 8 && selectedSlots.length > 0);
 
   if (completed) {
     return (
-      <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <div className={cn(onboardingThemeClass, "flex min-h-screen flex-col")}>
         <DevPreviewBanner />
         <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
           <div className="max-w-lg space-y-6">
@@ -163,19 +174,20 @@ export function TutorOnboardingFlow({
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className={cn(onboardingThemeClass, "flex min-h-screen flex-col")}>
       {preview ? <DevPreviewBanner /> : null}
       <OnboardingShell
-        brandHref={exitHref}
-        headerLabel={
+        step={step}
+        totalSteps={totalSteps}
+        symbolSrc={getOnboardingSymbol("tutor", step)}
+        symbolAlt={getOnboardingSymbolAlt("tutor", step)}
+        stepLabel={
           preview
             ? `Preview · Étape ${step} sur ${totalSteps}`
             : isEditing
               ? "Modification du profil"
-              : `Étape ${step} sur ${totalSteps}`
+              : undefined
         }
-        step={step}
-        totalSteps={totalSteps}
         canContinue={canContinue}
         isLastStep={step === totalSteps}
         isEditing={isEditing}
@@ -187,7 +199,27 @@ export function TutorOnboardingFlow({
       >
         {step === 1 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle stepKey={step} eyebrow="Profil tuteur" title="Quel âge avez-vous ?" />
+            <OnboardingStepTitle
+              step={step}
+              eyebrow="Profil tuteur"
+              title="Comment vous appelez-vous ?"
+              subtitle="Votre prénom sera affiché sur votre profil public."
+            />
+            <AnimatedTextField
+              label="Votre prénom"
+              placeholder="Sam"
+              value={firstName}
+              onChange={setFirstName}
+              hint="Au moins 2 caractères."
+              aria-label="Votre prénom"
+            />
+          </OnboardingStepPanel>
+        )}
+
+        {step === 2 && (
+          <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
+            <OnboardingStepTitle
+              step={step} eyebrow="Profil tuteur" title="Quel âge avez-vous ?" />
             <AnimatedNumberField
               label="Votre âge"
               placeholder="22"
@@ -202,10 +234,10 @@ export function TutorOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle
-              stepKey={step}
+            <OnboardingStepTitle
+              step={step}
               eyebrow="Profil tuteur"
               title="Quel est votre niveau d'études ?"
             />
@@ -218,10 +250,10 @@ export function TutorOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle
-              stepKey={step}
+            <OnboardingStepTitle
+              step={step}
               eyebrow="Profil tuteur"
               title="Dans quel établissement étudiez-vous ?"
             />
@@ -233,10 +265,10 @@ export function TutorOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 4 && (
+        {step === 5 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle
-              stepKey={step}
+            <OnboardingStepTitle
+              step={step}
               eyebrow="Profil tuteur"
               title="Quelles matières souhaitez-vous enseigner ?"
             />
@@ -253,10 +285,10 @@ export function TutorOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 5 && (
+        {step === 6 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle
-              stepKey={step}
+            <OnboardingStepTitle
+              step={step}
               eyebrow="Profil tuteur"
               title="Quel tarif horaire souhaitez-vous ?"
             />
@@ -276,10 +308,10 @@ export function TutorOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 6 && (
+        {step === 7 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle
-              stepKey={step}
+            <OnboardingStepTitle
+              step={step}
               eyebrow="Profil tuteur"
               title="Sous quel format souhaitez-vous enseigner ?"
             />
@@ -296,10 +328,10 @@ export function TutorOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 7 && (
+        {step === 8 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle
-              stepKey={step}
+            <OnboardingStepTitle
+              step={step}
               eyebrow="Profil tuteur"
               title="Quand êtes-vous généralement disponible ?"
               subtitle="Sélectionnez un ou plusieurs créneaux habituels."
@@ -308,6 +340,7 @@ export function TutorOnboardingFlow({
               stepKey={step}
               selectedSlots={selectedSlots}
               onToggle={handleSlotToggle}
+              onSetSlots={setSelectedSlots}
             />
           </OnboardingStepPanel>
         )}

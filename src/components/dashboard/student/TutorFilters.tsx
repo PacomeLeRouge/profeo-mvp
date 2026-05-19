@@ -41,7 +41,7 @@ export function TutorFilters({
   activeFiltersCount,
 }: TutorFiltersProps) {
   return (
-    <section className="rounded-[1.75rem] border border-border bg-card p-6 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.15)] sm:p-7">
+    <section className="rounded-[1.75rem] border border-border bg-card/85 p-6 shadow-sm backdrop-blur-md sm:p-7">
       <div className="flex flex-col gap-4 border-b border-border pb-5 md:flex-row md:items-end md:justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
@@ -75,7 +75,7 @@ export function TutorFilters({
                 "rounded-full border px-4 py-2 text-sm transition-colors",
                 subjectFilter === "All"
                   ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-background text-foreground/75 hover:border-primary/30"
+                  : "border-border bg-muted text-muted-foreground hover:border-primary/40 hover:text-foreground"
               )}
             >
               Toutes
@@ -89,7 +89,7 @@ export function TutorFilters({
                   "rounded-full border px-4 py-2 text-sm transition-colors",
                   subjectFilter === subject
                     ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-background text-foreground/75 hover:border-primary/30"
+                    : "border-border bg-muted text-muted-foreground hover:border-primary/40 hover:text-foreground"
                 )}
               >
                 {subjectTranslations[subject]}

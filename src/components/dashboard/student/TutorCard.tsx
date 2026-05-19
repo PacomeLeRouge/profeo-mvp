@@ -51,12 +51,12 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
   return (
     <article
       ref={cardRef}
-      className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_24px_60px_-36px_rgba(143,73,30,0.12)]"
+      className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-card/85 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_24px_60px_-36px_rgba(204,255,0,0.12)]"
     >
       <div className="border-b border-border p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-semibold text-white">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-semibold text-primary-foreground">
               {getInitials(tutor.name)}
             </div>
             <div className="min-w-0 space-y-1">
@@ -69,7 +69,7 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
               </p>
             </div>
           </div>
-          <div className="rounded-full bg-primary px-3 py-1.5 text-sm font-semibold text-white whitespace-nowrap">
+          <div className="rounded-full bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground whitespace-nowrap">
             {tutor.hourlyRate}€/h
           </div>
         </div>

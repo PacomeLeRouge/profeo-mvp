@@ -10,7 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:seed": "tsx scripts/seed.ts"
+    "db:seed": "tsx scripts/seed.ts",
+    "symbols:remove-bg": "python3 scripts/remove-symbol-backgrounds.py"
   },
   "dependencies": {
     "@clerk/localizations": "^4.6.6",

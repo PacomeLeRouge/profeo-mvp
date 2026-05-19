@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-plus-jakarta), var(--font-sans);
   --font-mono: ui-monospace, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
@@ -42,6 +42,9 @@
   --color-card: var(--card);
   --color-tertiary-foreground: var(--tertiary-foreground);
   --color-tertiary: var(--tertiary);
+  --color-text-accent: var(--text-accent);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
@@ -51,7 +54,13 @@
   --radius-4xl: var(--radius-xl);
 }
 
-/* Vivid Noir design system */
+/*
+ * Color roles
+ * - foreground / muted-foreground: body & secondary text
+ * - primary + primary-foreground: filled UI (buttons, selected cells) — never lime text on light surfaces
+ * - text-accent: links & emphasis on the current surface (lime on dark, olive on light)
+ */
+/* Default: bright sable (onboarding-style) */
 :root {
   --radius-sm: 0.5rem;
   --radius: 1rem;
@@ -59,42 +68,94 @@
   --radius-lg: 2rem;
   --radius-xl: 3rem;
 
-  --background: #fcf8f8;
-  --foreground: #1c1b1b;
-  --card: #ffffff;
-  --card-foreground: #1c1b1b;
-  --popover: #ffffff;
-  --popover-foreground: #1c1b1b;
-  --primary: #8f491e;
-  --primary-foreground: #ffffff;
-  --secondary: #6b38d4;
-  --secondary-foreground: #ffffff;
-  --muted: #f0edec;
-  --muted-foreground: #54433b;
-  --accent: #ebe7e7;
-  --accent-foreground: #1c1b1b;
-  --destructive: #ba1a1a;
+  --text-accent: #4a5a00;
+
+  --background: #e8e2d6;
+  --foreground: #1a1a1a;
+  --card: #f7f3ec;
+  --card-foreground: #1a1a1a;
+  --popover: #faf7f2;
+  --popover-foreground: #1a1a1a;
+  --primary: #ccff00;
+  --primary-foreground: #000000;
+  --secondary: #ebe4d8;
+  --secondary-foreground: #1a1a1a;
+  --muted: #ddd6cb;
+  --muted-foreground: #5c564e;
+  --accent: #e2dace;
+  --accent-foreground: #1a1a1a;
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #d9c2b7;
-  --input: #d9c2b7;
-  --ring: #8f491e;
-  --tertiary: #436600;
-  --tertiary-foreground: #ffffff;
+  --border: #cfc6b8;
+  --input: #cfc6b8;
+  --ring: #9eb800;
+  --tertiary: #ccff00;
+  --tertiary-foreground: #000000;
 
-  --chart-1: #8f491e;
-  --chart-2: #6b38d4;
-  --chart-3: #436600;
-  --chart-4: #ad6134;
-  --chart-5: #8455ef;
+  --highlight: #6d5ce7;
+  --highlight-foreground: #ffffff;
+  --text-highlight: #4f3fb8;
 
-  --sidebar: #f6f3f2;
-  --sidebar-foreground: #1c1b1b;
-  --sidebar-primary: #8f491e;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f0edec;
-  --sidebar-accent-foreground: #1c1b1b;
-  --sidebar-border: #d9c2b7;
-  --sidebar-ring: #8f491e;
+  --chart-1: #9eb800;
+  --chart-2: #ccff00;
+  --chart-3: #6b8f00;
+  --chart-4: #1a1a1a;
+  --chart-5: #8f8a82;
+
+  --sidebar: #e8e2d6;
+  --sidebar-foreground: #1a1a1a;
+  --sidebar-primary: #ccff00;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #ebe4d8;
+  --sidebar-accent-foreground: #1a1a1a;
+  --sidebar-border: #cfc6b8;
+  --sidebar-ring: #9eb800;
+}
+
+/* Neon Noir — toggled via .dark on <html> */
+.dark {
+  --text-accent: #ccff00;
+
+  --background: #0a0a0a;
+  --foreground: #e8e2d6;
+  --card: #141414;
+  --card-foreground: #e8e2d6;
+  --popover: #171717;
+  --popover-foreground: #e8e2d6;
+  --primary: #ccff00;
+  --primary-foreground: #000000;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #e8e2d6;
+  --muted: #1a1a1a;
+  --muted-foreground: #8f8a82;
+  --accent: #222222;
+  --accent-foreground: #e8e2d6;
+  --destructive: #ff4d4d;
+  --destructive-foreground: #000000;
+  --border: #2a2a2a;
+  --input: #2a2a2a;
+  --ring: #ccff00;
+  --tertiary: #ccff00;
+  --tertiary-foreground: #000000;
+
+  --highlight: #9b8afb;
+  --highlight-foreground: #0a0a0a;
+  --text-highlight: #c4b5fd;
+
+  --chart-1: #ccff00;
+  --chart-2: #a8d400;
+  --chart-3: #6b8f00;
+  --chart-4: #e8e2d6;
+  --chart-5: #4d4d4d;
+
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #e8e2d6;
+  --sidebar-primary: #ccff00;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1a1a1a;
+  --sidebar-accent-foreground: #e8e2d6;
+  --sidebar-border: #2a2a2a;
+  --sidebar-ring: #ccff00;
 }
 
 @layer base {
@@ -112,6 +173,7 @@
   h6 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+    color: var(--foreground);
   }
 }
 
@@ -138,8 +200,51 @@
   }
 
   .glass-panel {
-    background: rgb(255 255 255 / 72%);
+    background: rgb(255 255 255 / 55%);
     backdrop-filter: blur(24px);
-    border: 1px solid rgb(217 194 183 / 60%);
+    border: 1px solid rgb(0 0 0 / 6%);
+  }
+
+  .dark .glass-panel {
+    background: rgb(255 255 255 / 3%);
+    border: 1px solid rgb(255 255 255 / 8%);
+  }
+
+  .glow-lime {
+    box-shadow: 0 0 40px -12px rgb(204 255 0 / 35%);
+  }
+
+  .text-accent {
+    color: var(--text-accent);
+  }
+
+  .text-highlight {
+    color: var(--text-highlight);
+  }
+
+  .surface-brand-tint {
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+    color: var(--foreground);
+  }
+
+  .surface-brand-tint-partial {
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--foreground);
+  }
+
+  .app-surface,
+  .onboarding-surface {
+    background-color: #e8e2d6;
+    background-image:
+      radial-gradient(ellipse 120% 85% at 50% -15%, rgb(255 255 255 / 60%) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 50% at 100% 100%, rgb(204 255 0 / 10%) 0%, transparent 45%),
+      linear-gradient(168deg, #f4ede4 0%, #e8e2d6 48%, #ddd4c6 100%);
+    color: var(--foreground);
+  }
+
+  .dark .app-surface,
+  .dark .onboarding-surface {
+    background-color: var(--background);
+    background-image: none;
   }
 }

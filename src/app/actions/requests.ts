@@ -60,7 +60,7 @@ export async function createLessonRequestAction(data: {
     .values({
       studentUserId: userId,
       tutorProfileId: data.tutorProfileId,
-      tutorName: data.tutorName,
+      tutorName: tutor.name,
       subject: data.subject,
     })
     .returning();

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { setUserRole } from "@/app/actions/user";
 import { useAppData } from "@/hooks/use-app-data";
 import { GraduationCap, BookOpen, ArrowLeft } from "lucide-react";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 function RoleSelectionContent() {
   const router = useRouter();
@@ -41,6 +42,7 @@ function RoleSelectionContent() {
         >
           clutch
         </button>
+        <ThemeToggle />
       </div>
 
       <div className="flex flex-1 flex-col px-6 pb-6 pt-2 md:px-12 md:pb-8 md:pt-3">

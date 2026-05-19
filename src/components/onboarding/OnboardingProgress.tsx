@@ -8,10 +8,17 @@ type OnboardingProgressProps = {
   step: number;
   totalSteps: number;
   stepLabel?: string;
+  compact?: boolean;
   className?: string;
 };
 
-export function OnboardingProgress({ step, totalSteps, stepLabel, className }: OnboardingProgressProps) {
+export function OnboardingProgress({
+  step,
+  totalSteps,
+  stepLabel,
+  compact = false,
+  className,
+}: OnboardingProgressProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const prevStepRef = useRef(step);
 
@@ -25,15 +32,8 @@ export function OnboardingProgress({ step, totalSteps, stepLabel, className }: O
 
       segments.forEach((segment, index) => {
         const stepNumber = index + 1;
-        const isComplete = stepNumber <= step;
         const justCompleted = stepNumber === step && step > prevStep;
         const justUncompleted = stepNumber === prevStep && step < prevStep;
-
-        gsap.to(segment, {
-          backgroundColor: isComplete ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.15)",
-          duration: prefersReducedMotion() ? 0 : 0.35,
-          ease: onboardingEase.enter,
-        });
 
         if (!prefersReducedMotion() && (justCompleted || justUncompleted)) {
           gsap.fromTo(
@@ -48,23 +48,35 @@ export function OnboardingProgress({ step, totalSteps, stepLabel, className }: O
   );
 
   return (
-    <div ref={containerRef} className={cn("flex flex-col gap-5", className)}>
+    <div
+      ref={containerRef}
+      className={cn("flex flex-col items-center", compact ? "gap-2" : "gap-5", className)}
+    >
       {stepLabel ? (
-        <div className="w-full max-w-xl self-center text-sm text-muted-foreground">
-          <span>{stepLabel}</span>
-        </div>
+        <p
+          className={cn(
+            "text-muted-foreground",
+            compact ? "text-xs font-medium tracking-wide" : "text-sm"
+          )}
+        >
+          {stepLabel}
+        </p>
       ) : null}
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        {Array.from({ length: totalSteps }, (_, index) => (
-          <div
-            key={`progress-${index + 1}`}
-            data-progress-segment
-            className="h-3 w-16 origin-center rounded-full bg-primary/15 md:w-20"
-            style={{
-              backgroundColor: index + 1 <= step ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.15)",
-            }}
-          />
-        ))}
+      <div className={cn("flex flex-wrap items-center justify-center", compact ? "gap-1.5" : "gap-3")}>
+        {Array.from({ length: totalSteps }, (_, index) => {
+          const isComplete = index + 1 <= step;
+          return (
+            <div
+              key={`progress-${index + 1}`}
+              data-progress-segment
+              className={cn(
+                "origin-center rounded-full transition-colors duration-300",
+                compact ? "h-1 w-7 sm:w-8" : "h-3 w-16 md:w-20",
+                isComplete ? "bg-primary" : "bg-muted"
+              )}
+            />
+          );
+        })}
       </div>
     </div>
   );

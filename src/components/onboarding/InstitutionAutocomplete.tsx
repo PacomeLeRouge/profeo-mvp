@@ -33,7 +33,6 @@ export function InstitutionAutocomplete({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
-  const underlineRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -44,10 +43,7 @@ export function InstitutionAutocomplete({
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) {
-        gsap.set(underlineRef.current, { scaleX: isActive ? 1 : 0.3 });
-        return;
-      }
+      if (prefersReducedMotion()) return;
 
       gsap.from(containerRef.current, {
         opacity: 0,
@@ -56,8 +52,6 @@ export function InstitutionAutocomplete({
         ease: onboardingEase.enter,
         delay: 0.2,
       });
-
-      gsap.set(underlineRef.current, { scaleX: isActive ? 1 : 0.3, transformOrigin: "center center" });
 
       if (autoFocus) {
         gsap.delayedCall(0.45, () => inputRef.current?.focus());
@@ -76,12 +70,6 @@ export function InstitutionAutocomplete({
         opacity: isActive ? 0.55 : 0.35,
         duration: prefersReducedMotion() ? 0 : 0.28,
         ease: "power2.out",
-      });
-
-      gsap.to(underlineRef.current, {
-        scaleX: isActive ? 1 : isFocused ? 1 : 0.3,
-        duration: prefersReducedMotion() ? 0 : 0.35,
-        ease: isActive ? onboardingEase.bounce : onboardingEase.exit,
       });
     },
     { scope: containerRef, dependencies: [isActive, isFocused] }
@@ -192,14 +180,6 @@ export function InstitutionAutocomplete({
               ))}
             </ul>
           ) : null}
-        </div>
-
-        <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-primary/10">
-          <div
-            ref={underlineRef}
-            className="absolute inset-0 origin-center rounded-full bg-primary"
-            style={{ transform: "scaleX(0.3)" }}
-          />
         </div>
       </div>
 

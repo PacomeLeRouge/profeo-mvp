@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { GraduationCap, LogOut } from "lucide-react";
 import { useAppData } from "@/hooks/use-app-data";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export function Navbar() {
   const { user: clerkUser, isLoaded } = useUser();
@@ -50,6 +51,7 @@ export function Navbar() {
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <ThemeToggle />
             <div className="inline-flex max-w-full items-center rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground shadow-sm">
               <span className="truncate font-medium text-foreground">{displayName}</span>
             </div>

@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { clutchFrFR } from "@/lib/clerk-localization";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { ThemeScript } from "@/components/theme/ThemeScript";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -27,10 +24,13 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider localization={clutchFrFR}>
-      <html lang="fr">
-        <body className={`${inter.variable} ${plusJakarta.variable} font-sans`}>
-          <Navbar />
-          {children}
+      <html lang="fr" suppressHydrationWarning>
+        <body className={`${plusJakarta.variable} font-sans app-surface`}>
+          <ThemeScript />
+          <ThemeProvider>
+            <Navbar />
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

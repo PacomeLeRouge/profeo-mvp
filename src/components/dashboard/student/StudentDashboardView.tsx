@@ -5,11 +5,14 @@ import { RequestDialog } from "@/components/dashboard/student/RequestDialog";
 import { RequestList } from "@/components/dashboard/student/RequestList";
 import { TutorCard, TutorEmptyState } from "@/components/dashboard/student/TutorCard";
 import { TutorFilters } from "@/components/dashboard/student/TutorFilters";
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+import { StatCard } from "@/components/dashboard/StatCard";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
 import { Button } from "@/components/ui/button";
 import { gsap, useGSAP, prefersReducedMotion, onboardingEase } from "@/lib/gsap-config";
 import { SUBJECTS, type Subject } from "@/lib/subjects";
 import { Format, LessonRequest, TutorProfile, User } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { BookOpen, Search, Users } from "lucide-react";
 
 type StudentDashboardViewProps = {
@@ -113,7 +116,8 @@ export function StudentDashboardView({
   if (isLoading) return null;
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-[#fafafa]">
+    <DashboardShell>
+      <div ref={pageRef}>
       {preview ? <DevPreviewBanner /> : null}
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
@@ -132,20 +136,28 @@ export function StudentDashboardView({
             </div>
           </div>
           {onEditProfile ? (
-            <Button
-              variant="outline"
-              className="rounded-full border-border bg-card"
-              onClick={onEditProfile}
-            >
+            <Button variant="outline" className="rounded-full" onClick={onEditProfile}>
               Modifier mon profil
             </Button>
           ) : null}
         </header>
 
         <div className="grid gap-3 sm:grid-cols-3">
-          <StatCard icon={Users} label="Tuteurs disponibles" value={String(filteredTutors.length)} />
-          <StatCard icon={BookOpen} label="Matières" value={String(SUBJECTS.length)} />
-          <StatCard icon={Search} label="Demandes en attente" value={String(pendingCount)} />
+          <StatCard
+            icon={Users}
+            label="Tuteurs disponibles"
+            value={String(filteredTutors.length)}
+            accent="violet"
+            emphasis
+          />
+          <StatCard icon={BookOpen} label="Matières" value={String(SUBJECTS.length)} accent="lime" />
+          <StatCard
+            icon={Search}
+            label="Demandes en attente"
+            value={String(pendingCount)}
+            accent="violet"
+            emphasis={pendingCount > 0}
+          />
         </div>
 
         <TutorFilters
@@ -162,7 +174,14 @@ export function StudentDashboardView({
         <section className="space-y-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-xl font-semibold tracking-tight">Tuteurs disponibles</h2>
-            <span className="inline-flex w-fit items-center rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground/65">
+            <span
+              className={cn(
+                "inline-flex w-fit items-center rounded-full border px-3 py-1.5 text-sm font-semibold backdrop-blur-sm",
+                filteredTutors.length > 0
+                  ? "border-highlight/35 bg-highlight/12 text-highlight"
+                  : "border-border bg-card/80 text-muted-foreground"
+              )}
+            >
               {filteredTutors.length} résultat{filteredTutors.length > 1 ? "s" : ""}
             </span>
           </div>
@@ -185,34 +204,8 @@ export function StudentDashboardView({
           onSubjectChange={setRequestSubject}
           onSubmit={handleSendRequest}
         />
-      </div>
-    </div>
-  );
-}
-
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: typeof Users;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div
-      data-dashboard-stat
-      className="rounded-2xl border border-border bg-card px-5 py-4 shadow-sm"
-    >
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted">
-          <Icon className="h-4 w-4 text-foreground/70" aria-hidden />
-        </div>
-        <div>
-          <p className="text-2xl font-semibold tracking-tight">{value}</p>
-          <p className="text-sm text-muted-foreground">{label}</p>
         </div>
       </div>
-    </div>
+    </DashboardShell>
   );
 }

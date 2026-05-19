@@ -1,15 +1,20 @@
 "use client";
 
 import { SignIn, SignUp } from "@clerk/nextjs";
+import { useTheme } from "@/components/theme/ThemeProvider";
 import { clerkAppearanceDark, clerkAppearanceLight } from "@/lib/clerk-appearance";
+import { cn } from "@/lib/utils";
 
 const redirectUrl = "/auth/continue";
 
 export function AuthClerkSignIn() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   return (
-    <div className="clutch-clerk-auth clutch-clerk-auth--dark w-full">
+    <div className={cn("clutch-clerk-auth w-full", isDark && "clutch-clerk-auth--dark")}>
       <SignIn
-        appearance={clerkAppearanceDark}
+        appearance={isDark ? clerkAppearanceDark : clerkAppearanceLight}
         routing="hash"
         signUpUrl="/sign-up"
         forceRedirectUrl={redirectUrl}
@@ -19,10 +24,13 @@ export function AuthClerkSignIn() {
 }
 
 export function AuthClerkSignUp() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   return (
-    <div className="clutch-clerk-auth w-full">
+    <div className={cn("clutch-clerk-auth w-full", isDark && "clutch-clerk-auth--dark")}>
       <SignUp
-        appearance={clerkAppearanceLight}
+        appearance={isDark ? clerkAppearanceDark : clerkAppearanceLight}
         routing="path"
         path="/sign-up"
         signInUrl="/"

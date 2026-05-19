@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AuthClerkSignUp } from "@/components/AuthClerk";
+import { AuthPageHeader } from "@/components/theme/AuthPageHeader";
 import { GraduationCap, Shield } from "lucide-react";
 import splashBackground from "../../img/splash.png";
 
@@ -8,16 +9,20 @@ export default function SignUpPage() {
   return (
     <div className="grid min-h-screen bg-background text-foreground lg:grid-cols-[1.05fr_0.95fr]">
       <SplashPanel />
-      <div className="flex min-h-screen flex-col bg-background px-6 py-8 sm:px-8 md:px-12 md:py-10">
-        <div className="flex items-center justify-between">
-          <div className="font-display text-2xl font-bold tracking-tight lg:hidden">clutch</div>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Déjà un compte ?
-          </Link>
-        </div>
+      <div className="flex min-h-screen flex-col bg-card px-6 py-8 sm:px-8 md:px-12 md:py-10">
+        <AuthPageHeader
+          leading={
+            <div className="font-display text-2xl font-bold tracking-tight lg:hidden">clutch</div>
+          }
+          trailing={
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Déjà un compte ?
+            </Link>
+          }
+        />
         <div className="flex flex-1 flex-col justify-center py-8 md:py-10">
           <div className="mx-auto w-full max-w-md space-y-8">
             <header className="space-y-3">
@@ -58,8 +63,8 @@ function SplashPanel() {
       <div className="absolute inset-0 bg-background/55" />
       <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/30 to-background/70" />
       <div className="relative z-10 flex items-center gap-3 font-display text-3xl font-bold tracking-tight">
-        <div className="glass-panel flex h-12 w-12 items-center justify-center rounded-2xl">
-          <GraduationCap className="h-6 w-6 text-primary" />
+        <div className="glow-lime flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+          <GraduationCap className="h-6 w-6" />
         </div>
         <span>Clutch</span>
       </div>

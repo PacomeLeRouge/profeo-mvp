@@ -3,12 +3,58 @@
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { studentProfiles, tutorProfiles, users } from "@/db/schema";
-import { ensureDbUser, requireAuthUserId } from "@/lib/auth";
+import { lessonRequests, studentProfiles, tutorProfiles, users } from "@/db/schema";
+import { ensureDbUser, requireAuthUserId, syncClerkFirstName } from "@/lib/auth";
 import { listPublishedTutorProfiles } from "@/lib/data/dashboard";
 import { mapStudentProfile, mapTutorProfile } from "@/lib/mappers";
-import { assertValidSubjects } from "@/lib/subjects";
+import {
+  normalizeFirstName,
+  validateStudentProfileInput,
+  validateTutorProfileInput,
+} from "@/lib/profile-validation";
 import type { Format, Subject } from "@/lib/types";
+
+async function syncUserFirstName(userId: string, firstName: string) {
+  const trimmed = normalizeFirstName(firstName);
+
+  await db
+    .update(users)
+    .set({ name: trimmed, updatedAt: new Date() })
+    .where(eq(users.id, userId));
+
+  await syncClerkFirstName(userId, trimmed);
+
+  return trimmed;
+}
+
+async function syncTutorPublicName(userId: string, displayName: string) {
+  const tutor = await db.query.tutorProfiles.findFirst({
+    where: eq(tutorProfiles.userId, userId),
+  });
+  if (!tutor) return;
+
+  await db
+    .update(tutorProfiles)
+    .set({ name: displayName, updatedAt: new Date() })
+    .where(eq(tutorProfiles.userId, userId));
+
+  await db
+    .update(lessonRequests)
+    .set({ tutorName: displayName })
+    .where(eq(lessonRequests.tutorProfileId, tutor.id));
+}
+
+function revalidateAfterProfileSave(role: "student" | "tutor") {
+  revalidatePath("/", "layout");
+  if (role === "student") {
+    revalidatePath("/dashboard/student");
+    revalidatePath("/onboarding/student");
+  } else {
+    revalidatePath("/dashboard/tutor");
+    revalidatePath("/dashboard/student");
+    revalidatePath("/onboarding/tutor");
+  }
+}
 
 export async function getStudentProfileAction() {
   const userId = await requireAuthUserId();
@@ -32,6 +78,7 @@ export async function listTutorProfilesAction() {
 }
 
 export async function saveStudentProfileAction(data: {
+  firstName: string;
   age?: number;
   educationLevel: string;
   institution: string;
@@ -43,7 +90,8 @@ export async function saveStudentProfileAction(data: {
     throw new Error("Only students can save a student profile");
   }
 
-  assertValidSubjects(data.subjectsOfInterest);
+  const validated = validateStudentProfileInput(data);
+  await syncUserFirstName(userId, validated.firstName);
 
   const existing = await db.query.studentProfiles.findFirst({
     where: eq(studentProfiles.userId, userId),
@@ -53,15 +101,16 @@ export async function saveStudentProfileAction(data: {
     const [updated] = await db
       .update(studentProfiles)
       .set({
-        age: data.age,
-        educationLevel: data.educationLevel,
-        institution: data.institution,
-        subjectsOfInterest: data.subjectsOfInterest,
+        age: validated.age,
+        educationLevel: validated.educationLevel,
+        institution: validated.institution,
+        subjectsOfInterest: validated.subjectsOfInterest,
         updatedAt: new Date(),
       })
       .where(eq(studentProfiles.userId, userId))
       .returning();
-    revalidatePath("/dashboard/student");
+
+    revalidateAfterProfileSave("student");
     return mapStudentProfile(updated);
   }
 
@@ -69,18 +118,19 @@ export async function saveStudentProfileAction(data: {
     .insert(studentProfiles)
     .values({
       userId,
-      age: data.age,
-      educationLevel: data.educationLevel,
-      institution: data.institution,
-      subjectsOfInterest: data.subjectsOfInterest,
+      age: validated.age,
+      educationLevel: validated.educationLevel,
+      institution: validated.institution,
+      subjectsOfInterest: validated.subjectsOfInterest,
     })
     .returning();
 
-  revalidatePath("/dashboard/student");
+  revalidateAfterProfileSave("student");
   return mapStudentProfile(created);
 }
 
 export async function saveTutorProfileAction(data: {
+  firstName: string;
   age?: number;
   subjects: Subject[];
   hourlyRate: number;
@@ -96,22 +146,23 @@ export async function saveTutorProfileAction(data: {
     throw new Error("Only tutors can save a tutor profile");
   }
 
-  assertValidSubjects(data.subjects);
+  const validated = validateTutorProfileInput(data);
+  const displayName = await syncUserFirstName(userId, validated.firstName);
 
   const existing = await db.query.tutorProfiles.findFirst({
     where: eq(tutorProfiles.userId, userId),
   });
 
   const payload = {
-    name: user.name,
-    age: data.age,
-    subjects: data.subjects,
-    hourlyRate: data.hourlyRate,
-    format: data.format,
-    bio: data.bio,
-    availability: data.availability,
-    educationLevel: data.educationLevel,
-    institution: data.institution,
+    name: displayName,
+    age: validated.age,
+    subjects: validated.subjects,
+    hourlyRate: validated.hourlyRate,
+    format: validated.format,
+    bio: validated.bio,
+    availability: validated.availability,
+    educationLevel: validated.educationLevel,
+    institution: validated.institution,
     updatedAt: new Date(),
   };
 
@@ -121,8 +172,9 @@ export async function saveTutorProfileAction(data: {
       .set(payload)
       .where(eq(tutorProfiles.userId, userId))
       .returning();
-    revalidatePath("/dashboard/tutor");
-    revalidatePath("/dashboard/student");
+
+    await syncTutorPublicName(userId, displayName);
+    revalidateAfterProfileSave("tutor");
     return mapTutorProfile(updated);
   }
 
@@ -131,30 +183,13 @@ export async function saveTutorProfileAction(data: {
     .values({ userId, ...payload })
     .returning();
 
-  revalidatePath("/dashboard/tutor");
-  revalidatePath("/dashboard/student");
+  revalidateAfterProfileSave("tutor");
   return mapTutorProfile(created);
 }
 
 export async function updateUserDisplayNameAction(name: string) {
   const userId = await requireAuthUserId();
-  const trimmed = name.trim();
-  if (!trimmed) throw new Error("Name is required");
-
-  await db
-    .update(users)
-    .set({ name: trimmed, updatedAt: new Date() })
-    .where(eq(users.id, userId));
-
-  const tutor = await db.query.tutorProfiles.findFirst({
-    where: eq(tutorProfiles.userId, userId),
-  });
-  if (tutor) {
-    await db
-      .update(tutorProfiles)
-      .set({ name: trimmed, updatedAt: new Date() })
-      .where(eq(tutorProfiles.userId, userId));
-  }
-
+  const displayName = await syncUserFirstName(userId, name);
+  await syncTutorPublicName(userId, displayName);
   revalidatePath("/", "layout");
 }

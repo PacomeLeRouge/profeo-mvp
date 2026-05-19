@@ -38,7 +38,7 @@ export function OnboardingStepPanel({
     <div
       ref={panelRef}
       key={stepKey}
-      className={cn("w-full max-w-6xl space-y-10", className)}
+      className={cn("relative z-10 w-full max-w-6xl space-y-10", className)}
     >
       {children}
     </div>

@@ -5,22 +5,28 @@ import { useRouter } from "next/navigation";
 import { Subject, StudentProfile } from "@/lib/types";
 import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
 import { OnboardingStepPanel } from "@/components/onboarding/OnboardingStepPanel";
-import { AnimatedTitle } from "@/components/onboarding/AnimatedTitle";
+import { OnboardingStepTitle } from "@/components/onboarding/OnboardingStepTitle";
 import { AnimatedNumberField } from "@/components/onboarding/AnimatedNumberField";
+import { AnimatedTextField } from "@/components/onboarding/AnimatedTextField";
 import { InstitutionAutocomplete } from "@/components/onboarding/InstitutionAutocomplete";
 import { ChoiceChipGroup } from "@/components/onboarding/ChoiceChip";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
 import { SUBJECTS, subjectTranslations } from "@/lib/subjects";
 import { studentEducationLevels } from "@/components/onboarding/onboarding-shared";
 import { Button } from "@/components/ui/button";
+import { onboardingThemeClass } from "@/lib/onboarding-theme";
+import { getOnboardingSymbol, getOnboardingSymbolAlt } from "@/lib/onboarding-symbols";
+import { cn } from "@/lib/utils";
 
-const totalSteps = 4;
+const totalSteps = 5;
 
 type StudentOnboardingFlowProps = {
   preview?: boolean;
   exitHref: string;
+  initialFirstName?: string;
   initialProfile?: StudentProfile | null;
   onSubmit: (data: {
+    firstName: string;
     age?: number;
     educationLevel: string;
     institution: string;
@@ -31,6 +37,7 @@ type StudentOnboardingFlowProps = {
 export function StudentOnboardingFlow({
   preview = false,
   exitHref,
+  initialFirstName = "",
   initialProfile = null,
   onSubmit,
 }: StudentOnboardingFlowProps) {
@@ -40,6 +47,7 @@ export function StudentOnboardingFlow({
 
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [firstName, setFirstName] = useState(initialFirstName);
   const [age, setAge] = useState(initialProfile?.age ? String(initialProfile.age) : "");
   const [educationLevel, setEducationLevel] = useState(initialProfile?.educationLevel || "");
   const [institution, setInstitution] = useState(initialProfile?.institution || "");
@@ -70,6 +78,7 @@ export function StudentOnboardingFlow({
 
   const handleSubmit = async () => {
     await onSubmit({
+      firstName: firstName.trim(),
       age: age ? Number(age) : undefined,
       educationLevel,
       institution,
@@ -78,13 +87,13 @@ export function StudentOnboardingFlow({
 
     if (preview) {
       setCompleted(true);
-      return;
     }
   };
 
   const handleRestartPreview = () => {
     setCompleted(false);
     setStep(1);
+    setFirstName(initialFirstName);
     setAge("");
     setEducationLevel("");
     setInstitution("");
@@ -93,14 +102,15 @@ export function StudentOnboardingFlow({
   };
 
   const canContinue =
-    (step === 1 && !!age) ||
-    (step === 2 && !!educationLevel) ||
-    (step === 3 && !!institution.trim()) ||
-    (step === 4 && subjects.length > 0);
+    (step === 1 && firstName.trim().length >= 2) ||
+    (step === 2 && !!age) ||
+    (step === 3 && !!educationLevel) ||
+    (step === 4 && !!institution.trim()) ||
+    (step === 5 && subjects.length > 0);
 
   if (completed) {
     return (
-      <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <div className={cn(onboardingThemeClass, "flex min-h-screen flex-col")}>
         {preview ? <DevPreviewBanner /> : null}
         <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
           <div className="max-w-lg space-y-6">
@@ -126,19 +136,20 @@ export function StudentOnboardingFlow({
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className={cn(onboardingThemeClass, "flex min-h-screen flex-col")}>
       {preview ? <DevPreviewBanner /> : null}
       <OnboardingShell
-        brandHref={exitHref}
-        headerLabel={
+        step={step}
+        totalSteps={totalSteps}
+        symbolSrc={getOnboardingSymbol("student", step)}
+        symbolAlt={getOnboardingSymbolAlt("student", step)}
+        stepLabel={
           preview
             ? `Preview · Étape ${step} sur ${totalSteps}`
             : isEditing
               ? "Modification du profil"
-              : `Étape ${step} sur ${totalSteps}`
+              : undefined
         }
-        step={step}
-        totalSteps={totalSteps}
         canContinue={canContinue}
         isLastStep={step === totalSteps}
         isEditing={isEditing}
@@ -150,7 +161,26 @@ export function StudentOnboardingFlow({
       >
         {step === 1 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle stepKey={step} eyebrow="Profil étudiant" title="Votre âge ?" />
+            <OnboardingStepTitle
+              step={step}
+              eyebrow="Profil étudiant"
+              title="Comment vous appelez-vous ?"
+              subtitle="Votre prénom sera visible par les tuteurs."
+            />
+            <AnimatedTextField
+              label="Votre prénom"
+              placeholder="Alex"
+              value={firstName}
+              onChange={setFirstName}
+              hint="Au moins 2 caractères."
+              aria-label="Votre prénom"
+            />
+          </OnboardingStepPanel>
+        )}
+
+        {step === 2 && (
+          <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
+            <OnboardingStepTitle step={step} eyebrow="Profil étudiant" title="Votre âge ?" />
             <AnimatedNumberField
               label="Votre âge"
               placeholder="18"
@@ -165,9 +195,9 @@ export function StudentOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle stepKey={step} eyebrow="Profil étudiant" title="Votre niveau d'études ?" />
+            <OnboardingStepTitle step={step} eyebrow="Profil étudiant" title="Votre niveau d'études ?" />
             <ChoiceChipGroup
               stepKey={step}
               options={studentEducationLevels}
@@ -177,9 +207,9 @@ export function StudentOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle stepKey={step} eyebrow="Profil étudiant" title="Votre établissement ?" />
+            <OnboardingStepTitle step={step} eyebrow="Profil étudiant" title="Votre établissement ?" />
             <InstitutionAutocomplete
               value={institution}
               onChange={setInstitution}
@@ -188,10 +218,10 @@ export function StudentOnboardingFlow({
           </OnboardingStepPanel>
         )}
 
-        {step === 4 && (
+        {step === 5 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
-            <AnimatedTitle
-              stepKey={step}
+            <OnboardingStepTitle
+              step={step}
               eyebrow="Profil étudiant"
               title="Sur quelles matières avez-vous besoin d'aide ?"
             />

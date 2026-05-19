@@ -18,9 +18,11 @@ function StudentOnboardingContent() {
   return (
     <StudentOnboardingFlow
       exitHref={studentProfile ? `/dashboard/${user.role}` : roleSelectionHref}
+      initialFirstName={user.name}
       initialProfile={studentProfile}
       onSubmit={async (data) => {
         await saveStudentProfileAction(data);
+        router.refresh();
         router.push("/dashboard/student");
       }}
     />
