@@ -1,22 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useStore } from "@/lib/store";
+import { updateLessonRequestStatusAction } from "@/app/actions/requests";
+import { useAppData } from "@/hooks/use-app-data";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sparkles } from "lucide-react";
-
-// Translations
-const subjectTranslations: Record<string, string> = {
-  'Math': 'Mathématiques',
-  'English': 'Anglais',
-  'Science': 'Sciences',
-  'History': 'Histoire',
-  'Physics': 'Physique',
-  'Computer Science': 'Informatique'
-};
+import { subjectTranslations } from "@/lib/subjects";
 
 const formatTranslations: Record<string, string> = {
   'Online': 'En ligne',
@@ -32,10 +24,15 @@ const statusTranslations: Record<string, string> = {
 };
 
 export default function TutorDashboard() {
-  const { user, tutorProfile, requests, updateRequestStatus } = useStore();
+  const { user, tutorProfile, requests, isLoading, refresh } = useAppData();
   const router = useRouter();
 
-  if (!user || !tutorProfile) return null;
+  const handleUpdateStatus = async (id: string, status: "Confirmed" | "Declined") => {
+    await updateLessonRequestStatusAction(id, status);
+    await refresh();
+  };
+
+  if (isLoading || !user || !tutorProfile) return null;
 
   const myRequests = requests.filter(r => r.tutorId === tutorProfile.id);
   const pendingRequests = myRequests.filter(r => r.status === 'Pending');
@@ -142,13 +139,13 @@ export default function TutorDashboard() {
                             <Button 
                               variant="outline" 
                               className="flex-1 rounded-full sm:flex-none border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
-                              onClick={() => updateRequestStatus(req.id, 'Declined')}
+                              onClick={() => handleUpdateStatus(req.id, 'Declined')}
                             >
                               Refuser
                             </Button>
                             <Button 
                               className="flex-1 rounded-full sm:flex-none bg-green-600 hover:bg-green-700"
-                              onClick={() => updateRequestStatus(req.id, 'Confirmed')}
+                              onClick={() => handleUpdateStatus(req.id, 'Confirmed')}
                             >
                               Accepter
                             </Button>

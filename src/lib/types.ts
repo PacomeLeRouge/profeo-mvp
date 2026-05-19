@@ -1,6 +1,8 @@
+import type { Subject } from "@/lib/subjects";
+
 export type Role = 'student' | 'tutor' | null;
 
-export type Subject = 'Math' | 'English' | 'Science' | 'History' | 'Physics' | 'Computer Science';
+export type { Subject };
 
 export type Format = 'Online' | 'In-person' | 'Both';
 

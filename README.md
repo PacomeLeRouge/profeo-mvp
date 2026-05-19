@@ -14,13 +14,19 @@ Plateforme de mise en relation entre étudiants et tuteurs pour des cours partic
 - **Langage** : TypeScript
 - **Styling** : Tailwind CSS
 - **UI** : shadcn/ui
-- **State** : Zustand
+- **Auth** : Clerk (email, Google, Microsoft)
+- **Base de données** : Neon Postgres + Drizzle ORM
+- **Déploiement** : Vercel (frontend + API)
 - **Icons** : Lucide React
 
 ## Installation
 
 ```bash
 npm install
+cp env.example .env.local
+# Renseignez Clerk + DATABASE_URL (voir docs/DEPLOY.md)
+npm run db:push
+npm run db:seed   # optionnel — tuteurs de démo
 ```
 
 ## Développement
@@ -30,6 +36,8 @@ npm run dev
 ```
 
 Ouvrir [http://localhost:3000](http://localhost:3000)
+
+Guide complet : [docs/DEPLOY.md](docs/DEPLOY.md)
 
 ## Build production
 
@@ -59,9 +67,9 @@ src/
 
 ## Flow utilisateur
 
-1. **Accueil** → Connexion rapide avec prénom
+1. **Accueil** → Connexion (email, Google ou Microsoft via Clerk)
 2. **Sélection de rôle** → Choix entre "Étudiant" ou "Tuteur"
-3. **Onboarding** → Configuration du profil selon le rôle
+3. **Onboarding** → Configuration du profil (enregistré en base)
 4. **Dashboard** → Recherche/gestion des cours
 
 ---

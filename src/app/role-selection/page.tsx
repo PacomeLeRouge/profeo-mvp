@@ -2,30 +2,34 @@
 
 import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useStore } from "@/lib/store";
+import { setUserRole } from "@/app/actions/user";
+import { useAppData } from "@/hooks/use-app-data";
 import { GraduationCap, BookOpen, ArrowLeft } from "lucide-react";
 
 function RoleSelectionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, setRole } = useStore();
+  const { user, isLoading } = useAppData();
   const source = searchParams.get("source");
   const isSignupFlow = source === "signup";
-  const backHref = isSignupFlow ? "/signup/name" : "/";
+  const backHref = isSignupFlow ? "/sign-up" : "/";
 
   useEffect(() => {
-    if (!user) {
+    if (!isLoading && !user) {
       router.push("/");
     }
-  }, [user, router]);
+    if (!isLoading && user?.role) {
+      router.push("/auth/continue");
+    }
+  }, [user, isLoading, router]);
 
-  const handleSelectRole = (role: "student" | "tutor") => {
-    setRole(role);
+  const handleSelectRole = async (role: "student" | "tutor") => {
+    await setUserRole(role);
     const query = source ? `?source=${source}` : "";
     router.push(`/onboarding/${role}${query}`);
   };
 
-  if (!user) return null;
+  if (isLoading || !user) return null;
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-black">
