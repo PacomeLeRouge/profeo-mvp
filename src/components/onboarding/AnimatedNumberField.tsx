@@ -122,13 +122,13 @@ export function AnimatedNumberField({
     <div ref={containerRef} className={cn("mx-auto w-full max-w-lg", className)}>
       <div
         className={cn(
-          "rounded-[2rem] border bg-black/[0.02] px-6 py-8 transition-shadow duration-300 sm:px-8 sm:py-10",
+          "rounded-[2rem] border bg-muted px-6 py-8 transition-shadow duration-300 sm:px-8 sm:py-10",
           isFocused
             ? "border-black/20 shadow-[0_24px_60px_-32px_rgba(0,0,0,0.18)]"
-            : "border-black/10"
+            : "border-border"
         )}
       >
-        <p className="text-center text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+        <p className="text-center text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
           {label}
         </p>
 
@@ -138,7 +138,7 @@ export function AnimatedNumberField({
             aria-label={`Diminuer ${label.toLowerCase()}`}
             disabled={isValidNumber && numericValue <= min}
             onClick={(e) => applyDelta(-step, e.currentTarget)}
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black transition-colors hover:border-black/20 hover:bg-black/[0.03] disabled:cursor-not-allowed disabled:opacity-30 sm:h-16 sm:w-16"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:border-black/20 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-30 sm:h-16 sm:w-16"
           >
             <Minus className="h-5 w-5" strokeWidth={2.25} />
           </button>
@@ -157,10 +157,10 @@ export function AnimatedNumberField({
               onBlur={handleBlur}
               placeholder={placeholder}
               aria-label={ariaLabel ?? label}
-              className="w-full border-0 bg-transparent text-center text-5xl font-semibold tabular-nums tracking-tight text-black outline-none placeholder:text-black/15 sm:text-6xl"
+              className="w-full border-0 bg-transparent text-center text-5xl font-semibold tabular-nums tracking-tight text-foreground outline-none placeholder:text-foreground/15 sm:text-6xl"
             />
             {(unit || (value && suffix)) ? (
-              <p className="mt-1 text-sm font-medium text-black/40">
+              <p className="mt-1 text-sm font-medium text-muted-foreground">
                 {value && suffix ? suffix : unit}
               </p>
             ) : null}
@@ -171,14 +171,14 @@ export function AnimatedNumberField({
             aria-label={`Augmenter ${label.toLowerCase()}`}
             disabled={isValidNumber && numericValue >= max}
             onClick={(e) => applyDelta(step, e.currentTarget)}
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-black/10 bg-black text-white transition-transform hover:bg-black/90 disabled:cursor-not-allowed disabled:opacity-30 sm:h-16 sm:w-16"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-border bg-primary text-primary-foreground transition-transform hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-30 sm:h-16 sm:w-16"
           >
             <Plus className="h-5 w-5" strokeWidth={2.25} />
           </button>
         </div>
       </div>
 
-      {hint ? <p className="mt-5 text-center text-sm text-black/45">{hint}</p> : null}
+      {hint ? <p className="mt-5 text-center text-sm text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }

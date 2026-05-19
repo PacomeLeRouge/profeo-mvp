@@ -65,12 +65,12 @@ export function AnimatedTextarea({
 
   return (
     <div ref={containerRef} className={cn("mx-auto w-full max-w-2xl", className)}>
-      <p className="mb-4 text-left text-sm font-medium uppercase tracking-[0.2em] text-black/35">
+      <p className="mb-4 text-left text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </p>
       <div
         ref={borderRef}
-        className="overflow-hidden rounded-[2rem] border border-black/10 bg-white will-change-transform"
+        className="overflow-hidden rounded-[2rem] border border-border bg-white will-change-transform"
         style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.08)" }}
       >
         <textarea
@@ -81,10 +81,10 @@ export function AnimatedTextarea({
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
           aria-label={ariaLabel ?? label}
-          className="min-h-[220px] w-full resize-none border-0 bg-transparent px-6 py-5 text-left text-lg leading-8 text-black outline-none placeholder:text-black/25 md:text-xl"
+          className="min-h-[220px] w-full resize-none border-0 bg-transparent px-6 py-5 text-left text-lg leading-8 text-foreground outline-none placeholder:text-foreground/25 md:text-xl"
         />
       </div>
-      {hint ? <p className="mt-4 text-left text-sm text-black/45">{hint}</p> : null}
+      {hint ? <p className="mt-4 text-left text-sm text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }

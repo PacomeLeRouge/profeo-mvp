@@ -62,10 +62,10 @@ export function ChoiceChip({ label, selected, onClick, index = 0, stepKey, class
       type="button"
       onClick={handleClick}
       className={cn(
-        "min-h-14 rounded-full border px-7 py-4 text-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2",
+        "min-h-14 rounded-full border px-7 py-4 text-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2",
         selected
-          ? "border-black bg-black text-white"
-          : "border-black/15 bg-transparent text-black hover:bg-black/5",
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border bg-transparent text-foreground hover:bg-muted",
         className
       )}
     >

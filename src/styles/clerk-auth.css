@@ -1,6 +1,6 @@
 /* Clutch — Clerk SignIn / SignUp dans la carte auth */
 
-.clutch-clerk-auth {
+.clutch-clerk-auth--dark {
   --clerk-border-radius: 0;
   --clerk-color-background: transparent;
   --clerk-color-input: transparent;
@@ -12,9 +12,9 @@
   width: 100%;
 }
 
-.clutch-clerk-auth .cl-card,
-.clutch-clerk-auth .cl-cardBox,
-.clutch-clerk-auth .cl-main {
+.clutch-clerk-auth--dark .cl-card,
+.clutch-clerk-auth--dark .cl-cardBox,
+.clutch-clerk-auth--dark .cl-main {
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
@@ -22,13 +22,13 @@
 }
 
 /* ——— Accès rapide (Google / Microsoft) ——— */
-.clutch-clerk-auth .cl-socialButtonsRoot {
+.clutch-clerk-auth--dark .cl-socialButtonsRoot {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.clutch-clerk-auth .cl-socialButtonsRoot::before {
+.clutch-clerk-auth--dark .cl-socialButtonsRoot::before {
   content: "Accès rapide";
   display: block;
   font-size: 0.6875rem;
@@ -39,16 +39,16 @@
   margin-bottom: 0.25rem;
 }
 
-.clutch-clerk-auth .cl-socialButtons {
+.clutch-clerk-auth--dark .cl-socialButtons {
   display: flex !important;
   flex-direction: column !important;
   gap: 0.625rem !important;
   width: 100% !important;
 }
 
-.clutch-clerk-auth .cl-socialButtonsIconButton,
-.clutch-clerk-auth .cl-socialButtonsBlockButton,
-.clutch-clerk-auth .cl-socialButtonsButton {
+.clutch-clerk-auth--dark .cl-socialButtonsIconButton,
+.clutch-clerk-auth--dark .cl-socialButtonsBlockButton,
+.clutch-clerk-auth--dark .cl-socialButtonsButton {
   width: 100% !important;
   min-height: 2.75rem !important;
   border-radius: 9999px !important;
@@ -61,24 +61,24 @@
   font-weight: 500 !important;
 }
 
-.clutch-clerk-auth .cl-socialButtonsIconButton:hover,
-.clutch-clerk-auth .cl-socialButtonsBlockButton:hover {
+.clutch-clerk-auth--dark .cl-socialButtonsIconButton:hover,
+.clutch-clerk-auth--dark .cl-socialButtonsBlockButton:hover {
   background: rgb(255 255 255 / 0.09) !important;
   border-color: rgb(255 255 255 / 0.22) !important;
 }
 
 /* ——— Séparateur ——— */
-.clutch-clerk-auth .cl-dividerRow {
+.clutch-clerk-auth--dark .cl-dividerRow {
   margin: 0.25rem 0 !important;
   gap: 0.75rem !important;
 }
 
-.clutch-clerk-auth .cl-dividerLine {
+.clutch-clerk-auth--dark .cl-dividerLine {
   background: rgb(255 255 255 / 0.12) !important;
   flex: 1;
 }
 
-.clutch-clerk-auth .cl-dividerText {
+.clutch-clerk-auth--dark .cl-dividerText {
   font-size: 0.6875rem !important;
   letter-spacing: 0.15em !important;
   text-transform: lowercase !important;
@@ -86,13 +86,13 @@
 }
 
 /* ——— E-mail universitaire ——— */
-.clutch-clerk-auth .cl-form {
+.clutch-clerk-auth--dark .cl-form {
   display: flex;
   flex-direction: column;
   gap: 1rem !important;
 }
 
-.clutch-clerk-auth .cl-form::before {
+.clutch-clerk-auth--dark .cl-form::before {
   content: "Avec votre e-mail";
   display: block;
   font-size: 0.6875rem;
@@ -103,11 +103,11 @@
   margin-bottom: 0.125rem;
 }
 
-.clutch-clerk-auth .cl-formField {
+.clutch-clerk-auth--dark .cl-formField {
   gap: 0.375rem !important;
 }
 
-.clutch-clerk-auth .cl-formFieldLabel {
+.clutch-clerk-auth--dark .cl-formFieldLabel {
   display: block !important;
   font-size: 0.8125rem !important;
   font-weight: 500 !important;
@@ -115,19 +115,19 @@
   margin-bottom: 0.125rem !important;
 }
 
-.clutch-clerk-auth .cl-formFieldInput,
-.clutch-clerk-auth .cl-inputWrapper {
+.clutch-clerk-auth--dark .cl-formFieldInput,
+.clutch-clerk-auth--dark .cl-inputWrapper {
   background: transparent !important;
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
 
-.clutch-clerk-auth input[type="email"],
-.clutch-clerk-auth input[type="password"],
-.clutch-clerk-auth input[type="text"],
-.clutch-clerk-auth .cl-formFieldInput input,
-.clutch-clerk-auth .cl-input {
+.clutch-clerk-auth--dark input[type="email"],
+.clutch-clerk-auth--dark input[type="password"],
+.clutch-clerk-auth--dark input[type="text"],
+.clutch-clerk-auth--dark .cl-formFieldInput input,
+.clutch-clerk-auth--dark .cl-input {
   height: 3.25rem !important;
   padding: 0 !important;
   background: transparent !important;
@@ -141,28 +141,28 @@
 }
 
 @media (min-width: 768px) {
-  .clutch-clerk-auth input[type="email"],
-  .clutch-clerk-auth input[type="password"],
-  .clutch-clerk-auth input[type="text"],
-  .clutch-clerk-auth .cl-formFieldInput input,
-  .clutch-clerk-auth .cl-input {
+  .clutch-clerk-auth--dark input[type="email"],
+  .clutch-clerk-auth--dark input[type="password"],
+  .clutch-clerk-auth--dark input[type="text"],
+  .clutch-clerk-auth--dark .cl-formFieldInput input,
+  .clutch-clerk-auth--dark .cl-input {
     height: 3.5rem !important;
     font-size: 1.25rem !important;
   }
 }
 
-.clutch-clerk-auth input::placeholder {
+.clutch-clerk-auth--dark input::placeholder {
   color: rgb(255 255 255 / 0.22) !important;
 }
 
-.clutch-clerk-auth input:focus {
+.clutch-clerk-auth--dark input:focus {
   border-bottom-color: #fff !important;
   outline: none !important;
   box-shadow: none !important;
 }
 
 /* Bouton principal */
-.clutch-clerk-auth .cl-formButtonPrimary {
+.clutch-clerk-auth--dark .cl-formButtonPrimary {
   margin-top: 0.5rem !important;
   height: 3rem !important;
   width: 100% !important;
@@ -174,21 +174,21 @@
   box-shadow: none !important;
 }
 
-.clutch-clerk-auth .cl-formButtonPrimary:hover {
+.clutch-clerk-auth--dark .cl-formButtonPrimary:hover {
   background: rgb(255 255 255 / 0.92) !important;
 }
 
-.clutch-clerk-auth .cl-footer {
+.clutch-clerk-auth--dark .cl-footer {
   display: none !important;
 }
 
-.clutch-clerk-auth .cl-footerAction {
+.clutch-clerk-auth--dark .cl-footerAction {
   display: none !important;
 }
 
 /* Badge mode développement — discret */
-.clutch-clerk-auth .cl-badge,
-.clutch-clerk-auth [data-localization-key="badge__development"] {
+.clutch-clerk-auth--dark .cl-badge,
+.clutch-clerk-auth--dark [data-localization-key="badge__development"] {
   margin-top: 0.75rem !important;
   opacity: 0.7 !important;
   font-size: 0.65rem !important;

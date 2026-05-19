@@ -41,21 +41,21 @@ export function TutorFilters({
   activeFiltersCount,
 }: TutorFiltersProps) {
   return (
-    <section className="rounded-[1.75rem] border border-black/10 bg-white p-6 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.15)] sm:p-7">
-      <div className="flex flex-col gap-4 border-b border-black/8 pb-5 md:flex-row md:items-end md:justify-between">
+    <section className="rounded-[1.75rem] border border-border bg-white p-6 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.15)] sm:p-7">
+      <div className="flex flex-col gap-4 border-b border-border pb-5 md:flex-row md:items-end md:justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <SlidersHorizontal className="h-4 w-4 text-black/45" aria-hidden />
+            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" aria-hidden />
             <h2 className="text-xl font-semibold tracking-tight">Affiner la recherche</h2>
           </div>
-          <p className="text-sm text-black/55">
+          <p className="text-sm text-muted-foreground">
             Filtrez par matière, budget ou format — {SUBJECTS.length} matières disponibles.
           </p>
         </div>
         {activeFiltersCount > 0 ? (
           <Button
             variant="ghost"
-            className="h-auto w-fit rounded-full px-0 text-black/60 hover:bg-transparent hover:text-black"
+            className="h-auto w-fit rounded-full px-0 text-muted-foreground hover:bg-transparent hover:text-foreground"
             onClick={onReset}
           >
             <X className="mr-1.5 h-4 w-4" />
@@ -66,7 +66,7 @@ export function TutorFilters({
 
       <div className="space-y-6 pt-5">
         <div className="space-y-3">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-black/40">Matière</p>
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Matière</p>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
@@ -74,8 +74,8 @@ export function TutorFilters({
               className={cn(
                 "rounded-full border px-4 py-2 text-sm transition-colors",
                 subjectFilter === "All"
-                  ? "border-black bg-black text-white"
-                  : "border-black/12 bg-white text-black/75 hover:border-black/25"
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-black/12 bg-background text-foreground/75 hover:border-primary/30"
               )}
             >
               Toutes
@@ -88,8 +88,8 @@ export function TutorFilters({
                 className={cn(
                   "rounded-full border px-4 py-2 text-sm transition-colors",
                   subjectFilter === subject
-                    ? "border-black bg-black text-white"
-                    : "border-black/12 bg-white text-black/75 hover:border-black/25"
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-black/12 bg-background text-foreground/75 hover:border-primary/30"
                 )}
               >
                 {subjectTranslations[subject]}
@@ -100,7 +100,7 @@ export function TutorFilters({
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <label htmlFor="max-price" className="text-xs font-medium uppercase tracking-[0.2em] text-black/40">
+            <label htmlFor="max-price" className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
               Budget max (€/h)
             </label>
             <input
@@ -110,13 +110,13 @@ export function TutorFilters({
               placeholder="Ex. 40"
               value={maxPrice}
               onChange={(e) => onMaxPriceChange(e.target.value)}
-              className="h-12 w-full rounded-2xl border border-black/10 bg-black/[0.02] px-4 text-base outline-none transition-colors placeholder:text-black/30 focus:border-black/25 focus:bg-white"
+              className="h-12 w-full rounded-2xl border border-border bg-muted px-4 text-base outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-primary/30 focus:bg-white"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-medium uppercase tracking-[0.2em] text-black/40">Format</label>
+            <label className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Format</label>
             <Select value={formatFilter} onValueChange={(val) => onFormatFilterChange(val as Format | "All")}>
-              <SelectTrigger className="h-12 rounded-2xl border-black/10 bg-black/[0.02]">
+              <SelectTrigger className="h-12 rounded-2xl border-border bg-muted">
                 <SelectValue placeholder="Tous les formats" />
               </SelectTrigger>
               <SelectContent>

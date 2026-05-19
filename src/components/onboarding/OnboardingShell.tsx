@@ -75,7 +75,7 @@ export function OnboardingShell({
   const finalSubmitLabel = submitLabel ?? (isEditing ? "Enregistrer" : "Terminer");
 
   return (
-    <div ref={shellRef} className={cn("flex min-h-screen flex-col bg-white text-black", className)}>
+    <div ref={shellRef} className={cn("flex min-h-screen flex-col bg-background text-foreground", className)}>
       <div
         data-onboarding-header
         className="flex items-center justify-between px-8 py-6 md:px-12"
@@ -87,7 +87,7 @@ export function OnboardingShell({
         >
           clutch
         </button>
-        <span className="text-sm font-medium text-black/50">{headerLabel}</span>
+        <span className="text-sm font-medium text-muted-foreground">{headerLabel}</span>
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center px-6 pb-10 text-center md:px-12">
@@ -95,7 +95,7 @@ export function OnboardingShell({
       </div>
 
       <div className="px-6 pb-12 pt-4 md:px-12 md:pb-14">
-        <div className="mx-auto flex max-w-5xl flex-col gap-5 border-t border-black/8 pt-6">
+        <div className="mx-auto flex max-w-5xl flex-col gap-5 border-t border-border pt-6">
           <OnboardingProgress
             step={step}
             totalSteps={totalSteps}

@@ -1,15 +1,15 @@
 "use client";
 
 import { SignIn, SignUp } from "@clerk/nextjs";
-import { clerkAppearance } from "@/lib/clerk-appearance";
+import { clerkAppearanceDark, clerkAppearanceLight } from "@/lib/clerk-appearance";
 
 const redirectUrl = "/auth/continue";
 
 export function AuthClerkSignIn() {
   return (
-    <div className="clutch-clerk-auth w-full">
+    <div className="clutch-clerk-auth clutch-clerk-auth--dark w-full">
       <SignIn
-        appearance={clerkAppearance}
+        appearance={clerkAppearanceDark}
         routing="hash"
         signUpUrl="/sign-up"
         forceRedirectUrl={redirectUrl}
@@ -22,7 +22,7 @@ export function AuthClerkSignUp() {
   return (
     <div className="clutch-clerk-auth w-full">
       <SignUp
-        appearance={clerkAppearance}
+        appearance={clerkAppearanceLight}
         routing="path"
         path="/sign-up"
         signInUrl="/"

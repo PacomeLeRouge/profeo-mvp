@@ -59,7 +59,7 @@ export function AnimatedTitle({ eyebrow, title, subtitle, stepKey, className }: 
     <div ref={containerRef} className={cn("space-y-4", className)}>
       <p
         data-onboarding-eyebrow
-        className="text-sm uppercase tracking-[0.25em] text-black/40"
+        className="text-sm uppercase tracking-[0.25em] text-muted-foreground"
       >
         {eyebrow}
       </p>
@@ -74,7 +74,7 @@ export function AnimatedTitle({ eyebrow, title, subtitle, stepKey, className }: 
         ))}
       </h1>
       {subtitle ? (
-        <p data-onboarding-subtitle className="text-lg text-black/50 md:text-xl">
+        <p data-onboarding-subtitle className="text-lg text-muted-foreground md:text-xl">
           {subtitle}
         </p>
       ) : null}

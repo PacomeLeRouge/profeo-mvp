@@ -45,7 +45,7 @@ export function RequestDialog({
 }: RequestDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="rounded-[1.5rem] border-black/10 sm:max-w-md">
+      <DialogContent className="rounded-[1.5rem] border-border sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Demander un cours</DialogTitle>
           <DialogDescription>
@@ -55,7 +55,7 @@ export function RequestDialog({
 
         <div className="space-y-5 py-2">
           <div className="space-y-2">
-            <label className="text-xs font-medium uppercase tracking-[0.2em] text-black/40">
+            <label className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
               Matière
             </label>
             <Select value={subject} onValueChange={(val) => onSubjectChange(val as Subject)}>
@@ -73,7 +73,7 @@ export function RequestDialog({
           </div>
 
           {tutor ? (
-            <div className="grid gap-2 rounded-2xl border border-black/8 bg-black/[0.02] p-4 text-sm">
+            <div className="grid gap-2 rounded-2xl border border-border bg-muted p-4 text-sm">
               <Row label="Tarif" value={`${tutor.hourlyRate} €/h`} />
               <Row label="Format" value={formatLabels[tutor.format] ?? tutor.format} />
               <Row label="Établissement" value={tutor.institution} />
@@ -97,8 +97,8 @@ export function RequestDialog({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-4">
-      <span className="text-black/45">{label}</span>
-      <span className={cn("text-right font-medium text-black")}>{value}</span>
+      <span className="text-muted-foreground">{label}</span>
+      <span className={cn("text-right font-medium text-foreground")}>{value}</span>
     </div>
   );
 }

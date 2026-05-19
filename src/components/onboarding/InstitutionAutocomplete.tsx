@@ -142,7 +142,7 @@ export function InstitutionAutocomplete({
       <div className="relative pt-8">
         <span
           ref={labelRef}
-          className="pointer-events-none absolute left-0 right-0 top-0 origin-left text-center text-sm font-medium uppercase tracking-[0.2em] text-black/35"
+          className="pointer-events-none absolute left-0 right-0 top-0 origin-left text-center text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground"
         >
           {label}
         </span>
@@ -162,7 +162,7 @@ export function InstitutionAutocomplete({
             aria-expanded={showSuggestions}
             role="combobox"
             autoComplete="off"
-            className="h-24 w-full border-0 bg-transparent px-0 text-center text-3xl font-medium text-black outline-none placeholder:text-black/20 md:text-4xl"
+            className="h-24 w-full border-0 bg-transparent px-0 text-center text-3xl font-medium text-foreground outline-none placeholder:text-foreground/20 md:text-4xl"
           />
 
           {showSuggestions ? (
@@ -170,7 +170,7 @@ export function InstitutionAutocomplete({
               ref={listRef}
               id={listId}
               role="listbox"
-              className="absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto rounded-3xl border border-black/10 bg-white py-2 text-left shadow-[0_24px_60px_-32px_rgba(0,0,0,0.35)]"
+              className="absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto rounded-3xl border border-border bg-white py-2 text-left shadow-[0_24px_60px_-32px_rgba(0,0,0,0.35)]"
             >
               {suggestions.map((university) => (
                 <li key={`${university.name}-${university.city}`} role="option">
@@ -179,12 +179,12 @@ export function InstitutionAutocomplete({
                     data-suggestion-item
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => handleSelect(university)}
-                    className="flex w-full flex-col gap-0.5 px-5 py-3 text-left transition-colors hover:bg-black/[0.04] focus-visible:bg-black/[0.04] focus-visible:outline-none"
+                    className="flex w-full flex-col gap-0.5 px-5 py-3 text-left transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
                   >
-                    <span className="text-base font-medium text-black md:text-lg">
+                    <span className="text-base font-medium text-foreground md:text-lg">
                       {university.name}
                     </span>
-                    <span className="text-sm text-black/45">
+                    <span className="text-sm text-muted-foreground">
                       {university.city}, {university.country}
                     </span>
                   </button>
@@ -194,17 +194,17 @@ export function InstitutionAutocomplete({
           ) : null}
         </div>
 
-        <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-black/10">
+        <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-primary/10">
           <div
             ref={underlineRef}
-            className="absolute inset-0 origin-center rounded-full bg-black"
+            className="absolute inset-0 origin-center rounded-full bg-primary"
             style={{ transform: "scaleX(0.3)" }}
           />
         </div>
       </div>
 
       {hint ? (
-        <p className="mt-5 text-sm text-black/45">
+        <p className="mt-5 text-sm text-muted-foreground">
           {value.trim().length === 0
             ? hint
             : suggestions.length === 0

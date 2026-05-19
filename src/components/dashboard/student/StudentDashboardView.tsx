@@ -119,14 +119,14 @@ export function StudentDashboardView({
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
-            <p className="text-sm uppercase tracking-[0.25em] text-black/40">
+            <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">
               {preview ? "Preview · Espace étudiant" : "Espace étudiant"}
             </p>
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-[2.75rem] lg:leading-none">
                 Trouve ton tuteur
               </h1>
-              <p className="max-w-2xl text-base leading-7 text-black/55 md:text-lg">
+              <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">
                 Compare les profils, filtre par matière et envoie une demande en quelques clics.
               </p>
             </div>
@@ -134,7 +134,7 @@ export function StudentDashboardView({
           {onEditProfile ? (
             <Button
               variant="outline"
-              className="rounded-full border-black/15 bg-white"
+              className="rounded-full border-border bg-white"
               onClick={onEditProfile}
             >
               Modifier mon profil
@@ -162,7 +162,7 @@ export function StudentDashboardView({
         <section className="space-y-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-xl font-semibold tracking-tight">Tuteurs disponibles</h2>
-            <span className="inline-flex w-fit items-center rounded-full border border-black/10 bg-white px-3 py-1.5 text-sm font-medium text-black/65">
+            <span className="inline-flex w-fit items-center rounded-full border border-border bg-white px-3 py-1.5 text-sm font-medium text-foreground/65">
               {filteredTutors.length} résultat{filteredTutors.length > 1 ? "s" : ""}
             </span>
           </div>
@@ -202,15 +202,15 @@ function StatCard({
   return (
     <div
       data-dashboard-stat
-      className="rounded-2xl border border-black/10 bg-white px-5 py-4 shadow-sm"
+      className="rounded-2xl border border-border bg-white px-5 py-4 shadow-sm"
     >
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-black/[0.05]">
-          <Icon className="h-4 w-4 text-black/70" aria-hidden />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted">
+          <Icon className="h-4 w-4 text-foreground/70" aria-hidden />
         </div>
         <div>
           <p className="text-2xl font-semibold tracking-tight">{value}</p>
-          <p className="text-sm text-black/50">{label}</p>
+          <p className="text-sm text-muted-foreground">{label}</p>
         </div>
       </div>
     </div>

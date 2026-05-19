@@ -137,15 +137,15 @@ export function TutorOnboardingFlow({
 
   if (completed) {
     return (
-      <div className="flex min-h-screen flex-col bg-white text-black">
+      <div className="flex min-h-screen flex-col bg-background text-foreground">
         <DevPreviewBanner />
         <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
           <div className="max-w-lg space-y-6">
-            <p className="text-sm uppercase tracking-[0.25em] text-black/40">Preview terminée</p>
+            <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">Preview terminée</p>
             <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
               Onboarding tuteur complété
             </h1>
-            <p className="text-lg text-black/55">
+            <p className="text-lg text-muted-foreground">
               En mode dev, rien n&apos;a été enregistré. Relancez le parcours pour retester les animations.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">

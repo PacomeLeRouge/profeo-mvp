@@ -43,18 +43,18 @@ export function AvailabilityGrid({ selectedSlots, onToggle, stepKey }: Availabil
 
   return (
     <div ref={gridRef} className="overflow-x-auto">
-      <div className="mx-auto min-w-[760px] max-w-5xl overflow-hidden rounded-3xl border border-black/10">
-        <div className="grid grid-cols-8 border-b border-black/10 bg-black/[0.02] text-sm font-medium text-black/60">
-          <div className="border-r border-black/10 px-4 py-4" />
+      <div className="mx-auto min-w-[760px] max-w-5xl overflow-hidden rounded-3xl border border-border">
+        <div className="grid grid-cols-8 border-b border-border bg-muted text-sm font-medium text-muted-foreground">
+          <div className="border-r border-border px-4 py-4" />
           {daysOfWeek.map((day) => (
-            <div key={day} className="border-r border-black/10 px-4 py-4 text-center last:border-r-0">
+            <div key={day} className="border-r border-border px-4 py-4 text-center last:border-r-0">
               {day.substring(0, 3)}
             </div>
           ))}
         </div>
         {timeSlots.map((time) => (
-          <div key={time} className="grid grid-cols-8 border-b border-black/10 last:border-b-0">
-            <div className="flex items-center justify-center border-r border-black/10 bg-black/[0.02] px-4 py-5 text-sm font-medium text-black/60">
+          <div key={time} className="grid grid-cols-8 border-b border-border last:border-b-0">
+            <div className="flex items-center justify-center border-r border-border bg-muted px-4 py-5 text-sm font-medium text-muted-foreground">
               {time}
             </div>
             {daysOfWeek.map((day) => {
@@ -68,8 +68,8 @@ export function AvailabilityGrid({ selectedSlots, onToggle, stepKey }: Availabil
                   data-availability-cell
                   onClick={(e) => handleToggle(day, time, e.currentTarget)}
                   className={cn(
-                    "border-r border-black/10 px-2 py-3 transition-colors duration-200 last:border-r-0",
-                    isSelected ? "bg-black/90" : "bg-white hover:bg-black/[0.04]"
+                    "border-r border-border px-2 py-3 transition-colors duration-200 last:border-r-0",
+                    isSelected ? "bg-primary/90" : "bg-white hover:bg-muted"
                   )}
                 >
                   <div

@@ -50,7 +50,7 @@ export function OnboardingProgress({ step, totalSteps, stepLabel, className }: O
   return (
     <div ref={containerRef} className={cn("flex flex-col gap-5", className)}>
       {stepLabel ? (
-        <div className="w-full max-w-xl self-center text-sm text-black/45">
+        <div className="w-full max-w-xl self-center text-sm text-muted-foreground">
           <span>{stepLabel}</span>
         </div>
       ) : null}
@@ -59,7 +59,7 @@ export function OnboardingProgress({ step, totalSteps, stepLabel, className }: O
           <div
             key={`progress-${index + 1}`}
             data-progress-segment
-            className="h-3 w-16 origin-center rounded-full bg-black/15 md:w-20"
+            className="h-3 w-16 origin-center rounded-full bg-primary/15 md:w-20"
             style={{
               backgroundColor: index + 1 <= step ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.15)",
             }}
