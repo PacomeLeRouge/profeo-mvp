@@ -5,8 +5,12 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { lessonRequests, tutorProfiles, users } from "@/db/schema";
 import { requireAuthUserId } from "@/lib/auth";
+import {
+  notifyStudentOfLessonRequestStatus,
+  notifyTutorOfNewLessonRequest,
+} from "@/lib/email/lesson-requests";
 import { mapLessonRequest } from "@/lib/mappers";
-import { assertValidSubjects, isSubject } from "@/lib/subjects";
+import { isSubject } from "@/lib/subjects";
 import type { Subject } from "@/lib/types";
 
 export async function listMyLessonRequestsAction() {
@@ -67,6 +71,13 @@ export async function createLessonRequestAction(data: {
 
   revalidatePath("/dashboard/student");
   revalidatePath("/dashboard/tutor");
+
+  void notifyTutorOfNewLessonRequest({
+    tutorUserId: tutor.userId,
+    studentUserId: userId,
+    subject: data.subject,
+  }).catch((err) => console.error("[email] notify tutor:", err));
+
   return mapLessonRequest(created);
 }
 
@@ -95,5 +106,13 @@ export async function updateLessonRequestStatusAction(
 
   revalidatePath("/dashboard/tutor");
   revalidatePath("/dashboard/student");
+
+  void notifyStudentOfLessonRequestStatus({
+    studentUserId: updated.studentUserId,
+    tutorUserId: userId,
+    subject: updated.subject as Subject,
+    status,
+  }).catch((err) => console.error("[email] notify student:", err));
+
   return mapLessonRequest(updated);
 }

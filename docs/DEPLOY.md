@@ -5,6 +5,7 @@
 1. [Vercel](https://vercel.com) — hébergement Next.js
 2. [Clerk](https://clerk.com) — authentification
 3. [Neon](https://neon.tech) — base Postgres
+4. [Resend](https://resend.com) — e-mails (demandes de cours)
 
 Ou installez Clerk et Neon depuis le **Vercel Marketplace** sur votre projet (`vercel integration add clerk` / `neon`).
 
@@ -46,7 +47,27 @@ npm run db:push
 npm run db:seed   # tuteurs de démo (optionnel)
 ```
 
-## 4. Lancer en local
+## 4. Resend — notifications par e-mail
+
+Les demandes de cours déclenchent des e-mails transactionnels :
+
+- **Nouvelle demande** → e-mail au tuteur
+- **Acceptation / refus** → e-mail à l'étudiant
+
+1. Créez un compte [Resend](https://resend.com) et une clé API.
+2. En développement, utilisez `onboarding@resend.dev` comme expéditeur (domaine de test Resend).
+3. En production, vérifiez votre domaine et mettez par ex. `Clutch <noreply@votredomaine.com>` dans `EMAIL_FROM`.
+4. Ajoutez dans `.env.local` :
+
+```env
+RESEND_API_KEY=re_...
+EMAIL_FROM=Clutch <onboarding@resend.dev>
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+Sans `RESEND_API_KEY`, l'app fonctionne normalement : les demandes sont enregistrées en base, les e-mails sont simplement ignorés (message dans les logs en dev).
+
+## 5. Lancer en local
 
 ```bash
 npm install
@@ -55,7 +76,7 @@ npm run dev
 
 Ouvrez [http://localhost:3000](http://localhost:3000).
 
-## 5. Déployer sur Vercel
+## 6. Déployer sur Vercel
 
 ```bash
 vercel link
@@ -75,10 +96,13 @@ Variables d'environnement à définir sur Vercel (Production + Preview) :
 - `NEXT_PUBLIC_CLERK_SIGN_UP_URL` = `/sign-up`
 - `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL` = `/auth/continue`
 - `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL` = `/auth/continue`
+- `RESEND_API_KEY`
+- `EMAIL_FROM` (ex. `Clutch <noreply@votredomaine.com>`)
+- `NEXT_PUBLIC_APP_URL` = `https://votre-domaine.vercel.app` (ou domaine custom)
 
 Après le premier déploiement, mettez à jour l’URL du webhook Clerk avec le domaine de production.
 
-## 6. Transfert au client (handoff)
+## 7. Transfert au client (handoff)
 
 | Ressource | Action |
 |-----------|--------|
@@ -90,7 +114,7 @@ Après le premier déploiement, mettez à jour l’URL du webhook Clerk avec le 
 
 Le client recrée les intégrations Marketplace, copie `.env.example`, exécute `vercel env pull` et `npm run db:push`.
 
-## 7. Parcours utilisateur
+## 8. Parcours utilisateur
 
 1. Connexion (`/`) — email, Google ou Microsoft
 2. `/auth/continue` — redirection selon profil

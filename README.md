@@ -17,6 +17,7 @@ Plateforme de mise en relation entre étudiants et tuteurs pour des cours partic
 - **Auth** : Clerk (email, Google, Microsoft)
 - **Base de données** : Neon Postgres + Drizzle ORM
 - **Déploiement** : Vercel (frontend + API)
+- **E-mails** : Resend (notifications de demandes de cours)
 - **Icons** : Lucide React
 
 ## Installation
