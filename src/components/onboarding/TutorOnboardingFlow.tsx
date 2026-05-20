@@ -17,6 +17,11 @@ import { tutorEducationLevels } from "@/components/onboarding/onboarding-shared"
 import { Button } from "@/components/ui/button";
 import { onboardingThemeClass } from "@/lib/onboarding-theme";
 import { getOnboardingSymbol, getOnboardingSymbolAlt } from "@/lib/onboarding-symbols";
+import {
+  isValidAgeStep,
+  isValidFirstNameStep,
+  isValidHourlyRateStep,
+} from "@/lib/onboarding-step-validation";
 import { cn } from "@/lib/utils";
 
 const totalSteps = 8;
@@ -24,10 +29,12 @@ const totalSteps = 8;
 type TutorOnboardingFlowProps = {
   preview?: boolean;
   exitHref: string;
+  accountEmail: string;
   initialFirstName?: string;
   initialProfile?: TutorProfile | null;
   onSubmit: (data: {
     firstName: string;
+    contactEmail: string;
     age?: number;
     subjects: Subject[];
     hourlyRate: number;
@@ -42,6 +49,7 @@ type TutorOnboardingFlowProps = {
 export function TutorOnboardingFlow({
   preview = false,
   exitHref,
+  accountEmail,
   initialFirstName = "",
   initialProfile = null,
   onSubmit,
@@ -52,6 +60,8 @@ export function TutorOnboardingFlow({
 
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [firstName, setFirstName] = useState(initialFirstName || initialProfile?.name || "");
   const [age, setAge] = useState(initialProfile?.age ? String(initialProfile.age) : "");
   const [educationLevel, setEducationLevel] = useState(initialProfile?.educationLevel || "");
@@ -88,6 +98,7 @@ export function TutorOnboardingFlow({
   };
 
   const handleNext = () => {
+    setSubmitError(null);
     directionRef.current = 1;
     setStep((current) => Math.min(current + 1, totalSteps));
   };
@@ -102,23 +113,38 @@ export function TutorOnboardingFlow({
   };
 
   const handleSubmit = async () => {
+    setSubmitError(null);
+    setIsSubmitting(true);
+
     const availability =
       selectedSlots.length > 0 ? selectedSlots.join(" • ") : "Non précisé";
 
-    await onSubmit({
-      firstName: firstName.trim(),
-      age: age ? Number(age) : undefined,
-      subjects,
-      hourlyRate: Number(hourlyRate),
-      format,
-      bio: initialProfile?.bio ?? "",
-      availability,
-      educationLevel,
-      institution,
-    });
+    try {
+      await onSubmit({
+        firstName: firstName.trim(),
+        contactEmail: accountEmail,
+        age: age ? Number(age) : undefined,
+        subjects,
+        hourlyRate: Number(hourlyRate),
+        format,
+        bio: initialProfile?.bio ?? "",
+        availability,
+        educationLevel,
+        institution,
+      });
 
-    if (preview) {
-      setCompleted(true);
+      if (preview) {
+        setCompleted(true);
+      }
+    } catch (err) {
+      console.error("[TutorOnboarding] submit failed:", err);
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : "Impossible d'enregistrer votre profil. Réessayez."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -137,12 +163,12 @@ export function TutorOnboardingFlow({
   };
 
   const canContinue =
-    (step === 1 && firstName.trim().length >= 2) ||
-    (step === 2 && !!age) ||
+    (step === 1 && isValidFirstNameStep(firstName)) ||
+    (step === 2 && isValidAgeStep(age, 18, 99)) ||
     (step === 3 && !!educationLevel) ||
     (step === 4 && !!institution.trim()) ||
     (step === 5 && subjects.length > 0) ||
-    (step === 6 && !!hourlyRate) ||
+    (step === 6 && isValidHourlyRateStep(hourlyRate)) ||
     (step === 7 && !!format) ||
     (step === 8 && selectedSlots.length > 0);
 
@@ -189,6 +215,8 @@ export function TutorOnboardingFlow({
               : undefined
         }
         canContinue={canContinue}
+        isSubmitting={isSubmitting}
+        submitError={submitError}
         isLastStep={step === totalSteps}
         isEditing={isEditing}
         submitLabel={preview ? "Terminer (preview)" : isEditing ? "Enregistrer" : "Publier mon profil"}
@@ -219,7 +247,10 @@ export function TutorOnboardingFlow({
         {step === 2 && (
           <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
             <OnboardingStepTitle
-              step={step} eyebrow="Profil tuteur" title="Quel âge avez-vous ?" />
+              step={step}
+              eyebrow="Profil tuteur"
+              title="Quel âge avez-vous ?"
+            />
             <AnimatedNumberField
               label="Votre âge"
               placeholder="22"

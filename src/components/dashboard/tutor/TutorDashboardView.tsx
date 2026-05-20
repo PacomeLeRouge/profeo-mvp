@@ -12,6 +12,7 @@ import { tutorDashboardDecor } from "@/lib/dashboard-decor";
 import { subjectTranslations } from "@/lib/subjects";
 import type { LessonRequest, TutorProfile, User } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ContactEmailLink } from "@/components/dashboard/ContactEmailLink";
 import { BookOpen, Clock, Euro, Sparkles } from "lucide-react";
 
 const formatTranslations: Record<string, string> = {
@@ -153,6 +154,10 @@ export function TutorDashboardView({
               <span className="font-medium text-foreground">{confirmedCount}</span> cours confirmé
               {confirmedCount > 1 ? "s" : ""} · Disponibilités : {tutorProfile.availability}
             </p>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <span className="text-sm text-muted-foreground">Contact publié :</span>
+              <ContactEmailLink email={tutorProfile.contactEmail} />
+            </div>
           </section>
 
           <section className="space-y-4">
@@ -198,10 +203,11 @@ export function TutorDashboardView({
                         key={req.id}
                         className="flex flex-col gap-4 rounded-[1.25rem] border border-border bg-background/50 p-5 sm:flex-row sm:items-center sm:justify-between"
                       >
-                        <div className="space-y-1">
+                        <div className="space-y-2">
                           <p className="font-medium text-foreground">
-                            {subjectTranslations[req.subject] || req.subject}
+                            {req.studentName} · {subjectTranslations[req.subject] || req.subject}
                           </p>
+                          <ContactEmailLink email={req.studentContactEmail} label="Contacter l'élève" />
                           <p className="text-sm text-muted-foreground">
                             Reçu le{" "}
                             {new Date(req.createdAt).toLocaleDateString("fr-BE", {
@@ -244,10 +250,13 @@ export function TutorDashboardView({
                         key={req.id}
                         className="flex flex-col gap-3 rounded-[1.25rem] border border-border bg-background/50 p-5 sm:flex-row sm:items-center sm:justify-between"
                       >
-                        <div className="space-y-1">
+                        <div className="space-y-2">
                           <p className="font-medium text-foreground">
-                            {subjectTranslations[req.subject] || req.subject}
+                            {req.studentName} · {subjectTranslations[req.subject] || req.subject}
                           </p>
+                          {req.status === "Confirmed" ? (
+                            <ContactEmailLink email={req.studentContactEmail} label="Contacter l'élève" />
+                          ) : null}
                           <p className="text-sm text-muted-foreground">
                             {new Date(req.createdAt).toLocaleDateString("fr-BE")}
                           </p>

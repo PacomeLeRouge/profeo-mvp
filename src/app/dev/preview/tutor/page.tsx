@@ -7,6 +7,7 @@ export default function DevTutorPreviewPage() {
     <TutorOnboardingFlow
       preview
       exitHref="/dev"
+      accountEmail="preview@clutch.dev"
       onSubmit={async () => {
         await new Promise((resolve) => setTimeout(resolve, 300));
       }}

@@ -10,6 +10,7 @@ type AnimatedTextFieldProps = {
   label: string;
   placeholder?: string;
   hint?: string;
+  type?: "text" | "email";
   autoFocus?: boolean;
   className?: string;
   "aria-label"?: string;
@@ -21,6 +22,7 @@ export function AnimatedTextField({
   label,
   placeholder = "…",
   hint,
+  type = "text",
   autoFocus = true,
   className,
   "aria-label": ariaLabel,
@@ -58,15 +60,18 @@ export function AnimatedTextField({
         </span>
         <input
           ref={inputRef}
-          type="text"
+          type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder={isActive ? placeholder : ""}
           aria-label={ariaLabel ?? label}
-          autoComplete="given-name"
-          className="h-24 w-full border-0 bg-transparent px-0 text-center text-3xl font-medium text-foreground capitalize outline-none placeholder:text-foreground/20 md:text-4xl"
+          autoComplete={type === "email" ? "email" : "given-name"}
+          className={cn(
+            "h-24 w-full border-0 bg-transparent px-0 text-center text-3xl font-medium text-foreground outline-none placeholder:text-foreground/20 md:text-4xl",
+            type === "text" && "capitalize"
+          )}
         />
       </div>
       {hint ? <p className="mt-5 text-center text-sm text-muted-foreground">{hint}</p> : null}

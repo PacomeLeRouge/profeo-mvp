@@ -47,6 +47,7 @@ export const studentProfiles = pgTable("student_profiles", {
   educationLevel: text("education_level").notNull(),
   institution: text("institution").notNull(),
   subjectsOfInterest: subjectEnum("subjects_of_interest").array().notNull(),
+  contactEmail: text("contact_email").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -70,6 +71,7 @@ export const tutorProfiles = pgTable("tutor_profiles", {
   availability: text("availability").notNull(),
   educationLevel: text("education_level").notNull(),
   institution: text("institution").notNull(),
+  contactEmail: text("contact_email").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -87,6 +89,9 @@ export const lessonRequests = pgTable("lesson_requests", {
     .notNull()
     .references(() => tutorProfiles.id, { onDelete: "cascade" }),
   tutorName: text("tutor_name").notNull(),
+  studentName: text("student_name").notNull(),
+  studentContactEmail: text("student_contact_email").notNull(),
+  tutorContactEmail: text("tutor_contact_email").notNull(),
   subject: subjectEnum("subject").notNull(),
   status: requestStatusEnum("status").default("Pending").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })

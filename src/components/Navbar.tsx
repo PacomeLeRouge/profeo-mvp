@@ -22,6 +22,8 @@ export function Navbar() {
     pathname.startsWith("/auth") ||
     pathname.startsWith("/dev");
 
+  const showThemeToggle = pathname.startsWith("/dashboard");
+
   const handleLogout = async () => {
     await signOut();
     router.push("/");
@@ -51,7 +53,7 @@ export function Navbar() {
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <ThemeToggle />
+            {showThemeToggle ? <ThemeToggle /> : null}
             <div className="inline-flex max-w-full items-center rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground shadow-sm">
               <span className="truncate font-medium text-foreground">{displayName}</span>
             </div>

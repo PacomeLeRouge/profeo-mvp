@@ -16,6 +16,10 @@ import { studentEducationLevels } from "@/components/onboarding/onboarding-share
 import { Button } from "@/components/ui/button";
 import { onboardingThemeClass } from "@/lib/onboarding-theme";
 import { getOnboardingSymbol, getOnboardingSymbolAlt } from "@/lib/onboarding-symbols";
+import {
+  isValidAgeStep,
+  isValidFirstNameStep,
+} from "@/lib/onboarding-step-validation";
 import { cn } from "@/lib/utils";
 
 const totalSteps = 5;
@@ -23,10 +27,12 @@ const totalSteps = 5;
 type StudentOnboardingFlowProps = {
   preview?: boolean;
   exitHref: string;
+  accountEmail: string;
   initialFirstName?: string;
   initialProfile?: StudentProfile | null;
   onSubmit: (data: {
     firstName: string;
+    contactEmail: string;
     age?: number;
     educationLevel: string;
     institution: string;
@@ -37,6 +43,7 @@ type StudentOnboardingFlowProps = {
 export function StudentOnboardingFlow({
   preview = false,
   exitHref,
+  accountEmail,
   initialFirstName = "",
   initialProfile = null,
   onSubmit,
@@ -47,6 +54,8 @@ export function StudentOnboardingFlow({
 
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [firstName, setFirstName] = useState(initialFirstName);
   const [age, setAge] = useState(initialProfile?.age ? String(initialProfile.age) : "");
   const [educationLevel, setEducationLevel] = useState(initialProfile?.educationLevel || "");
@@ -63,6 +72,7 @@ export function StudentOnboardingFlow({
   };
 
   const handleNext = () => {
+    setSubmitError(null);
     directionRef.current = 1;
     setStep((current) => Math.min(current + 1, totalSteps));
   };
@@ -77,16 +87,31 @@ export function StudentOnboardingFlow({
   };
 
   const handleSubmit = async () => {
-    await onSubmit({
-      firstName: firstName.trim(),
-      age: age ? Number(age) : undefined,
-      educationLevel,
-      institution,
-      subjectsOfInterest: subjects,
-    });
+    setSubmitError(null);
+    setIsSubmitting(true);
 
-    if (preview) {
-      setCompleted(true);
+    try {
+      await onSubmit({
+        firstName: firstName.trim(),
+        contactEmail: accountEmail,
+        age: age ? Number(age) : undefined,
+        educationLevel,
+        institution,
+        subjectsOfInterest: subjects,
+      });
+
+      if (preview) {
+        setCompleted(true);
+      }
+    } catch (err) {
+      console.error("[StudentOnboarding] submit failed:", err);
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : "Impossible d'enregistrer votre profil. Réessayez."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -102,8 +127,8 @@ export function StudentOnboardingFlow({
   };
 
   const canContinue =
-    (step === 1 && firstName.trim().length >= 2) ||
-    (step === 2 && !!age) ||
+    (step === 1 && isValidFirstNameStep(firstName)) ||
+    (step === 2 && isValidAgeStep(age, 16, 99)) ||
     (step === 3 && !!educationLevel) ||
     (step === 4 && !!institution.trim()) ||
     (step === 5 && subjects.length > 0);
@@ -151,6 +176,8 @@ export function StudentOnboardingFlow({
               : undefined
         }
         canContinue={canContinue}
+        isSubmitting={isSubmitting}
+        submitError={submitError}
         isLastStep={step === totalSteps}
         isEditing={isEditing}
         submitLabel={preview ? "Terminer (preview)" : undefined}

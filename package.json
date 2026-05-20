@@ -7,10 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:smoke": "tsx scripts/smoke-onboarding.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx scripts/seed.ts",
+    "email:test": "tsx scripts/test-contact-email.ts",
     "symbols:remove-bg": "python3 scripts/remove-symbol-backgrounds.py"
   },
   "dependencies": {

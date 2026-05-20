@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion, onboardingEase } from "@/lib/gsap-config";
 import { Button } from "@/components/ui/button";
 import { OnboardingProgress } from "@/components/onboarding/OnboardingProgress";
 import { OnboardingSymbol } from "@/components/onboarding/OnboardingSymbol";
 import { getSymbolPlacement } from "@/lib/onboarding-symbols";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 type OnboardingShellProps = {
@@ -15,6 +15,8 @@ type OnboardingShellProps = {
   symbolSrc?: string;
   symbolAlt?: string;
   canContinue: boolean;
+  isSubmitting?: boolean;
+  submitError?: string | null;
   isLastStep: boolean;
   isEditing?: boolean;
   submitLabel?: string;
@@ -33,6 +35,8 @@ export function OnboardingShell({
   symbolSrc,
   symbolAlt = "",
   canContinue,
+  isSubmitting = false,
+  submitError = null,
   isLastStep,
   isEditing = false,
   submitLabel,
@@ -47,21 +51,8 @@ export function OnboardingShell({
   const continueRef = useRef<HTMLDivElement>(null);
   const symbolPlacement = useMemo(() => getSymbolPlacement(step), [step]);
 
-  useGSAP(
-    () => {
-      if (!continueRef.current || prefersReducedMotion()) return;
-
-      gsap.to(continueRef.current, {
-        scale: canContinue ? 1 : 0.97,
-        opacity: canContinue ? 1 : 0.45,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    },
-    { scope: shellRef, dependencies: [canContinue] }
-  );
-
   const finalSubmitLabel = submitLabel ?? (isEditing ? "Enregistrer" : "Terminer");
+  const actionDisabled = !canContinue || isSubmitting;
   const progressLabel = stepLabel ?? `Étape ${step} sur ${totalSteps}`;
 
   return (
@@ -70,6 +61,9 @@ export function OnboardingShell({
       className={cn("flex min-h-0 flex-1 flex-col", className)}
     >
       <div className="relative flex min-h-[min(72vh,720px)] flex-1 flex-col overflow-hidden">
+        <div className="absolute right-6 top-6 z-20 md:right-12 md:top-8">
+          <ThemeToggle />
+        </div>
         {symbolSrc ? (
           <OnboardingSymbol
             src={symbolSrc}
@@ -92,6 +86,14 @@ export function OnboardingShell({
             totalSteps={totalSteps}
             stepLabel={progressLabel}
           />
+          {submitError ? (
+            <p
+              role="alert"
+              className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-center text-sm text-destructive"
+            >
+              {submitError}
+            </p>
+          ) : null}
           <div className="flex items-center justify-between">
             <Button variant="ghost" onClick={onBack} className="px-0 text-base">
               Retour
@@ -100,15 +102,15 @@ export function OnboardingShell({
               {isLastStep ? (
                 <Button
                   onClick={onSubmit}
-                  disabled={!canContinue}
+                  disabled={actionDisabled}
                   className="h-12 rounded-full px-8 text-base transition-none"
                 >
-                  {finalSubmitLabel}
+                  {isSubmitting ? "Enregistrement…" : finalSubmitLabel}
                 </Button>
               ) : (
                 <Button
                   onClick={onNext}
-                  disabled={!canContinue}
+                  disabled={actionDisabled}
                   className="h-12 rounded-full px-8 text-base transition-none"
                 >
                   {continueLabel}

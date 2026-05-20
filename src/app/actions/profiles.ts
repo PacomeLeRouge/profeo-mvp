@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { lessonRequests, studentProfiles, tutorProfiles, users } from "@/db/schema";
 import { ensureDbUser, requireAuthUserId, syncClerkFirstName } from "@/lib/auth";
+import { resolveContactEmail } from "@/lib/contact-email";
 import { listPublishedTutorProfiles } from "@/lib/data/dashboard";
 import { mapStudentProfile, mapTutorProfile } from "@/lib/mappers";
 import {
@@ -79,6 +80,7 @@ export async function listTutorProfilesAction() {
 
 export async function saveStudentProfileAction(data: {
   firstName: string;
+  contactEmail: string;
   age?: number;
   educationLevel: string;
   institution: string;
@@ -90,7 +92,10 @@ export async function saveStudentProfileAction(data: {
     throw new Error("Only students can save a student profile");
   }
 
-  const validated = validateStudentProfileInput(data);
+  const validated = validateStudentProfileInput({
+    ...data,
+    contactEmail: resolveContactEmail(data.contactEmail, user.email),
+  });
   await syncUserFirstName(userId, validated.firstName);
 
   const existing = await db.query.studentProfiles.findFirst({
@@ -102,6 +107,7 @@ export async function saveStudentProfileAction(data: {
       .update(studentProfiles)
       .set({
         age: validated.age,
+        contactEmail: validated.contactEmail,
         educationLevel: validated.educationLevel,
         institution: validated.institution,
         subjectsOfInterest: validated.subjectsOfInterest,
@@ -119,6 +125,7 @@ export async function saveStudentProfileAction(data: {
     .values({
       userId,
       age: validated.age,
+      contactEmail: validated.contactEmail,
       educationLevel: validated.educationLevel,
       institution: validated.institution,
       subjectsOfInterest: validated.subjectsOfInterest,
@@ -131,6 +138,7 @@ export async function saveStudentProfileAction(data: {
 
 export async function saveTutorProfileAction(data: {
   firstName: string;
+  contactEmail: string;
   age?: number;
   subjects: Subject[];
   hourlyRate: number;
@@ -146,7 +154,10 @@ export async function saveTutorProfileAction(data: {
     throw new Error("Only tutors can save a tutor profile");
   }
 
-  const validated = validateTutorProfileInput(data);
+  const validated = validateTutorProfileInput({
+    ...data,
+    contactEmail: resolveContactEmail(data.contactEmail, user.email),
+  });
   const displayName = await syncUserFirstName(userId, validated.firstName);
 
   const existing = await db.query.tutorProfiles.findFirst({
@@ -155,6 +166,7 @@ export async function saveTutorProfileAction(data: {
 
   const payload = {
     name: displayName,
+    contactEmail: validated.contactEmail,
     age: validated.age,
     subjects: validated.subjects,
     hourlyRate: validated.hourlyRate,

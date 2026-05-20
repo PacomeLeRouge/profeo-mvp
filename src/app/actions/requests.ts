@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { lessonRequests, tutorProfiles, users } from "@/db/schema";
+import { lessonRequests, studentProfiles, tutorProfiles, users } from "@/db/schema";
+import { resolveContactEmail } from "@/lib/contact-email";
 import { requireAuthUserId } from "@/lib/auth";
 import {
   notifyStudentOfLessonRequestStatus,
@@ -49,15 +50,33 @@ export async function createLessonRequestAction(data: {
     throw new Error("Only students can create lesson requests");
   }
 
+  const studentProfile = await db.query.studentProfiles.findFirst({
+    where: eq(studentProfiles.userId, userId),
+  });
+  if (!studentProfile) {
+    throw new Error("Complétez votre profil étudiant avant d'envoyer une demande");
+  }
+
   const tutor = await db.query.tutorProfiles.findFirst({
     where: eq(tutorProfiles.id, data.tutorProfileId),
   });
   if (!tutor) throw new Error("Tutor not found");
+
+  const tutorUser = await db.query.users.findFirst({
+    where: eq(users.id, tutor.userId),
+  });
+  if (!tutorUser?.email) throw new Error("Tuteur introuvable");
   if (tutor.userId === userId) throw new Error("Cannot request yourself");
   if (!isSubject(data.subject)) throw new Error(`Matière invalide : ${data.subject}`);
   if (!tutor.subjects.includes(data.subject)) {
     throw new Error("Ce tuteur n'enseigne pas cette matière");
   }
+
+  const studentContactEmail = resolveContactEmail(
+    studentProfile.contactEmail,
+    user.email
+  );
+  const tutorContactEmail = resolveContactEmail(tutor.contactEmail, tutorUser.email);
 
   const [created] = await db
     .insert(lessonRequests)
@@ -65,6 +84,9 @@ export async function createLessonRequestAction(data: {
       studentUserId: userId,
       tutorProfileId: data.tutorProfileId,
       tutorName: tutor.name,
+      studentName: user.name,
+      studentContactEmail,
+      tutorContactEmail,
       subject: data.subject,
     })
     .returning();
@@ -74,7 +96,9 @@ export async function createLessonRequestAction(data: {
 
   void notifyTutorOfNewLessonRequest({
     tutorUserId: tutor.userId,
-    studentUserId: userId,
+    tutorContactEmail,
+    studentName: user.name,
+    studentContactEmail,
     subject: data.subject,
   }).catch((err) => console.error("[email] notify tutor:", err));
 
@@ -108,8 +132,10 @@ export async function updateLessonRequestStatusAction(
   revalidatePath("/dashboard/student");
 
   void notifyStudentOfLessonRequestStatus({
-    studentUserId: updated.studentUserId,
-    tutorUserId: userId,
+    studentContactEmail: updated.studentContactEmail,
+    studentName: updated.studentName,
+    tutorName: updated.tutorName,
+    tutorContactEmail: updated.tutorContactEmail,
     subject: updated.subject as Subject,
     status,
   }).catch((err) => console.error("[email] notify student:", err));

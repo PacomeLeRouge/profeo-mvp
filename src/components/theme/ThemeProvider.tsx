@@ -9,57 +9,84 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { DEFAULT_THEME, isTheme, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
+import { usePathname } from "next/navigation";
+import {
+  applyThemeToDocument,
+  isThemeToggleRoute,
+  resolveThemeForRoute,
+  THEME_STORAGE_KEY,
+  type Theme,
+} from "@/lib/theme";
 
 type ThemeContextValue = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
+  canToggleTheme: boolean;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-function applyTheme(theme: Theme) {
-  const isDark = theme === "dark";
-  document.documentElement.classList.toggle("dark", isDark);
-  document.body.classList.toggle("app-surface", !isDark);
-  localStorage.setItem(THEME_STORAGE_KEY, theme);
+function readStoredTheme(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(THEME_STORAGE_KEY);
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(DEFAULT_THEME);
+/** Remounts when the route changes so theme resets without syncing in an effect. */
+function ThemeProviderScope({
+  pathname,
+  children,
+}: {
+  pathname: string;
+  children: ReactNode;
+}) {
+  const [theme, setThemeState] = useState<Theme>(() =>
+    resolveThemeForRoute(pathname, readStoredTheme())
+  );
+  const canToggleTheme = isThemeToggleRoute(pathname);
 
   useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    const stored = localStorage.getItem(THEME_STORAGE_KEY);
-    const resolved: Theme = isTheme(stored) ? stored : isDark ? "dark" : DEFAULT_THEME;
-    setThemeState(resolved);
-    applyTheme(resolved);
-  }, []);
+    applyThemeToDocument(theme);
+  }, [theme]);
 
-  const setTheme = useCallback((next: Theme) => {
-    setThemeState(next);
-    applyTheme(next);
-  }, []);
+  const setTheme = useCallback(
+    (next: Theme) => {
+      if (!isThemeToggleRoute(pathname)) return;
+      setThemeState(next);
+      applyThemeToDocument(next);
+    },
+    [pathname]
+  );
 
   const toggleTheme = useCallback(() => {
+    if (!isThemeToggleRoute(pathname)) return;
     setThemeState((current) => {
       const next: Theme = current === "dark" ? "light" : "dark";
-      applyTheme(next);
+      applyThemeToDocument(next);
       return next;
     });
-  }, []);
+  }, [pathname]);
 
   const value = useMemo(
     () => ({
       theme,
       setTheme,
       toggleTheme,
+      canToggleTheme,
     }),
-    [theme, setTheme, toggleTheme]
+    [theme, setTheme, toggleTheme, canToggleTheme]
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  return (
+    <ThemeProviderScope key={pathname} pathname={pathname}>
+      {children}
+    </ThemeProviderScope>
+  );
 }
 
 export function useTheme() {

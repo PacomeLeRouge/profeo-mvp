@@ -17,21 +17,23 @@ const formatLabels: Record<string, string> = {
 
 export async function notifyTutorOfNewLessonRequest(params: {
   tutorUserId: string;
-  studentUserId: string;
+  tutorContactEmail: string;
+  studentName: string;
+  studentContactEmail: string;
   subject: Subject;
 }): Promise<void> {
-  const [tutorUser, studentUser, tutorProfile] = await Promise.all([
+  const [tutorUser, tutorProfile] = await Promise.all([
     db.query.users.findFirst({ where: eq(users.id, params.tutorUserId) }),
-    db.query.users.findFirst({ where: eq(users.id, params.studentUserId) }),
     db.query.tutorProfiles.findFirst({ where: eq(tutorProfiles.userId, params.tutorUserId) }),
   ]);
 
-  if (!tutorUser?.email || !studentUser || !tutorProfile) return;
+  if (!tutorUser || !tutorProfile) return;
 
   const subjectLabel = subjectTranslations[params.subject] ?? params.subject;
   const message = newLessonRequestEmail({
     tutorName: tutorUser.name,
-    studentName: studentUser.name,
+    studentName: params.studentName,
+    studentContactEmail: params.studentContactEmail,
     subjectLabel,
     hourlyRate: tutorProfile.hourlyRate,
     formatLabel: formatLabels[tutorProfile.format] ?? tutorProfile.format,
@@ -39,7 +41,7 @@ export async function notifyTutorOfNewLessonRequest(params: {
   });
 
   await sendEmail({
-    to: tutorUser.email,
+    to: params.tutorContactEmail,
     subject: message.subject,
     html: message.html,
     text: message.text,
@@ -47,28 +49,24 @@ export async function notifyTutorOfNewLessonRequest(params: {
 }
 
 export async function notifyStudentOfLessonRequestStatus(params: {
-  studentUserId: string;
-  tutorUserId: string;
+  studentContactEmail: string;
+  studentName: string;
+  tutorName: string;
+  tutorContactEmail: string;
   subject: Subject;
   status: "Confirmed" | "Declined";
 }): Promise<void> {
-  const [studentUser, tutorUser] = await Promise.all([
-    db.query.users.findFirst({ where: eq(users.id, params.studentUserId) }),
-    db.query.users.findFirst({ where: eq(users.id, params.tutorUserId) }),
-  ]);
-
-  if (!studentUser?.email || !tutorUser) return;
-
   const subjectLabel = subjectTranslations[params.subject] ?? params.subject;
   const message = lessonRequestStatusEmail({
-    studentName: studentUser.name,
-    tutorName: tutorUser.name,
+    studentName: params.studentName,
+    tutorName: params.tutorName,
+    tutorContactEmail: params.tutorContactEmail,
     subjectLabel,
     status: params.status,
   });
 
   await sendEmail({
-    to: studentUser.email,
+    to: params.studentContactEmail,
     subject: message.subject,
     html: message.html,
     text: message.text,

@@ -5,6 +5,7 @@ import {
   requestStatusClassName,
   requestStatusLabels,
 } from "@/lib/dashboard-status-styles";
+import { ContactEmailLink } from "@/components/dashboard/ContactEmailLink";
 import { LessonRequest } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -35,11 +36,21 @@ export function RequestList({ requests }: RequestListProps) {
             key={request.id}
             className="flex flex-col gap-4 rounded-[1.25rem] border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between"
           >
-            <div className="space-y-1">
+            <div className="space-y-2">
               <p className="font-medium text-foreground">{request.tutorName}</p>
               <p className="text-sm text-muted-foreground">
                 {subjectTranslations[request.subject] ?? request.subject}
               </p>
+              {request.status === "Confirmed" ? (
+                <ContactEmailLink
+                  email={request.tutorContactEmail}
+                  label="Contacter le tuteur"
+                />
+              ) : request.status === "Pending" ? (
+                <p className="text-xs text-muted-foreground">
+                  Les coordonnées du tuteur seront partagées après acceptation.
+                </p>
+              ) : null}
               {request.createdAt ? (
                 <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <Clock3 className="h-3.5 w-3.5" aria-hidden />

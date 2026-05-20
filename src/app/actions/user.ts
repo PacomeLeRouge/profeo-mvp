@@ -9,7 +9,10 @@ import type { Role } from "@/lib/types";
 
 export async function setUserRole(role: "student" | "tutor") {
   const userId = await requireAuthUserId();
-  await ensureDbUser();
+  const user = await ensureDbUser();
+  if (!user) {
+    throw new Error("Session introuvable. Reconnectez-vous.");
+  }
 
   await db
     .update(users)

@@ -115,9 +115,6 @@ export function getSymbolPlacement(stepKey: string | number): SymbolPlacement {
 }
 
 export function getOnboardingSymbolAlt(role: OnboardingRole, step: number): string {
-  const stepLabels: Record<number, string> = {
-    1: "Prénom",
-  };
   const labels: Record<OnboardingSymbolKey, string> = {
     age: "Âge",
     education: "Niveau d'études",
@@ -126,9 +123,8 @@ export function getOnboardingSymbolAlt(role: OnboardingRole, step: number): stri
     rate: "Tarif horaire",
     format: "Format d'enseignement",
     availability: "Disponibilités",
-    connection: "Mise en relation",
+    connection: "Prénom",
   };
-  if (step === 1) return stepLabels[1];
   const key = role === "tutor" ? tutorStepSymbols[step] : studentStepSymbols[step];
   return key ? labels[key] : "Étape d'onboarding";
 }

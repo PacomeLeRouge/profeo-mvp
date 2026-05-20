@@ -22,32 +22,49 @@ export function useAppData() {
   const [tutors, setTutors] = useState<TutorProfile[]>([]);
   const [requests, setRequests] = useState<LessonRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
+
     try {
-      const [currentUser, tutorList, myRequests] = await Promise.all([
-        getCurrentUserAction(),
-        listTutorProfilesAction(),
-        listMyLessonRequestsAction(),
+      const currentUser = await getCurrentUserAction();
+      setUser(currentUser);
+
+      if (!currentUser) {
+        setStudentProfile(null);
+        setTutorProfile(null);
+        setTutors([]);
+        setRequests([]);
+        return;
+      }
+
+      const [tutorList, myRequests] = await Promise.all([
+        listTutorProfilesAction().catch(() => [] as TutorProfile[]),
+        listMyLessonRequestsAction().catch(() => [] as LessonRequest[]),
       ]);
 
-      setUser(currentUser);
       setTutors(tutorList);
       setRequests(myRequests);
 
-      if (currentUser?.role === "student") {
-        const profile = await getStudentProfileAction();
+      if (currentUser.role === "student") {
+        const profile = await getStudentProfileAction().catch(() => null);
         setStudentProfile(profile);
         setTutorProfile(null);
-      } else if (currentUser?.role === "tutor") {
-        const profile = await getTutorProfileAction();
+      } else if (currentUser.role === "tutor") {
+        const profile = await getTutorProfileAction().catch(() => null);
         setTutorProfile(profile);
         setStudentProfile(null);
       } else {
         setStudentProfile(null);
         setTutorProfile(null);
       }
+    } catch (err) {
+      console.error("[useAppData] refresh failed:", err);
+      setError(
+        err instanceof Error ? err.message : "Impossible de charger vos données"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -64,6 +81,7 @@ export function useAppData() {
     tutors,
     requests,
     isLoading,
+    error,
     refresh,
     setRequests,
     setTutors,

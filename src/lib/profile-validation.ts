@@ -1,3 +1,4 @@
+import { normalizeContactEmail } from "@/lib/contact-email";
 import { SUBJECTS, assertValidSubjects } from "@/lib/subjects";
 import type { Format, Subject } from "@/lib/types";
 
@@ -18,12 +19,14 @@ export function normalizeFirstName(firstName: string): string {
 
 export function validateStudentProfileInput(data: {
   firstName: string;
+  contactEmail: string;
   age?: number;
   educationLevel: string;
   institution: string;
   subjectsOfInterest: Subject[];
 }) {
   const firstName = normalizeFirstName(data.firstName);
+  const contactEmail = normalizeContactEmail(data.contactEmail);
 
   if (data.age !== undefined) {
     if (!Number.isInteger(data.age) || data.age < MIN_AGE_STUDENT || data.age > MAX_AGE) {
@@ -47,6 +50,7 @@ export function validateStudentProfileInput(data: {
 
   return {
     firstName,
+    contactEmail,
     age: data.age,
     educationLevel: data.educationLevel.trim(),
     institution: data.institution.trim(),
@@ -56,6 +60,7 @@ export function validateStudentProfileInput(data: {
 
 export function validateTutorProfileInput(data: {
   firstName: string;
+  contactEmail: string;
   age?: number;
   subjects: Subject[];
   hourlyRate: number;
@@ -66,6 +71,7 @@ export function validateTutorProfileInput(data: {
   institution: string;
 }) {
   const firstName = normalizeFirstName(data.firstName);
+  const contactEmail = normalizeContactEmail(data.contactEmail);
 
   if (data.age !== undefined) {
     if (!Number.isInteger(data.age) || data.age < MIN_AGE_TUTOR || data.age > MAX_AGE) {
@@ -97,6 +103,7 @@ export function validateTutorProfileInput(data: {
 
   return {
     firstName,
+    contactEmail,
     age: data.age,
     subjects: data.subjects,
     hourlyRate: Math.round(data.hourlyRate),

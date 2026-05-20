@@ -75,6 +75,7 @@ async function main() {
         availability: tutor.availability,
         educationLevel: tutor.educationLevel,
         institution: tutor.institution,
+        contactEmail: tutor.email,
       })
       .onConflictDoNothing();
   }

@@ -30,34 +30,47 @@ function plain(lines: string[]): string {
   return lines.join("\n");
 }
 
+function contactBlock(label: string, name: string, email: string): string {
+  return `
+    <tr><td style="padding:10px 16px;font-size:14px;">
+      <span style="color:#5c564e;">${label}</span><br/>
+      <strong>${escapeHtml(name)}</strong><br/>
+      <a href="mailto:${escapeHtml(email)}" style="color:#1a1a1a;">${escapeHtml(email)}</a>
+    </td></tr>
+  `;
+}
+
 export function newLessonRequestEmail(params: {
   tutorName: string;
   studentName: string;
+  studentContactEmail: string;
   subjectLabel: string;
   hourlyRate: number;
   formatLabel: string;
   institution: string;
 }) {
   const dashboardUrl = `${getAppUrl()}/dashboard/tutor`;
-  const title = "Nouvelle demande de cours";
+  const title = "Nouvelle demande de prise de contact";
   const body = `
     <p style="margin:0 0 12px;">Bonjour <strong>${escapeHtml(params.tutorName)}</strong>,</p>
-    <p style="margin:0 0 16px;"><strong>${escapeHtml(params.studentName)}</strong> souhaite un cours de <strong>${escapeHtml(params.subjectLabel)}</strong>.</p>
+    <p style="margin:0 0 16px;"><strong>${escapeHtml(params.studentName)}</strong> souhaite vous contacter pour un cours de <strong>${escapeHtml(params.subjectLabel)}</strong>.</p>
     <table width="100%" cellpadding="0" cellspacing="0" style="background:#ebe4d8;border-radius:12px;padding:4px 0;">
+      ${contactBlock("Élève", params.studentName, params.studentContactEmail)}
       <tr><td style="padding:10px 16px;font-size:14px;"><span style="color:#5c564e;">Tarif</span><br/><strong>${params.hourlyRate} €/h</strong></td></tr>
       <tr><td style="padding:10px 16px;font-size:14px;"><span style="color:#5c564e;">Format</span><br/><strong>${escapeHtml(params.formatLabel)}</strong></td></tr>
       <tr><td style="padding:10px 16px;font-size:14px;"><span style="color:#5c564e;">Établissement</span><br/><strong>${escapeHtml(params.institution)}</strong></td></tr>
     </table>
-    <p style="margin:16px 0 0;">Connectez-vous pour accepter ou refuser la demande.</p>
+    <p style="margin:16px 0 0;">Répondez à l'élève par e-mail ou acceptez la demande depuis votre tableau de bord.</p>
   `;
 
   return {
-    subject: `${params.studentName} demande un cours de ${params.subjectLabel}`,
+    subject: `${params.studentName} souhaite vous contacter — ${params.subjectLabel}`,
     html: layout(title, body, "Voir la demande", dashboardUrl),
     text: plain([
       `Bonjour ${params.tutorName},`,
       "",
       `${params.studentName} souhaite un cours de ${params.subjectLabel}.`,
+      `E-mail de l'élève : ${params.studentContactEmail}`,
       `Tarif : ${params.hourlyRate} €/h`,
       `Format : ${params.formatLabel}`,
       `Établissement : ${params.institution}`,
@@ -70,25 +83,33 @@ export function newLessonRequestEmail(params: {
 export function lessonRequestStatusEmail(params: {
   studentName: string;
   tutorName: string;
+  tutorContactEmail: string;
   subjectLabel: string;
   status: "Confirmed" | "Declined";
 }) {
   const dashboardUrl = `${getAppUrl()}/dashboard/student`;
   const accepted = params.status === "Confirmed";
-  const title = accepted ? "Demande acceptée" : "Demande refusée";
+  const title = accepted ? "Demande acceptée — coordonnées du tuteur" : "Demande refusée";
   const statusText = accepted
-    ? `${escapeHtml(params.tutorName)} a accepté votre demande.`
+    ? `${escapeHtml(params.tutorName)} a accepté votre demande. Voici son e-mail pour organiser le premier cours :`
     : `${escapeHtml(params.tutorName)} a décliné votre demande pour le moment.`;
+
+  const contactSection = accepted
+    ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#ebe4d8;border-radius:12px;padding:4px 0;margin-top:12px;">
+        ${contactBlock("Tuteur", params.tutorName, params.tutorContactEmail)}
+      </table>`
+    : "";
 
   const body = `
     <p style="margin:0 0 12px;">Bonjour <strong>${escapeHtml(params.studentName)}</strong>,</p>
     <p style="margin:0 0 12px;">${statusText}</p>
     <p style="margin:0;"><strong>Matière :</strong> ${escapeHtml(params.subjectLabel)}</p>
+    ${contactSection}
   `;
 
   return {
     subject: accepted
-      ? `${params.tutorName} a accepté votre demande — ${params.subjectLabel}`
+      ? `${params.tutorName} a accepté — contact : ${params.subjectLabel}`
       : `Réponse à votre demande — ${params.subjectLabel}`,
     html: layout(title, body, "Voir mes demandes", dashboardUrl),
     text: plain([
@@ -97,6 +118,7 @@ export function lessonRequestStatusEmail(params: {
       accepted
         ? `${params.tutorName} a accepté votre demande de cours en ${params.subjectLabel}.`
         : `${params.tutorName} a refusé votre demande de cours en ${params.subjectLabel}.`,
+      ...(accepted ? [`E-mail du tuteur : ${params.tutorContactEmail}`] : []),
       "",
       `Tableau de bord : ${dashboardUrl}`,
     ]),

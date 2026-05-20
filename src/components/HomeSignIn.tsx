@@ -9,8 +9,8 @@ import splashBackground from "@/app/img/splash.png";
 
 export function HomeSignIn() {
   return (
-    <div className="grid min-h-screen bg-background text-foreground lg:grid-cols-[1.05fr_0.95fr]">
-      <div className="relative flex min-h-[42vh] flex-col justify-between overflow-hidden px-8 py-8 md:px-12 md:py-10 lg:min-h-screen">
+    <div className="grid h-dvh max-h-dvh overflow-hidden bg-background text-foreground lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="relative flex max-h-[42vh] min-h-[42vh] flex-col justify-between overflow-hidden px-8 py-8 md:px-12 md:py-10 lg:max-h-none lg:min-h-full lg:h-full">
         <Image src={splashBackground} alt="Étudiants qui échangent des cours sur Clutch" fill priority className="object-cover object-center" />
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/50 to-background/90" />
@@ -46,7 +46,7 @@ export function HomeSignIn() {
           </ul>
         </div>
       </div>
-      <div className="flex min-h-screen flex-col bg-card px-6 py-8 sm:px-8 md:px-12 md:py-10">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card px-6 py-8 sm:px-8 md:px-12 md:py-10">
         <AuthPageHeader
           leading={
             <span className="font-display text-xl font-bold tracking-tight lg:hidden">clutch</span>
@@ -58,13 +58,15 @@ export function HomeSignIn() {
             </span>
           }
         />
-        <div className="flex flex-1 flex-col justify-center py-6 md:py-10">
+        <div className="flex min-h-0 flex-1 flex-col justify-center py-6 md:py-10">
           <div className="mx-auto w-full max-w-md space-y-7">
             <header className="space-y-2.5">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">Connexion</p>
-              <h2 className="font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">Bon retour.</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">Accueil</p>
+              <h2 className="font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+                Bienvenue sur Clutch.
+              </h2>
               <p className="text-base leading-7 text-muted-foreground">
-                Retrouvez vos demandes, votre profil et votre tableau de bord — en tant qu&apos;étudiant ou tuteur.
+                La plateforme de tutorat entre étudiants — créez un compte en quelques minutes ou connectez-vous pour accéder à votre espace.
               </p>
             </header>
             <div className="glass-panel rounded-[1.75rem] p-5 sm:p-7">
