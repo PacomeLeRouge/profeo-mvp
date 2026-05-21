@@ -32,16 +32,30 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
-      gsap.from(cardRef.current, {
-        opacity: 0,
-        y: 24,
-        duration: 0.5,
-        delay: index * 0.08,
-        ease: onboardingEase.enter,
-      });
+      const card = cardRef.current;
+      if (!card) return;
+
+      gsap.killTweensOf(card);
+
+      if (prefersReducedMotion()) {
+        gsap.set(card, { clearProps: "opacity,transform", opacity: 1, y: 0 });
+        return;
+      }
+
+      gsap.fromTo(
+        card,
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          delay: index * 0.08,
+          ease: onboardingEase.enter,
+          clearProps: "opacity,transform",
+        }
+      );
     },
-    { scope: cardRef, dependencies: [tutor.id] }
+    { scope: cardRef, dependencies: [tutor.id, index], revertOnUpdate: true }
   );
 
   const slots = getAvailabilitySlots(tutor.availability);
