@@ -69,7 +69,7 @@ export function AnimatedTextField({
           aria-label={ariaLabel ?? label}
           autoComplete={type === "email" ? "email" : "given-name"}
           className={cn(
-            "h-24 w-full border-0 bg-transparent px-0 text-center text-3xl font-medium text-foreground outline-none placeholder:text-foreground/20 md:text-4xl",
+            "h-20 w-full border-0 bg-transparent px-2 text-center text-2xl font-medium text-foreground outline-none placeholder:text-foreground/20 break-words sm:h-24 sm:text-3xl md:text-4xl",
             type === "text" && "capitalize"
           )}
         />

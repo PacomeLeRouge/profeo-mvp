@@ -186,7 +186,7 @@ export function TutorOnboardingFlow({
 
   if (completed) {
     return (
-      <div className={cn(onboardingThemeClass, "flex min-h-screen flex-col")}>
+      <div className={cn(onboardingThemeClass, "flex min-h-dvh flex-col")}>
         <DevPreviewBanner />
         <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
           <div className="max-w-lg space-y-6">
@@ -212,7 +212,7 @@ export function TutorOnboardingFlow({
   }
 
   return (
-    <div className={cn(onboardingThemeClass, "flex min-h-screen flex-col")}>
+    <div className={cn(onboardingThemeClass, "flex min-h-dvh flex-col")}>
       {preview ? <DevPreviewBanner /> : null}
       <OnboardingShell
         step={step}

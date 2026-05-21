@@ -63,7 +63,7 @@ export function AnimatedTitle({ eyebrow, title, subtitle, stepKey, className }: 
       >
         {eyebrow}
       </p>
-      <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl lg:text-[4.5rem]">
+      <h1 className="text-2xl font-semibold leading-[1.1] tracking-tight sm:text-3xl md:text-5xl lg:text-[4.5rem]">
         {words.map((word, index) => (
           <span key={`${stepKey}-${index}`} className="inline-block overflow-hidden pb-1">
             <span data-onboarding-word className="inline-block">
@@ -74,7 +74,7 @@ export function AnimatedTitle({ eyebrow, title, subtitle, stepKey, className }: 
         ))}
       </h1>
       {subtitle ? (
-        <p data-onboarding-subtitle className="text-lg text-muted-foreground md:text-xl">
+        <p data-onboarding-subtitle className="text-base text-muted-foreground sm:text-lg md:text-xl">
           {subtitle}
         </p>
       ) : null}

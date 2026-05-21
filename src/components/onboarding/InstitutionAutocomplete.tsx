@@ -150,7 +150,7 @@ export function InstitutionAutocomplete({
             aria-expanded={showSuggestions}
             role="combobox"
             autoComplete="off"
-            className="h-24 w-full border-0 bg-transparent px-0 text-center text-3xl font-medium text-foreground outline-none placeholder:text-foreground/20 md:text-4xl"
+            className="h-20 w-full border-0 bg-transparent px-2 text-center text-xl font-medium text-foreground outline-none placeholder:text-foreground/20 break-words sm:h-24 sm:text-2xl md:text-4xl"
           />
 
           {showSuggestions ? (
@@ -158,7 +158,7 @@ export function InstitutionAutocomplete({
               ref={listRef}
               id={listId}
               role="listbox"
-              className="absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-y-auto rounded-3xl border border-border bg-card py-2 text-left shadow-[0_24px_60px_-32px_rgba(0,0,0,0.35)]"
+              className="absolute left-0 right-0 top-full z-20 mt-2 max-h-[40vh] overflow-y-auto rounded-3xl border border-border bg-card py-2 text-left shadow-[0_24px_60px_-32px_rgba(0,0,0,0.35)] sm:max-h-72"
             >
               {suggestions.map((university) => (
                 <li key={`${university.name}-${university.city}`} role="option">

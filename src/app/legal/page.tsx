@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 
 export default function LegalPage() {
   return (
-    <div className={cn("min-h-screen", "onboarding-surface")}>
+    <div className={cn("min-h-dvh", "onboarding-surface")}>
       <header className="border-b border-border bg-background/80 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-6 py-5 md:px-12">
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5 md:px-12">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -30,10 +30,10 @@ export default function LegalPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-6 py-10 md:px-12 md:py-14">
+      <main className="mx-auto max-w-3xl px-4 py-8 pb-safe sm:px-6 sm:py-10 md:px-12 md:py-14">
         <header className="space-y-3 border-b border-border pb-8">
           <p className="text-eyebrow text-text-accent">Informations légales</p>
-          <h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+          <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
             {legalPageMeta.title}
           </h1>
           <p className="text-base leading-7 text-muted-foreground">{legalPageMeta.subtitle}</p>
@@ -70,7 +70,7 @@ export default function LegalPage() {
               id={section.id}
               className="scroll-mt-24 space-y-4"
             >
-              <h2 className="font-display text-2xl font-bold tracking-tight text-foreground">
+              <h2 className="font-display text-xl font-bold tracking-tight text-foreground sm:text-2xl">
                 {section.title}
               </h2>
               {section.paragraphs.map((paragraph) => (

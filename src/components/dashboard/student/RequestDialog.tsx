@@ -59,7 +59,7 @@ export function RequestDialog({
               Matière
             </label>
             <Select value={subject} onValueChange={(val) => onSubjectChange(val as Subject)}>
-              <SelectTrigger className="h-12 rounded-2xl">
+              <SelectTrigger className="h-12 w-full rounded-2xl">
                 <SelectValue placeholder="Sélectionner une matière" />
               </SelectTrigger>
               <SelectContent>
@@ -81,7 +81,7 @@ export function RequestDialog({
           ) : null}
         </div>
 
-        <DialogFooter className="gap-2 sm:gap-0">
+        <DialogFooter className="flex-col-reverse gap-2 sm:flex-row sm:gap-0">
           <Button variant="outline" className="rounded-full" onClick={() => onOpenChange(false)}>
             Annuler
           </Button>
@@ -98,7 +98,7 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-4">
       <span className="text-muted-foreground">{label}</span>
-      <span className={cn("text-right font-medium text-foreground")}>{value}</span>
+      <span className={cn("max-w-[60%] break-words text-right font-medium text-foreground")}>{value}</span>
     </div>
   );
 }

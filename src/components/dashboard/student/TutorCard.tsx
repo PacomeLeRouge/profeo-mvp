@@ -69,7 +69,7 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
               </p>
             </div>
           </div>
-          <div className="rounded-full bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground whitespace-nowrap">
+          <div className="rounded-full bg-primary px-2.5 py-1.5 text-xs font-semibold text-primary-foreground whitespace-nowrap sm:px-3 sm:text-sm">
             {tutor.hourlyRate}€/h
           </div>
         </div>

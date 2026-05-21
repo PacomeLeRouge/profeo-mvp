@@ -72,7 +72,7 @@ export function TutorFilters({
               type="button"
               onClick={() => onSubjectFilterChange("All")}
               className={cn(
-                "rounded-full border px-4 py-2 text-sm transition-colors",
+                "rounded-full border px-4 py-2.5 text-sm transition-colors min-h-11",
                 subjectFilter === "All"
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-muted text-muted-foreground hover:border-primary/40 hover:text-foreground"
@@ -86,7 +86,7 @@ export function TutorFilters({
                 type="button"
                 onClick={() => onSubjectFilterChange(subject)}
                 className={cn(
-                  "rounded-full border px-4 py-2 text-sm transition-colors",
+                  "rounded-full border px-4 py-2.5 text-sm transition-colors min-h-11",
                   subjectFilter === subject
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border bg-muted text-muted-foreground hover:border-primary/40 hover:text-foreground"
@@ -116,7 +116,7 @@ export function TutorFilters({
           <div className="space-y-2">
             <label className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Format</label>
             <Select value={formatFilter} onValueChange={(val) => onFormatFilterChange(val as Format | "All")}>
-              <SelectTrigger className="h-12 rounded-2xl border-border bg-muted">
+              <SelectTrigger className="h-12 w-full rounded-2xl border-border bg-muted">
                 <SelectValue placeholder="Tous les formats" />
               </SelectTrigger>
               <SelectContent>

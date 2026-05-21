@@ -106,8 +106,8 @@ export function AvailabilityGrid({
         ) : null}
       </div>
 
-      <div ref={gridRef} className="-mx-1 overflow-x-auto px-1 pb-1 touch-pan-x">
-        <div className="mx-auto min-w-[min(100%,42rem)] max-w-5xl overflow-hidden rounded-2xl border border-border bg-card shadow-sm sm:rounded-3xl">
+      <div ref={gridRef} className="-mx-1 overflow-x-auto overscroll-x-contain px-1 pb-2 touch-pan-x">
+        <div className="mx-auto min-w-[36rem] max-w-5xl overflow-hidden rounded-2xl border border-border bg-card shadow-sm sm:rounded-3xl">
           <div className="grid grid-cols-8 border-b border-border bg-muted/50">
             <div className="border-r border-border px-2 py-3" aria-hidden />
             {daysOfWeek.map((day) => {
@@ -174,7 +174,7 @@ export function AvailabilityGrid({
                     aria-label={`${day}, ${time}${isSelected ? " — sélectionné" : " — non sélectionné"}`}
                     onClick={() => onToggle(day, time)}
                     className={cn(
-                      "touch-manipulation min-h-14 w-full border-r border-border transition-colors duration-150 last:border-r-0 sm:min-h-[3.75rem]",
+                      "touch-manipulation min-h-11 min-w-11 w-full border-r border-border transition-colors duration-150 last:border-r-0 sm:min-h-[3.75rem]",
                       "focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
                       isSelected
                         ? "bg-primary"

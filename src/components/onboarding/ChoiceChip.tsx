@@ -62,7 +62,7 @@ export function ChoiceChip({ label, selected, onClick, index = 0, stepKey, class
       type="button"
       onClick={handleClick}
       className={cn(
-        "min-h-14 rounded-full border px-7 py-4 text-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2",
+        "min-h-11 max-w-full rounded-full border px-5 py-3 text-base transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2 sm:min-h-14 sm:px-7 sm:py-4 sm:text-lg",
         selected
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border bg-transparent text-foreground hover:bg-muted",
@@ -99,7 +99,7 @@ export function ChoiceChipGroup({
     multiple ? (value as string[]).includes(optionValue) : value === optionValue;
 
   return (
-    <div className={cn("mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-4", className)}>
+    <div className={cn("mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-2 px-2 sm:gap-4 sm:px-0", className)}>
       {normalized.map((option, index) => (
         <ChoiceChip
           key={option.value}

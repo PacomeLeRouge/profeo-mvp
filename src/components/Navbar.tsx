@@ -57,7 +57,7 @@ export function Navbar() {
             <div className="inline-flex max-w-full items-center rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground shadow-sm">
               <span className="truncate font-medium text-foreground">{displayName}</span>
             </div>
-            <Button variant="outline" size="sm" className="rounded-full" onClick={handleLogout}>
+            <Button variant="outline" size="default" className="min-h-11 rounded-full px-4 sm:min-h-9" onClick={handleLogout}>
               <LogOut className="h-4 w-4" />
               Déconnexion
             </Button>

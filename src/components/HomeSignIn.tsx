@@ -9,8 +9,8 @@ import splashBackground from "@/app/img/splash.png";
 
 export function HomeSignIn() {
   return (
-    <div className="grid h-dvh max-h-dvh overflow-hidden bg-background text-foreground lg:grid-cols-[1.05fr_0.95fr]">
-      <div className="relative flex max-h-[42vh] min-h-[42vh] flex-col justify-between overflow-hidden px-8 py-8 md:px-12 md:py-10 lg:max-h-none lg:min-h-full lg:h-full">
+    <div className="grid min-h-dvh bg-background text-foreground lg:h-dvh lg:max-h-dvh lg:grid-cols-[1.05fr_0.95fr] lg:overflow-hidden">
+      <div className="relative flex min-h-[28vh] flex-col justify-between overflow-hidden px-6 py-6 sm:min-h-[32vh] sm:px-8 md:px-12 md:py-10 lg:h-full lg:max-h-none lg:min-h-full">
         <Image src={splashBackground} alt="Étudiants qui échangent des cours sur Clutch" fill priority className="object-cover object-center" />
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/50 to-background/90" />
@@ -20,12 +20,12 @@ export function HomeSignIn() {
           </div>
           <span className="font-display text-2xl font-bold tracking-tight sm:text-3xl">Clutch</span>
         </div>
-        <div className="relative z-10 max-w-2xl space-y-8 py-10 lg:py-0">
+        <div className="relative z-10 max-w-2xl space-y-4 py-4 sm:space-y-6 sm:py-6 lg:space-y-8 lg:py-0">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground sm:text-sm">
             Tutorat entre étudiants
           </p>
-          <div className="space-y-5">
-            <h1 className="font-display text-4xl font-bold leading-[0.95] tracking-tight sm:text-5xl md:text-6xl xl:text-[4.25rem]">
+          <div className="space-y-3 sm:space-y-5">
+            <h1 className="font-display text-3xl font-bold leading-[0.95] tracking-tight sm:text-4xl md:text-6xl xl:text-[4.25rem]">
               Le bon tuteur,
               <br />
               au bon moment.
@@ -46,7 +46,7 @@ export function HomeSignIn() {
           </ul>
         </div>
       </div>
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card px-6 py-8 sm:px-8 md:px-12 md:py-10">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-card px-6 py-6 pb-safe sm:px-8 md:px-12 md:py-10">
         <AuthPageHeader
           leading={
             <span className="font-display text-xl font-bold tracking-tight lg:hidden">clutch</span>
@@ -58,7 +58,7 @@ export function HomeSignIn() {
             </span>
           }
         />
-        <div className="flex min-h-0 flex-1 flex-col justify-center py-6 md:py-10">
+        <div className="flex min-h-0 flex-1 flex-col justify-start py-4 sm:justify-center sm:py-6 md:py-10">
           <div className="mx-auto w-full max-w-md space-y-7">
             <header className="space-y-2.5">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">Accueil</p>

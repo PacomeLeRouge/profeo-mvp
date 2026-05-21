@@ -20,7 +20,7 @@ export function OnboardingPageGate({
     return (
       <div
         className={cn(
-          "flex min-h-screen items-center justify-center",
+          "flex min-h-dvh items-center justify-center",
           onboardingThemeClass
         )}
       >
@@ -33,7 +33,7 @@ export function OnboardingPageGate({
     return (
       <div
         className={cn(
-          "flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center",
+          "flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center",
           onboardingThemeClass
         )}
       >

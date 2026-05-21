@@ -69,9 +69,9 @@ export function OnboardingShell({
       ref={shellRef}
       className={cn("flex min-h-0 flex-1 flex-col", className)}
     >
-      <div className="relative flex min-h-[min(72vh,720px)] flex-1 flex-col overflow-hidden">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto lg:min-h-[min(60vh,720px)]">
         {isEditing ? (
-          <div className="absolute right-6 top-6 z-20 md:right-12 md:top-8">
+          <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6 md:right-12 md:top-8">
             <ThemeToggle />
           </div>
         ) : null}
@@ -81,16 +81,16 @@ export function OnboardingShell({
             alt={symbolAlt}
             stepKey={step}
             placement={symbolPlacement}
-            size={320}
+            size={280}
             priority
           />
         ) : null}
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pb-10 pt-8 text-center md:px-12 md:pt-10">
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-start px-4 pb-4 pt-6 text-center sm:px-6 sm:justify-center sm:pb-8 sm:pt-8 md:px-12 md:pb-10 md:pt-10">
           {children}
         </div>
       </div>
 
-      <div className="px-6 pb-12 md:px-12 md:pb-14">
+      <div className="shrink-0 px-4 pb-safe pt-2 sm:px-6 md:px-12 md:pb-14">
         <div className="mx-auto flex max-w-xl flex-col gap-4">
           <OnboardingProgress
             compact
@@ -113,16 +113,16 @@ export function OnboardingShell({
               onCheckedChange={onEmailConsentChange}
             />
           ) : null}
-          <div className="flex items-center justify-between">
-            <Button variant="ghost" onClick={onBack} className="px-0 text-base">
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Button variant="ghost" onClick={onBack} className="h-11 px-0 text-base sm:h-12">
               Retour
             </Button>
-            <div ref={continueRef}>
+            <div ref={continueRef} className="w-full sm:w-auto">
               {isLastStep ? (
                 <Button
                   onClick={onSubmit}
                   disabled={actionDisabled}
-                  className="h-12 rounded-full px-8 text-base transition-none"
+                  className="h-11 w-full rounded-full px-6 text-base transition-none sm:h-12 sm:w-auto sm:px-8"
                 >
                   {isSubmitting ? "Enregistrement…" : finalSubmitLabel}
                 </Button>
@@ -130,7 +130,7 @@ export function OnboardingShell({
                 <Button
                   onClick={onNext}
                   disabled={actionDisabled}
-                  className="h-12 rounded-full px-8 text-base transition-none"
+                  className="h-11 w-full rounded-full px-6 text-base transition-none sm:h-12 sm:w-auto sm:px-8"
                 >
                   {continueLabel}
                 </Button>

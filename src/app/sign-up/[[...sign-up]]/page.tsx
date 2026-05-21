@@ -8,8 +8,8 @@ import splashBackground from "@/app/img/splash.png";
 
 export default function SignUpPage() {
   return (
-    <div className="grid h-dvh max-h-dvh overflow-hidden bg-background text-foreground lg:grid-cols-[1.05fr_0.95fr]">
-      <div className="relative flex max-h-[42vh] min-h-[42vh] flex-col justify-between overflow-hidden px-8 py-8 md:px-12 md:py-10 lg:max-h-none lg:min-h-full lg:h-full">
+    <div className="grid min-h-dvh bg-background text-foreground lg:h-dvh lg:max-h-dvh lg:grid-cols-[1.05fr_0.95fr] lg:overflow-hidden">
+      <div className="relative flex min-h-[24vh] flex-col justify-between overflow-hidden px-6 py-6 sm:min-h-[28vh] sm:px-8 md:px-12 md:py-10 lg:h-full lg:max-h-none lg:min-h-full">
         <Image
           src={splashBackground}
           alt="Étudiants qui échangent des cours sur Clutch"
@@ -53,7 +53,7 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card px-6 py-8 sm:px-8 md:px-12 md:py-10">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-card px-6 py-6 pb-safe sm:px-8 md:px-12 md:py-10">
         <AuthPageHeader
           leading={
             <span className="font-display text-xl font-bold tracking-tight lg:hidden">clutch</span>
@@ -65,8 +65,8 @@ export default function SignUpPage() {
             </span>
           }
         />
-        <div className="flex min-h-0 flex-1 flex-col justify-center py-6 md:py-10">
-          <div className="mx-auto w-full max-w-md space-y-7">
+        <div className="flex min-h-0 flex-1 flex-col justify-start py-4 sm:justify-center sm:py-6 md:py-10">
+          <div className="mx-auto w-full max-w-md space-y-5 sm:space-y-7">
             <header className="space-y-2.5">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
                 Inscription

@@ -50,7 +50,7 @@ function RoleSelectionContent() {
 
   if (isLoading) {
     return (
-      <div className={cn("flex min-h-screen items-center justify-center", onboardingThemeClass)}>
+      <div className={cn("flex min-h-dvh items-center justify-center", onboardingThemeClass)}>
         <p className="text-muted-foreground">Chargement…</p>
       </div>
     );
@@ -59,8 +59,8 @@ function RoleSelectionContent() {
   if (!user) return null;
 
   return (
-    <div className={cn("flex min-h-screen flex-col", onboardingThemeClass)}>
-      <header className="flex items-center justify-between px-6 py-6 md:px-12">
+    <div className={cn("flex min-h-dvh flex-col", onboardingThemeClass)}>
+      <header className="flex items-center justify-between px-4 py-5 sm:px-6 sm:py-6 md:px-12">
         <button
           type="button"
           onClick={() => router.push(backHref)}
@@ -71,27 +71,27 @@ function RoleSelectionContent() {
         <ThemeToggle />
       </header>
 
-      <div className="flex flex-1 flex-col px-6 pb-10 pt-2 md:px-12 md:pb-12 md:pt-4">
+      <div className="flex flex-1 flex-col px-4 pb-10 pt-2 sm:px-6 md:px-12 md:pb-12 md:pt-4">
         <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center">
-          <div className="w-full space-y-10 md:space-y-12">
+          <div className="w-full space-y-8 md:space-y-12">
             <div className="mx-auto max-w-3xl space-y-5 text-center md:text-left">
               <p className="text-eyebrow text-text-accent">
                 {isSignupFlow ? "Création de compte" : "Choix du profil"}
               </p>
-              <div className="flex items-start justify-center gap-3 md:justify-start md:gap-4">
+              <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-center md:justify-start md:gap-4">
                 <button
                   type="button"
                   onClick={() => router.push(backHref)}
-                  className="mt-1 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-primary hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:mt-2"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-primary hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:mt-1 md:mt-2"
                   aria-label="Retour"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </button>
-                <div className="space-y-4">
-                  <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-foreground md:text-6xl xl:text-[4.25rem]">
+                <div className="space-y-3 sm:space-y-4">
+                  <h1 className="font-display text-2xl font-bold leading-[1.08] tracking-tight text-foreground sm:text-3xl md:text-5xl xl:text-[4.25rem]">
                     Comment allez-vous utiliser Clutch ?
                   </h1>
-                  <p className="max-w-2xl text-lg leading-7 text-foreground/75 md:text-xl md:leading-8">
+                  <p className="max-w-2xl text-base leading-7 text-foreground/75 sm:text-lg md:text-xl md:leading-8">
                     Choisissez le parcours qui correspond à votre besoin. Clutch adaptera ensuite les
                     prochaines questions pour aller à l&apos;essentiel.
                   </p>

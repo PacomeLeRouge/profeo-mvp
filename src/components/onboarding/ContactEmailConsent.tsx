@@ -40,7 +40,7 @@ export function ContactEmailConsent({
         type="checkbox"
         checked={checked}
         onChange={(event) => onCheckedChange(event.target.checked)}
-        className="mt-1 h-4 w-4 shrink-0 rounded border-border accent-primary"
+        className="mt-1 h-5 w-5 shrink-0 rounded border-border accent-primary"
         required
       />
       <span className="space-y-2">

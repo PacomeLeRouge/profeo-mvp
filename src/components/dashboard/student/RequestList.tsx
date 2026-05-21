@@ -21,7 +21,7 @@ export function RequestList({ requests }: RequestListProps) {
 
   return (
     <section className="space-y-4 border-t border-border pt-10">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Suivi</p>
           <h2 className="text-xl font-semibold tracking-tight">Mes demandes de cours</h2>

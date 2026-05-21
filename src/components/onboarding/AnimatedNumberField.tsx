@@ -157,7 +157,7 @@ export function AnimatedNumberField({
               onBlur={handleBlur}
               placeholder={placeholder}
               aria-label={ariaLabel ?? label}
-              className="w-full border-0 bg-transparent text-center text-5xl font-semibold tabular-nums tracking-tight text-foreground outline-none placeholder:text-foreground/15 sm:text-6xl"
+              className="w-full border-0 bg-transparent text-center text-4xl font-semibold tabular-nums tracking-tight text-foreground outline-none placeholder:text-foreground/15 sm:text-5xl md:text-6xl"
             />
             {(unit || (value && suffix)) ? (
               <p className="mt-1 text-sm font-medium text-muted-foreground">

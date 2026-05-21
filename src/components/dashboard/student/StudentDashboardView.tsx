@@ -127,7 +127,7 @@ export function StudentDashboardView({
               {preview ? "Preview · Espace étudiant" : "Espace étudiant"}
             </p>
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-[2.75rem] lg:leading-none">
+              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-none">
                 Trouve ton tuteur
               </h1>
               <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">

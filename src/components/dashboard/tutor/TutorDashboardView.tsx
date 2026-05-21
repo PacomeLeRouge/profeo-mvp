@@ -94,7 +94,7 @@ export function TutorDashboardView({
                 {preview ? "Preview · Espace tuteur" : "Espace tuteur"}
               </p>
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-[2.75rem] lg:leading-none">
+                <h1 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-none">
                   Bonjour {user.name}
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">
@@ -136,7 +136,7 @@ export function TutorDashboardView({
             <div className="flex flex-col gap-4 border-b border-border pb-5 md:flex-row md:items-end md:justify-between">
               <div className="space-y-1">
                 <h2 className="text-xl font-semibold tracking-tight">Mon profil publié</h2>
-                <p className="text-sm text-muted-foreground">
+                <p className="truncate text-sm text-muted-foreground">
                   {tutorProfile.educationLevel} · {tutorProfile.institution}
                 </p>
               </div>
@@ -178,9 +178,13 @@ export function TutorDashboardView({
 
             <div className="rounded-[1.75rem] border border-border bg-card/85 p-5 shadow-sm backdrop-blur-md sm:p-6">
               <Tabs defaultValue="pending" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 rounded-full bg-muted p-1">
-                  <TabsTrigger value="pending">En attente ({pendingRequests.length})</TabsTrigger>
-                  <TabsTrigger value="past">Historique ({pastRequests.length})</TabsTrigger>
+                <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-full bg-muted p-1">
+                  <TabsTrigger value="pending" className="px-2 text-xs sm:px-3 sm:text-sm">
+                    En attente ({pendingRequests.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="past" className="px-2 text-xs sm:px-3 sm:text-sm">
+                    Historique ({pastRequests.length})
+                  </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="pending" className="mt-5 space-y-4">
@@ -228,14 +232,14 @@ export function TutorDashboardView({
                         <div className="flex w-full gap-2 sm:w-auto">
                           <Button
                             variant="destructive"
-                            className="flex-1 rounded-full sm:flex-none"
+                            className="min-h-11 flex-1 rounded-full sm:flex-none"
                             disabled={updatingId === req.id}
                             onClick={() => handleStatus(req.id, "Declined")}
                           >
                             Refuser
                           </Button>
                           <Button
-                            className="flex-1 rounded-full sm:flex-none"
+                            className="min-h-11 flex-1 rounded-full sm:flex-none"
                             disabled={updatingId === req.id}
                             onClick={() => handleStatus(req.id, "Confirmed")}
                           >

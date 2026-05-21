@@ -114,7 +114,7 @@ export function OnboardingSymbol({
           height={size}
           priority={priority}
           onLoad={() => setIsLoaded(true)}
-          className="h-auto w-[min(92vw,var(--symbol-size))] max-w-none object-contain opacity-90"
+          className="h-auto w-[min(52vw,var(--symbol-size))] max-w-none object-contain opacity-75 sm:w-[min(68vw,var(--symbol-size))] sm:opacity-85 md:w-[min(82vw,var(--symbol-size))] md:opacity-90"
           style={{ "--symbol-size": `${size}px` } as React.CSSProperties}
         />
       </div>

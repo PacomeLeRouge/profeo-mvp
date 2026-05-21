@@ -18,7 +18,7 @@ export function DashboardShell({
   decor = studentDashboardDecor,
 }: DashboardShellProps) {
   return (
-    <div className={cn("relative min-h-screen overflow-hidden bg-background text-foreground", className)}>
+    <div className={cn("relative min-h-dvh overflow-x-clip bg-background text-foreground", className)}>
       <DashboardFloatingDecor items={decor} />
       <div className="relative z-10">{children}</div>
     </div>

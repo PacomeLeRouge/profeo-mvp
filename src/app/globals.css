@@ -247,4 +247,12 @@
     background-color: var(--background);
     background-image: none;
   }
+
+  .pb-safe {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .pt-safe {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
 }
