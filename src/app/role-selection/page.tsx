@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { setUserRole } from "@/app/actions/user";
 import { useAppData } from "@/hooks/use-app-data";
 import { RoleChoiceCard } from "@/components/theme/RoleChoiceCard";
@@ -13,7 +14,8 @@ import { cn } from "@/lib/utils";
 function RoleSelectionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, isLoading, error } = useAppData();
+  const { isLoaded: clerkLoaded, isSignedIn } = useUser();
+  const { user, isLoading, error, refresh } = useAppData();
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectError, setSelectError] = useState<string | null>(null);
   const source = searchParams.get("source");
@@ -21,13 +23,17 @@ function RoleSelectionContent() {
   const backHref = isSignupFlow ? "/sign-up" : "/";
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (!clerkLoaded || isLoading) return;
+
+    if (!isSignedIn) {
       router.push("/");
+      return;
     }
-    if (!isLoading && user?.role) {
+
+    if (user?.role) {
       router.push("/auth/continue");
     }
-  }, [user, isLoading, router]);
+  }, [clerkLoaded, isSignedIn, user, isLoading, router]);
 
   const handleSelectRole = async (role: "student" | "tutor") => {
     setSelectError(null);
@@ -58,8 +64,15 @@ function RoleSelectionContent() {
 
   if (!user) {
     return (
-      <div className={cn("flex min-h-dvh items-center justify-center", onboardingThemeClass)}>
-        <p className="text-muted-foreground">Redirection…</p>
+      <div className={cn("flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center", onboardingThemeClass)}>
+        <p className="text-muted-foreground">Chargement de votre profil…</p>
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
+        >
+          Réessayer
+        </button>
       </div>
     );
   }

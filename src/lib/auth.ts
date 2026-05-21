@@ -4,6 +4,8 @@ import { db } from "@/db";
 import { studentProfiles, tutorProfiles, users } from "@/db/schema";
 import type { Role } from "@/lib/types";
 
+type DbUser = typeof users.$inferSelect;
+
 /** Nom affiché à partir de Clerk (prénom prioritaire, avant onboarding complet). */
 export function resolveClerkDisplayName(input: {
   firstName?: string | null;
@@ -52,36 +54,62 @@ export async function ensureDbUser() {
   if (existing) return existing;
 
   const clerkUser = await currentUser();
-  if (!clerkUser) return null;
+  let email = "";
+  let name = "Utilisateur";
 
-  const email =
-    clerkUser.emailAddresses.find((e) => e.id === clerkUser.primaryEmailAddressId)
-      ?.emailAddress ??
-    clerkUser.emailAddresses[0]?.emailAddress ??
-    "";
+  if (clerkUser) {
+    email =
+      clerkUser.emailAddresses.find((e) => e.id === clerkUser.primaryEmailAddressId)
+        ?.emailAddress ??
+      clerkUser.emailAddresses[0]?.emailAddress ??
+      "";
+    name = resolveClerkDisplayName({
+      firstName: clerkUser.firstName,
+      lastName: clerkUser.lastName,
+      username: clerkUser.username,
+      email,
+    });
+  } else {
+    try {
+      const { clerkClient } = await import("@clerk/nextjs/server");
+      const clerk = await clerkClient();
+      const apiUser = await clerk.users.getUser(userId);
+      email =
+        apiUser.emailAddresses.find((e) => e.id === apiUser.primaryEmailAddressId)
+          ?.emailAddress ??
+        apiUser.emailAddresses[0]?.emailAddress ??
+        "";
+      name = resolveClerkDisplayName({
+        firstName: apiUser.firstName,
+        lastName: apiUser.lastName,
+        username: apiUser.username,
+        email,
+      });
+    } catch (err) {
+      console.error("[ensureDbUser] clerkClient.getUser failed:", err);
+      return null;
+    }
+  }
 
-  const name = resolveClerkDisplayName({
-    firstName: clerkUser.firstName,
-    lastName: clerkUser.lastName,
-    username: clerkUser.username,
-    email,
-  });
+  if (!email) return null;
 
-  const [created] = await db
-    .insert(users)
-    .values({ id: userId, email, name })
-    .onConflictDoNothing()
-    .returning();
+  try {
+    const [created] = await db
+      .insert(users)
+      .values({ id: userId, email, name })
+      .onConflictDoNothing()
+      .returning();
 
-  if (created) return created;
+    if (created) return created;
 
-  return db.query.users.findFirst({ where: eq(users.id, userId) });
+    return db.query.users.findFirst({ where: eq(users.id, userId) });
+  } catch (err) {
+    console.error("[ensureDbUser] db insert failed:", err);
+    return null;
+  }
 }
 
-export async function getOnboardingRedirectPath() {
-  const user = await ensureDbUser();
-  if (!user) return "/";
-
+export async function resolveOnboardingPath(user: DbUser) {
   if (!user.role) return "/role-selection";
 
   if (user.role === "student") {
@@ -97,6 +125,13 @@ export async function getOnboardingRedirectPath() {
   });
   if (!profile) return "/onboarding/tutor";
   return "/dashboard/tutor";
+}
+
+export async function getOnboardingRedirectPath() {
+  const user = await ensureDbUser();
+  if (!user) return "/";
+
+  return resolveOnboardingPath(user);
 }
 
 export async function syncClerkRole(role: Role) {

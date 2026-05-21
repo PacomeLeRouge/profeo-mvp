@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
-import { ensureDbUser, requireAuthUserId, syncClerkRole } from "@/lib/auth";
+import { ensureDbUser, requireAuthUserId, resolveOnboardingPath, syncClerkRole } from "@/lib/auth";
 import type { Role } from "@/lib/types";
 
 export async function setUserRole(role: "student" | "tutor") {
@@ -35,4 +35,13 @@ export async function getCurrentUserAction() {
     email: user.email,
     emailContactConsentAt: user.emailContactConsentAt?.toISOString() ?? null,
   };
+}
+
+export async function completeAuthContinueAction() {
+  await requireAuthUserId();
+  const user = await ensureDbUser();
+  if (!user) {
+    throw new Error("Synchronisation du compte en cours…");
+  }
+  return resolveOnboardingPath(user);
 }

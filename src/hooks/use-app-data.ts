@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { useCallback, useEffect, useState } from "react";
 import { getCurrentUserAction } from "@/app/actions/user";
 import {
@@ -16,6 +17,7 @@ import type {
 } from "@/lib/types";
 
 export function useAppData() {
+  const { isLoaded: clerkLoaded, isSignedIn } = useUser();
   const [user, setUser] = useState<User | null>(null);
   const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null);
   const [tutorProfile, setTutorProfile] = useState<TutorProfile | null>(null);
@@ -71,8 +73,21 @@ export function useAppData() {
   }, []);
 
   useEffect(() => {
+    if (!clerkLoaded) return;
+
+    if (!isSignedIn) {
+      setUser(null);
+      setStudentProfile(null);
+      setTutorProfile(null);
+      setTutors([]);
+      setRequests([]);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+
     void refresh();
-  }, [refresh]);
+  }, [clerkLoaded, isSignedIn, refresh]);
 
   return {
     user,
@@ -80,7 +95,7 @@ export function useAppData() {
     tutorProfile,
     tutors,
     requests,
-    isLoading,
+    isLoading: !clerkLoaded || isLoading,
     error,
     refresh,
     setRequests,
