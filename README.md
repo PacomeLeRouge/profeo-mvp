@@ -14,7 +14,7 @@ Plateforme de mise en relation entre étudiants et tuteurs pour des cours partic
 - **Langage** : TypeScript
 - **Styling** : Tailwind CSS
 - **UI** : shadcn/ui
-- **Auth** : Clerk (email, Google, Microsoft)
+- **Auth** : Clerk (email, Google)
 - **Base de données** : Neon Postgres + Drizzle ORM
 - **Déploiement** : Vercel (frontend + API)
 - **E-mails** : Resend (notifications de demandes de cours)
@@ -84,7 +84,7 @@ AGENTS.md                 # Index agent
 
 ## Flow utilisateur
 
-1. **Accueil** → Connexion (email, Google ou Microsoft via Clerk)
+1. **Accueil** → Connexion (email ou Google via Clerk)
 2. **Sélection de rôle** → Choix entre "Étudiant" ou "Tuteur"
 3. **Onboarding** → Configuration du profil (enregistré en base)
 4. **Dashboard** → Recherche/gestion des cours

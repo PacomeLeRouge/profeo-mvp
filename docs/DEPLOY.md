@@ -13,8 +13,7 @@ Ou installez Clerk et Neon depuis le **Vercel Marketplace** sur votre projet (`v
 
 1. Créez une application Clerk.
 2. **Social connections** (Dashboard → User & Authentication → Social):
-   - Activez **Google**
-   - Activez **Microsoft**
+   - Activez **Google** (Microsoft volontairement désactivé — consentement admin requis sur les comptes `@uclouvain.be`)
 3. **Paths** :
    - Sign-in URL : `/`
    - Sign-up URL : `/sign-up`
@@ -145,7 +144,7 @@ Le client recrée les intégrations Marketplace, copie `.env.example`, exécute 
 
 ## 8. Parcours utilisateur
 
-1. Connexion (`/`) — email, Google ou Microsoft
+1. Connexion (`/`) — email ou Google
 2. `/auth/continue` — redirection selon profil
 3. `/role-selection` — choix étudiant / tuteur
 4. `/onboarding/...` — profil

@@ -15,7 +15,7 @@ Un compte Clerk = un rôle (`users.role`). Le choix se fait sur `/role-selection
 
 ## Parcours complet
 
-1. **Connexion** — `/` (email, Google, Microsoft via Clerk)
+1. **Connexion** — `/` (email ou Google via Clerk)
 2. **Inscription** — `/sign-up` + disclaimer informatif sur le partage d'e-mail
 3. **Redirection** — `/auth/continue` selon l'état du profil
 4. **Choix du rôle** — `/role-selection` si pas encore défini

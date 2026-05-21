@@ -21,7 +21,7 @@
   gap: 1.25rem !important;
 }
 
-/* ——— Accès rapide (Google / Microsoft) ——— */
+/* ——— Accès rapide (Google) ——— */
 .clutch-clerk-auth--dark .cl-socialButtonsRoot {
   display: flex;
   flex-direction: column;
