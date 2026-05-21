@@ -53,20 +53,21 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-card px-6 py-6 pb-safe sm:px-8 md:px-12 md:py-10">
-        <AuthPageHeader
-          leading={
-            <span className="font-display text-xl font-bold tracking-tight lg:hidden">clutch</span>
-          }
-          trailing={
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-              <Shield className="h-3.5 w-3.5 shrink-0" aria-hidden />
-              Connexion sécurisée
-            </span>
-          }
-        />
-        <div className="flex min-h-0 flex-1 flex-col justify-start py-4 sm:justify-center sm:py-6 md:py-10">
-          <div className="mx-auto w-full max-w-md space-y-5 sm:space-y-7">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-card px-6 pt-safe pb-safe sm:px-8 md:px-12">
+        <div className="mx-auto flex w-full max-w-md flex-1 flex-col py-6 sm:py-8 lg:py-10">
+          <AuthPageHeader
+            className="mb-6 shrink-0 sm:mb-8"
+            leading={
+              <span className="font-display text-xl font-bold tracking-tight lg:hidden">clutch</span>
+            }
+            trailing={
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <Shield className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                Connexion sécurisée
+              </span>
+            }
+          />
+          <div className="space-y-5 sm:space-y-7">
             <header className="space-y-2.5">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
                 Inscription
