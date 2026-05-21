@@ -51,7 +51,25 @@ export function OnboardingPageGate({
     );
   }
 
-  if (!ready) return null;
+  if (!ready) {
+    return (
+      <div
+        className={cn(
+          "flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center",
+          onboardingThemeClass
+        )}
+      >
+        <p className="text-muted-foreground">Connexion en cours…</p>
+        <button
+          type="button"
+          onClick={() => window.location.assign("/auth/continue")}
+          className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
+        >
+          Continuer
+        </button>
+      </div>
+    );
+  }
 
   return <>{children}</>;
 }

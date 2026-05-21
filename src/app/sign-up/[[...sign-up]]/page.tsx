@@ -1,12 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { AuthClerkSignUp } from "@/components/AuthClerk";
 import { AuthPageHeader } from "@/components/theme/AuthPageHeader";
 import { ContactEmailDisclaimer } from "@/components/onboarding/ContactEmailDisclaimer";
 import { GraduationCap, Shield } from "lucide-react";
 import splashBackground from "@/app/img/splash.png";
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+  const { userId } = await auth();
+  if (userId) {
+    redirect("/auth/continue");
+  }
+
   return (
     <div className="grid min-h-dvh bg-background text-foreground lg:h-dvh lg:max-h-dvh lg:grid-cols-[1.05fr_0.95fr] lg:overflow-hidden">
       <div className="relative flex min-h-[24vh] flex-col justify-between overflow-hidden px-6 py-6 sm:min-h-[28vh] sm:px-8 md:px-12 md:py-10 lg:h-full lg:max-h-none lg:min-h-full">

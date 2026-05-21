@@ -56,7 +56,13 @@ function RoleSelectionContent() {
     );
   }
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div className={cn("flex min-h-dvh items-center justify-center", onboardingThemeClass)}>
+        <p className="text-muted-foreground">Redirection…</p>
+      </div>
+    );
+  }
 
   return (
     <div className={cn("flex min-h-dvh flex-col", onboardingThemeClass)}>

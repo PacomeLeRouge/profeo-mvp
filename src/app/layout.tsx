@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ui } from "@clerk/ui";
 import { clutchFrFR } from "@/lib/clerk-localization";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
@@ -29,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider localization={clutchFrFR}>
+    <ClerkProvider localization={clutchFrFR} ui={ui}>
       <html lang="fr" suppressHydrationWarning>
         <body className={`${plusJakarta.variable} font-sans app-surface`}>
           <ThemeScript />
