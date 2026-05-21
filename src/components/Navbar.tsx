@@ -1,9 +1,10 @@
 "use client";
 
 import { useClerk, useUser } from "@clerk/nextjs";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
-import { GraduationCap, LogOut } from "lucide-react";
+import { GraduationCap, LogOut, UserRound } from "lucide-react";
 import { useAppData } from "@/hooks/use-app-data";
 import { RoleBadge } from "@/components/dashboard/RoleBadge";
 import { SwitchRoleLink } from "@/components/dashboard/SwitchRoleLink";
@@ -32,15 +33,15 @@ export function Navbar() {
 
   if (!isLoaded || !clerkUser || isEntryFlow) return null;
 
-  const displayName = user?.name ?? clerkUser.fullName ?? "Utilisateur";
   const role = user?.role as AppRole | undefined;
   const isDashboard = pathname.startsWith("/dashboard");
+  const profileHref = role ? `/onboarding/${role}` : "/role-selection";
 
   return (
     <nav className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex min-h-16 flex-col justify-center gap-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-0">
-          <div className="flex min-w-0 flex-1 items-center justify-between gap-3 sm:justify-start">
+        <div className="flex min-h-14 items-center justify-between gap-3 py-2 sm:min-h-16 sm:py-0">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button
               type="button"
               className="flex min-w-0 cursor-pointer items-center gap-3"
@@ -55,22 +56,33 @@ export function Navbar() {
                 Clutch
               </span>
             </button>
-            {isDashboard && role ? <RoleBadge role={role} size="sm" /> : null}
+            {isDashboard && role ? <RoleBadge role={role} size="sm" className="hidden sm:inline-flex" /> : null}
           </div>
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            {isDashboard ? <ThemeToggle /> : null}
-            {isDashboard && role ? <SwitchRoleLink currentRole={role} /> : null}
-            <div className="inline-flex max-w-full items-center rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground shadow-sm">
-              <span className="truncate font-medium text-foreground">{displayName}</span>
-            </div>
+
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+            {isDashboard ? <ThemeToggle className="size-9 px-0" /> : null}
+            {isDashboard && role ? (
+              <>
+                <SwitchRoleLink currentRole={role} variant="icon" />
+                <Link
+                  href={profileHref}
+                  aria-label="Modifier mon profil"
+                  title="Modifier mon profil"
+                  className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm transition-colors hover:border-primary/30 hover:bg-muted"
+                >
+                  <UserRound className="size-4 shrink-0" aria-hidden />
+                </Link>
+              </>
+            ) : null}
             <Button
               variant="outline"
-              size="default"
-              className="min-h-11 rounded-full px-4 sm:min-h-9"
+              size="icon"
+              className="size-9 rounded-full"
               onClick={handleLogout}
+              aria-label="Déconnexion"
+              title="Déconnexion"
             >
               <LogOut className="h-4 w-4" />
-              Déconnexion
             </Button>
           </div>
         </div>

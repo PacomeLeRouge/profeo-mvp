@@ -1,9 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion, onboardingEase } from "@/lib/gsap-config";
 import { subjectTranslations } from "@/lib/subjects";
-import { TutorProfile } from "@/lib/types";
+import { RequestStatus, TutorProfile } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, MapPin, Monitor, Sparkles } from "lucide-react";
@@ -23,50 +21,19 @@ function getAvailabilitySlots(availability: string) {
 
 type TutorCardProps = {
   tutor: TutorProfile;
-  index: number;
+  requestStatus?: RequestStatus | null;
   onRequest: (tutor: TutorProfile) => void;
 };
 
-export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
-  const cardRef = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      const card = cardRef.current;
-      if (!card) return;
-
-      gsap.killTweensOf(card);
-
-      if (prefersReducedMotion()) {
-        gsap.set(card, { clearProps: "opacity,transform", opacity: 1, y: 0 });
-        return;
-      }
-
-      gsap.fromTo(
-        card,
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          delay: index * 0.08,
-          ease: onboardingEase.enter,
-          clearProps: "opacity,transform",
-        }
-      );
-    },
-    { scope: cardRef, dependencies: [tutor.id, index], revertOnUpdate: true }
-  );
-
+export function TutorCard({ tutor, requestStatus = null, onRequest }: TutorCardProps) {
   const slots = getAvailabilitySlots(tutor.availability);
   const visibleSlots = slots.slice(0, 3);
   const hiddenCount = slots.length - visibleSlots.length;
+  const hasPendingRequest = requestStatus === "Pending";
+  const hasConfirmedRequest = requestStatus === "Confirmed";
 
   return (
-    <article
-      ref={cardRef}
-      className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-card/85 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_24px_60px_-36px_rgba(204,255,0,0.12)]"
-    >
+    <article className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-card shadow-sm transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_24px_60px_-36px_rgba(204,255,0,0.12)]">
       <div className="border-b border-border p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
@@ -145,8 +112,14 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
         <Button
           className="w-full rounded-full"
           onClick={() => onRequest(tutor)}
+          disabled={hasPendingRequest || hasConfirmedRequest}
+          variant={hasPendingRequest || hasConfirmedRequest ? "outline" : "default"}
         >
-          Demander un cours
+          {hasPendingRequest
+            ? "Demande en attente"
+            : hasConfirmedRequest
+              ? "Demande acceptée"
+              : "Demander un cours"}
         </Button>
       </div>
     </article>

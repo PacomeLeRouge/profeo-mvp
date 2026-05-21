@@ -6,10 +6,8 @@ import { RequestList } from "@/components/dashboard/student/RequestList";
 import { TutorCard, TutorEmptyState } from "@/components/dashboard/student/TutorCard";
 import { TutorFilters } from "@/components/dashboard/student/TutorFilters";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
-import { SwitchRoleLink } from "@/components/dashboard/SwitchRoleLink";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
-import { Button } from "@/components/ui/button";
 import { gsap, useGSAP, prefersReducedMotion, onboardingEase } from "@/lib/gsap-config";
 import { type Subject } from "@/lib/subjects";
 import { Format, LessonRequest, TutorProfile, User } from "@/lib/types";
@@ -52,6 +50,21 @@ export function StudentDashboardView({
 
   const myRequests = requests.filter((r) => r.studentId === user.id);
   const pendingCount = myRequests.filter((r) => r.status === "Pending").length;
+
+  const requestStatusByTutorId = useMemo(() => {
+    const statuses = new Map<string, LessonRequest["status"]>();
+
+    for (const request of myRequests) {
+      if (request.status === "Declined") continue;
+
+      const existing = statuses.get(request.tutorId);
+      if (!existing || request.status === "Confirmed") {
+        statuses.set(request.tutorId, request.status);
+      }
+    }
+
+    return statuses;
+  }, [myRequests]);
 
   const activeFiltersCount =
     (subjectFilter !== "All" ? 1 : 0) +
@@ -104,6 +117,9 @@ export function StudentDashboardView({
   };
 
   const handleOpenRequest = (tutor: TutorProfile) => {
+    const status = requestStatusByTutorId.get(tutor.id);
+    if (status === "Pending" || status === "Confirmed") return;
+
     setRequestError(null);
     setSelectedTutor(tutor);
     setRequestSubject(tutor.subjects[0] ?? "");
@@ -145,29 +161,13 @@ export function StudentDashboardView({
       {preview ? <DevPreviewBanner /> : null}
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-none">
-              {preview ? "Preview · Trouve ton tuteur" : "Trouve ton tuteur"}
-            </h1>
-            <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">
-              Compare les profils, filtre par matière et envoie une demande en quelques clics.
-            </p>
-          </div>
-          {!preview ? (
-            <div className="flex flex-wrap items-center gap-2">
-              <SwitchRoleLink currentRole="student" />
-              {onEditProfile ? (
-                <Button variant="outline" className="rounded-full" onClick={onEditProfile}>
-                  Modifier mon profil
-                </Button>
-              ) : null}
-            </div>
-          ) : onEditProfile ? (
-            <Button variant="outline" className="rounded-full" onClick={onEditProfile}>
-              Modifier mon profil
-            </Button>
-          ) : null}
+        <header className="space-y-2">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-none">
+            {preview ? "Preview · Trouve ton tuteur" : "Trouve ton tuteur"}
+          </h1>
+          <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">
+            Compare les profils, filtre par matière et envoie une demande en quelques clics.
+          </p>
         </header>
 
         <div className="flex flex-wrap gap-2">
@@ -215,8 +215,13 @@ export function StudentDashboardView({
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {filteredTutors.map((tutor, index) => (
-              <TutorCard key={tutor.id} tutor={tutor} index={index} onRequest={handleOpenRequest} />
+            {filteredTutors.map((tutor) => (
+              <TutorCard
+                key={tutor.id}
+                tutor={tutor}
+                requestStatus={requestStatusByTutorId.get(tutor.id) ?? null}
+                onRequest={handleOpenRequest}
+              />
             ))}
             {filteredTutors.length === 0 ? (
               <TutorEmptyState

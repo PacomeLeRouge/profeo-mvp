@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 type SwitchRoleLinkProps = {
   currentRole: AppRole;
   className?: string;
-  variant?: "button" | "text";
+  variant?: "button" | "text" | "icon";
 };
 
 export function SwitchRoleLink({
@@ -18,6 +18,22 @@ export function SwitchRoleLink({
 }: SwitchRoleLinkProps) {
   const otherRole = getOtherRole(currentRole);
   const otherMeta = roleMeta[otherRole];
+
+  if (variant === "icon") {
+    return (
+      <Link
+        href="/role-selection?switch=1"
+        aria-label="Changer de parcours"
+        title="Changer de parcours"
+        className={cn(
+          "inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm transition-colors hover:border-primary/30 hover:bg-muted",
+          className
+        )}
+      >
+        <ArrowLeftRight className="size-4 shrink-0" aria-hidden />
+      </Link>
+    );
+  }
 
   if (variant === "text") {
     return (
