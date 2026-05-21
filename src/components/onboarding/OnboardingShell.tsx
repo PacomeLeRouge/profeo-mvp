@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { OnboardingProgress } from "@/components/onboarding/OnboardingProgress";
 import { OnboardingSymbol } from "@/components/onboarding/OnboardingSymbol";
 import { getSymbolPlacement } from "@/lib/onboarding-symbols";
-import { ContactEmailConsent } from "@/components/onboarding/ContactEmailConsent";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { cn } from "@/lib/utils";
 
@@ -20,10 +19,6 @@ type OnboardingShellProps = {
   submitError?: string | null;
   isLastStep: boolean;
   isEditing?: boolean;
-  requireEmailConsent?: boolean;
-  emailConsentVariant?: "student" | "tutor";
-  emailConsentAccepted?: boolean;
-  onEmailConsentChange?: (accepted: boolean) => void;
   submitLabel?: string;
   continueLabel?: string;
   onBack: () => void;
@@ -44,10 +39,6 @@ export function OnboardingShell({
   submitError = null,
   isLastStep,
   isEditing = false,
-  requireEmailConsent = false,
-  emailConsentVariant = "student",
-  emailConsentAccepted = false,
-  onEmailConsentChange,
   submitLabel,
   continueLabel = "Continuer",
   onBack,
@@ -105,13 +96,6 @@ export function OnboardingShell({
             >
               {submitError}
             </p>
-          ) : null}
-          {isLastStep && requireEmailConsent && onEmailConsentChange ? (
-            <ContactEmailConsent
-              variant={emailConsentVariant}
-              checked={emailConsentAccepted}
-              onCheckedChange={onEmailConsentChange}
-            />
           ) : null}
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Button variant="ghost" onClick={onBack} className="h-11 px-0 text-base sm:h-12">

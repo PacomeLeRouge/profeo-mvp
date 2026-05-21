@@ -81,7 +81,7 @@ export function AnimatedTextarea({
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
           aria-label={ariaLabel ?? label}
-          className="min-h-[220px] w-full resize-none border-0 bg-transparent px-6 py-5 text-left text-lg leading-8 text-foreground outline-none placeholder:text-foreground/25 md:text-xl"
+          className="min-h-[220px] w-full resize-none border-0 bg-transparent px-6 py-5 text-left text-lg leading-8 text-foreground outline-none placeholder:text-muted-foreground/75 md:text-xl"
         />
       </div>
       {hint ? <p className="mt-4 text-left text-sm text-muted-foreground">{hint}</p> : null}

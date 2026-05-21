@@ -24,6 +24,16 @@ export async function setUserRole(role: "student" | "tutor") {
   revalidatePath("/", "layout");
 }
 
+/** Change de rôle et renvoie la route cible (dashboard ou onboarding). */
+export async function switchUserRoleAction(role: "student" | "tutor") {
+  await setUserRole(role);
+  const user = await ensureDbUser();
+  if (!user) {
+    throw new Error("Session introuvable. Reconnectez-vous.");
+  }
+  return resolveOnboardingPath(user);
+}
+
 export async function getCurrentUserAction() {
   const user = await ensureDbUser();
   if (!user) return null;

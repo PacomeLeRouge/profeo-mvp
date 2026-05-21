@@ -6,6 +6,8 @@ import { RequestList } from "@/components/dashboard/student/RequestList";
 import { TutorCard, TutorEmptyState } from "@/components/dashboard/student/TutorCard";
 import { TutorFilters } from "@/components/dashboard/student/TutorFilters";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
+import { RoleBadge } from "@/components/dashboard/RoleBadge";
+import { SwitchRoleLink } from "@/components/dashboard/SwitchRoleLink";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
 import { Button } from "@/components/ui/button";
@@ -123,9 +125,12 @@ export function StudentDashboardView({
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
-            <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">
-              {preview ? "Preview · Espace étudiant" : "Espace étudiant"}
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              {!preview ? <RoleBadge role="student" /> : null}
+              <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">
+                {preview ? "Preview · Espace étudiant" : "Espace étudiant"}
+              </p>
+            </div>
             <div className="space-y-2">
               <h1 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-none">
                 Trouve ton tuteur
@@ -135,7 +140,16 @@ export function StudentDashboardView({
               </p>
             </div>
           </div>
-          {onEditProfile ? (
+          {!preview ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <SwitchRoleLink currentRole="student" />
+              {onEditProfile ? (
+                <Button variant="outline" className="rounded-full" onClick={onEditProfile}>
+                  Modifier mon profil
+                </Button>
+              ) : null}
+            </div>
+          ) : onEditProfile ? (
             <Button variant="outline" className="rounded-full" onClick={onEditProfile}>
               Modifier mon profil
             </Button>

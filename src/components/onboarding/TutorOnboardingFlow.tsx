@@ -12,7 +12,7 @@ import { InstitutionAutocomplete } from "@/components/onboarding/InstitutionAuto
 import { ChoiceChipGroup } from "@/components/onboarding/ChoiceChip";
 import { AvailabilityGrid } from "@/components/onboarding/AvailabilityGrid";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
-import { ContactEmailDisclaimer } from "@/components/onboarding/ContactEmailDisclaimer";
+import { ContactEmailConsentStep } from "@/components/onboarding/ContactEmailConsentStep";
 import { SUBJECTS, subjectTranslations } from "@/lib/subjects";
 import { tutorEducationLevels } from "@/components/onboarding/onboarding-shared";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ import {
 } from "@/lib/onboarding-step-validation";
 import { cn } from "@/lib/utils";
 
-const totalSteps = 8;
+const profileSteps = 8;
 
 type TutorOnboardingFlowProps = {
   preview?: boolean;
@@ -62,6 +62,8 @@ export function TutorOnboardingFlow({
   const directionRef = useRef<1 | -1>(1);
   const isEditing = !!initialProfile && !preview;
   const needsEmailConsent = !isEditing && !hasEmailContactConsent;
+  const totalSteps = needsEmailConsent ? profileSteps + 1 : profileSteps;
+  const consentStep = needsEmailConsent ? totalSteps : null;
 
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
@@ -182,7 +184,8 @@ export function TutorOnboardingFlow({
     (step === 5 && subjects.length > 0) ||
     (step === 6 && isValidHourlyRateStep(hourlyRate)) ||
     (step === 7 && !!format) ||
-    (step === 8 && selectedSlots.length > 0 && (!needsEmailConsent || emailConsentAccepted));
+    (step === 8 && selectedSlots.length > 0) ||
+    (consentStep !== null && step === consentStep && emailConsentAccepted);
 
   if (completed) {
     return (
@@ -231,10 +234,6 @@ export function TutorOnboardingFlow({
         submitError={submitError}
         isLastStep={step === totalSteps}
         isEditing={isEditing}
-        requireEmailConsent={needsEmailConsent}
-        emailConsentVariant="tutor"
-        emailConsentAccepted={emailConsentAccepted}
-        onEmailConsentChange={setEmailConsentAccepted}
         submitLabel={preview ? "Terminer (preview)" : isEditing ? "Enregistrer" : "Publier mon profil"}
         onBack={handleBack}
         onNext={handleNext}
@@ -247,17 +246,14 @@ export function TutorOnboardingFlow({
               step={step}
               eyebrow="Profil tuteur"
               title="Comment vous appelez-vous ?"
-              subtitle="Votre prénom sera affiché sur votre profil public."
             />
             <AnimatedTextField
-              label="Votre prénom"
               placeholder="Sam"
               value={firstName}
               onChange={setFirstName}
               hint="Au moins 2 caractères."
               aria-label="Votre prénom"
             />
-            {!isEditing ? <ContactEmailDisclaimer variant="tutor" className="mx-auto max-w-lg" /> : null}
           </OnboardingStepPanel>
         )}
 
@@ -389,6 +385,22 @@ export function TutorOnboardingFlow({
               selectedSlots={selectedSlots}
               onToggle={handleSlotToggle}
               onSetSlots={setSelectedSlots}
+            />
+          </OnboardingStepPanel>
+        )}
+
+        {consentStep !== null && step === consentStep && (
+          <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
+            <OnboardingStepTitle
+              step={step}
+              eyebrow="Profil tuteur"
+              title="Un dernier point avant de publier"
+              subtitle="Confirmez comment Clutch utilisera votre adresse e-mail."
+            />
+            <ContactEmailConsentStep
+              variant="tutor"
+              checked={emailConsentAccepted}
+              onCheckedChange={setEmailConsentAccepted}
             />
           </OnboardingStepPanel>
         )}

@@ -14,18 +14,17 @@ alwaysApply: false
 
 ## Étapes
 
-| Rôle | Steps | Dernière étape |
-|------|-------|----------------|
-| Student | 5 | Matières recherchées |
-| Tutor | 8 | Disponibilités (grille) |
+| Rôle | Steps profil | Dernière étape profil | Étape consentement (si requis) |
+|------|--------------|----------------------|--------------------------------|
+| Student | 5 | Matières recherchées | Échanges par e-mail + checkbox |
+| Tutor | 8 | Disponibilités (grille) | Échanges par e-mail + checkbox |
 
 ## Disclaimer vs consentement
 
-- **Étape 1** : `ContactEmailDisclaimer` — info seulement, sauf `isEditing`
-- **Dernière étape** : `ContactEmailConsent` — checkbox **obligatoire** si consentement requis (`needsEmailConsent`)
-- Sign-up : disclaimer `signup` + lien `/legal`
-
-Ne pas fusionner disclaimer et checkbox sur la même étape sans décision produit.
+- **Sign-up** : `ContactEmailDisclaimer` variant `signup` — info seulement
+- **Fin d'onboarding** : étape dédiée `ContactEmailConsentStep` — disclaimer + checkbox shadcn si `needsEmailConsent`
+- **Étape 1** : plus de disclaimer (retiré)
+- **Édition profil** : pas d'étape consentement si consentement déjà enregistré
 
 ## Édition profil
 

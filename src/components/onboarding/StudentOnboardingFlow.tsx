@@ -11,7 +11,7 @@ import { AnimatedTextField } from "@/components/onboarding/AnimatedTextField";
 import { InstitutionAutocomplete } from "@/components/onboarding/InstitutionAutocomplete";
 import { ChoiceChipGroup } from "@/components/onboarding/ChoiceChip";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
-import { ContactEmailDisclaimer } from "@/components/onboarding/ContactEmailDisclaimer";
+import { ContactEmailConsentStep } from "@/components/onboarding/ContactEmailConsentStep";
 import { SUBJECTS, subjectTranslations } from "@/lib/subjects";
 import { studentEducationLevels } from "@/components/onboarding/onboarding-shared";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import {
 } from "@/lib/onboarding-step-validation";
 import { cn } from "@/lib/utils";
 
-const totalSteps = 5;
+const profileSteps = 5;
 
 type StudentOnboardingFlowProps = {
   preview?: boolean;
@@ -56,6 +56,8 @@ export function StudentOnboardingFlow({
   const directionRef = useRef<1 | -1>(1);
   const isEditing = !!initialProfile && !preview;
   const needsEmailConsent = !isEditing && !hasEmailContactConsent;
+  const totalSteps = needsEmailConsent ? profileSteps + 1 : profileSteps;
+  const consentStep = needsEmailConsent ? totalSteps : null;
 
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
@@ -143,7 +145,8 @@ export function StudentOnboardingFlow({
     (step === 2 && isValidAgeStep(age, 16, 99)) ||
     (step === 3 && !!educationLevel) ||
     (step === 4 && !!institution.trim()) ||
-    (step === 5 && subjects.length > 0 && (!needsEmailConsent || emailConsentAccepted));
+    (step === 5 && subjects.length > 0) ||
+    (consentStep !== null && step === consentStep && emailConsentAccepted);
 
   if (completed) {
     return (
@@ -192,10 +195,6 @@ export function StudentOnboardingFlow({
         submitError={submitError}
         isLastStep={step === totalSteps}
         isEditing={isEditing}
-        requireEmailConsent={needsEmailConsent}
-        emailConsentVariant="student"
-        emailConsentAccepted={emailConsentAccepted}
-        onEmailConsentChange={setEmailConsentAccepted}
         submitLabel={preview ? "Terminer (preview)" : undefined}
         onBack={handleBack}
         onNext={handleNext}
@@ -208,17 +207,14 @@ export function StudentOnboardingFlow({
               step={step}
               eyebrow="Profil étudiant"
               title="Comment vous appelez-vous ?"
-              subtitle="Votre prénom sera visible par les tuteurs."
             />
             <AnimatedTextField
-              label="Votre prénom"
               placeholder="Alex"
               value={firstName}
               onChange={setFirstName}
               hint="Au moins 2 caractères."
               aria-label="Votre prénom"
             />
-            {!isEditing ? <ContactEmailDisclaimer variant="student" className="mx-auto max-w-lg" /> : null}
           </OnboardingStepPanel>
         )}
 
@@ -278,6 +274,22 @@ export function StudentOnboardingFlow({
               value={subjects}
               onChange={handleSubjectToggle}
               multiple
+            />
+          </OnboardingStepPanel>
+        )}
+
+        {consentStep !== null && step === consentStep && (
+          <OnboardingStepPanel stepKey={step} direction={directionRef.current}>
+            <OnboardingStepTitle
+              step={step}
+              eyebrow="Profil étudiant"
+              title="Un dernier point avant de commencer"
+              subtitle="Confirmez comment Clutch utilisera votre adresse e-mail."
+            />
+            <ContactEmailConsentStep
+              variant="student"
+              checked={emailConsentAccepted}
+              onCheckedChange={setEmailConsentAccepted}
             />
           </OnboardingStepPanel>
         )}

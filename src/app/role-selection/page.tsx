@@ -3,10 +3,12 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { setUserRole } from "@/app/actions/user";
+import { setUserRole, switchUserRoleAction } from "@/app/actions/user";
 import { useAppData } from "@/hooks/use-app-data";
 import { RoleChoiceCard } from "@/components/theme/RoleChoiceCard";
+import { RoleBadge } from "@/components/dashboard/RoleBadge";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { roleMeta, type AppRole } from "@/lib/role-ui";
 import { onboardingThemeClass } from "@/lib/onboarding-theme";
 import { GraduationCap, BookOpen, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,8 +21,14 @@ function RoleSelectionContent() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectError, setSelectError] = useState<string | null>(null);
   const source = searchParams.get("source");
-  const isSignupFlow = source === "signup";
-  const backHref = isSignupFlow ? "/sign-up" : "/";
+  const isSwitchMode = searchParams.get("switch") === "1";
+  const isSignupFlow = source === "signup" && !isSwitchMode;
+  const currentRole = user?.role as AppRole | undefined;
+  const backHref = isSwitchMode && currentRole
+    ? `/dashboard/${currentRole}`
+    : isSignupFlow
+      ? "/sign-up"
+      : "/";
 
   useEffect(() => {
     if (!clerkLoaded || isLoading) return;
@@ -30,15 +38,21 @@ function RoleSelectionContent() {
       return;
     }
 
-    if (user?.role) {
+    if (user?.role && !isSwitchMode) {
       router.push("/auth/continue");
     }
-  }, [clerkLoaded, isSignedIn, user, isLoading, router]);
+  }, [clerkLoaded, isSignedIn, user, isLoading, router, isSwitchMode]);
 
-  const handleSelectRole = async (role: "student" | "tutor") => {
+  const handleSelectRole = async (role: AppRole) => {
     setSelectError(null);
     setIsSelecting(true);
     try {
+      if (isSwitchMode) {
+        const path = await switchUserRoleAction(role);
+        router.push(path);
+        return;
+      }
+
       await setUserRole(role);
       const query = source ? `?source=${source}` : "";
       router.push(`/onboarding/${role}${query}`);
@@ -94,9 +108,16 @@ function RoleSelectionContent() {
         <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center">
           <div className="w-full space-y-8 md:space-y-12">
             <div className="mx-auto max-w-3xl space-y-5 text-center md:text-left">
-              <p className="text-eyebrow text-text-accent">
-                {isSignupFlow ? "Création de compte" : "Choix du profil"}
-              </p>
+              <div className="flex flex-col items-center gap-3 md:items-start">
+                {isSwitchMode && currentRole ? <RoleBadge role={currentRole} /> : null}
+                <p className="text-eyebrow text-text-accent">
+                  {isSwitchMode
+                    ? "Changer de parcours"
+                    : isSignupFlow
+                      ? "Création de compte"
+                      : "Choix du profil"}
+                </p>
+              </div>
               <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-center md:justify-start md:gap-4">
                 <button
                   type="button"
@@ -108,11 +129,14 @@ function RoleSelectionContent() {
                 </button>
                 <div className="space-y-3 sm:space-y-4">
                   <h1 className="font-display text-2xl font-bold leading-[1.08] tracking-tight text-foreground sm:text-3xl md:text-5xl xl:text-[4.25rem]">
-                    Comment allez-vous utiliser Clutch ?
+                    {isSwitchMode
+                      ? "Envie de changer de casquette ?"
+                      : "Comment allez-vous utiliser Clutch ?"}
                   </h1>
                   <p className="max-w-2xl text-base leading-7 text-foreground/75 sm:text-lg md:text-xl md:leading-8">
-                    Choisissez le parcours qui correspond à votre besoin. Clutch adaptera ensuite les
-                    prochaines questions pour aller à l&apos;essentiel.
+                    {isSwitchMode
+                      ? "Vous pouvez passer de l'un à l'autre à tout moment. Clutch adaptera votre espace et vos prochaines étapes."
+                      : "Choisissez le parcours qui correspond à votre besoin. Clutch adaptera ensuite les prochaines questions pour aller à l'essentiel."}
                   </p>
                 </div>
               </div>
@@ -129,19 +153,33 @@ function RoleSelectionContent() {
 
             <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
               <RoleChoiceCard
-                eyebrow="Parcours étudiant"
+                eyebrow={roleMeta.student.dashboardEyebrow}
                 title="Trouver un tuteur"
-                description="Pour progresser dans une matière, préparer un examen ou obtenir un accompagnement ciblé."
-                ctaLabel="Choisir le parcours étudiant"
+                description={roleMeta.student.switchDescription}
+                ctaLabel={
+                  isSwitchMode
+                    ? currentRole === "student"
+                      ? "Continuer en étudiant"
+                      : "Passer en étudiant"
+                    : "Choisir le parcours étudiant"
+                }
                 icon={BookOpen}
+                isCurrent={isSwitchMode && currentRole === "student"}
                 onSelect={() => !isSelecting && handleSelectRole("student")}
               />
               <RoleChoiceCard
-                eyebrow="Parcours tuteur"
+                eyebrow={roleMeta.tutor.dashboardEyebrow}
                 title="Proposer mes cours"
-                description="Pour créer un profil crédible, présenter votre approche et commencer à accompagner d'autres étudiants."
-                ctaLabel="Choisir le parcours tuteur"
+                description={roleMeta.tutor.switchDescription}
+                ctaLabel={
+                  isSwitchMode
+                    ? currentRole === "tutor"
+                      ? "Continuer en tuteur"
+                      : "Passer en tuteur"
+                    : "Choisir le parcours tuteur"
+                }
                 icon={GraduationCap}
+                isCurrent={isSwitchMode && currentRole === "tutor"}
                 onSelect={() => !isSelecting && handleSelectRole("tutor")}
               />
             </div>

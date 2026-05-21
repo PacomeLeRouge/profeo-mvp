@@ -8,6 +8,7 @@ type RoleChoiceCardProps = {
   ctaLabel: string;
   icon: LucideIcon;
   onSelect: () => void;
+  isCurrent?: boolean;
   className?: string;
 };
 
@@ -18,6 +19,7 @@ export function RoleChoiceCard({
   ctaLabel,
   icon: Icon,
   onSelect,
+  isCurrent = false,
   className,
 }: RoleChoiceCardProps) {
   return (
@@ -25,7 +27,8 @@ export function RoleChoiceCard({
       type="button"
       onClick={onSelect}
       className={cn(
-        "group flex min-h-[240px] w-full flex-col rounded-[2rem] border-2 border-border bg-card p-5 text-left shadow-[0_20px_60px_-36px_rgba(26,26,26,0.22)] transition-all sm:min-h-[280px] sm:p-6",
+        "group flex min-h-[240px] w-full flex-col rounded-[2rem] border-2 bg-card p-5 text-left shadow-[0_20px_60px_-36px_rgba(26,26,26,0.22)] transition-all sm:min-h-[280px] sm:p-6",
+        isCurrent ? "border-primary/40 bg-primary/5" : "border-border",
         "hover:border-primary hover:shadow-[0_28px_80px_-32px_rgba(204,255,0,0.28)]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background",
         "md:min-h-[320px] md:p-8",

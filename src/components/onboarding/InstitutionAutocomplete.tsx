@@ -22,24 +22,33 @@ type InstitutionAutocompleteProps = {
 export function InstitutionAutocomplete({
   value,
   onChange,
-  label = "Établissement",
-  placeholder = "Tapez une lettre…",
-  hint = "Commencez à taper le nom de votre université — suggestions parmi les 100 plus grandes d'Europe.",
+  label,
+  placeholder = "UCLouvain, ULB, Sorbonne…",
+  hint = "Suggestions parmi les grandes universités européennes.",
   autoFocus = true,
   className,
   "aria-label": ariaLabel,
 }: InstitutionAutocompleteProps) {
   const listId = useId();
+  const hintId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  const fieldLabel = ariaLabel ?? label ?? "Établissement";
+  const showLabel = Boolean(label?.trim());
   const suggestions = filterEuropeanUniversities(value);
   const showSuggestions = isOpen && isFocused && value.trim().length > 0 && suggestions.length > 0;
-  const isActive = isFocused || value.length > 0;
+  const showPlaceholder = value.trim().length === 0;
+
+  const hintText =
+    value.trim().length === 0
+      ? hint
+      : suggestions.length === 0
+        ? "Aucune suggestion — vous pouvez saisir le nom manuellement."
+        : `${suggestions.length} suggestion${suggestions.length > 1 ? "s" : ""}`;
 
   useGSAP(
     () => {
@@ -58,21 +67,6 @@ export function InstitutionAutocomplete({
       }
     },
     { scope: containerRef, dependencies: [label], revertOnUpdate: true }
-  );
-
-  useGSAP(
-    () => {
-      if (!labelRef.current) return;
-
-      gsap.to(labelRef.current, {
-        y: isActive ? -36 : 0,
-        scale: isActive ? 0.72 : 1,
-        opacity: isActive ? 0.55 : 0.35,
-        duration: prefersReducedMotion() ? 0 : 0.28,
-        ease: "power2.out",
-      });
-    },
-    { scope: containerRef, dependencies: [isActive, isFocused] }
   );
 
   useGSAP(
@@ -127,13 +121,12 @@ export function InstitutionAutocomplete({
 
   return (
     <div ref={containerRef} className={cn("relative mx-auto w-full max-w-2xl", className)}>
-      <div className="relative pt-8">
-        <span
-          ref={labelRef}
-          className="pointer-events-none absolute left-0 right-0 top-0 origin-left text-center text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground"
-        >
-          {label}
-        </span>
+      <div className={cn("relative", showLabel && "pt-8")}>
+        {showLabel ? (
+          <span className="pointer-events-none absolute left-0 right-0 top-0 origin-left text-center text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            {label}
+          </span>
+        ) : null}
 
         <div className="relative">
           <input
@@ -143,14 +136,17 @@ export function InstitutionAutocomplete({
             onChange={(e) => handleChange(e.target.value)}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            placeholder={isActive ? placeholder : ""}
-            aria-label={ariaLabel ?? label}
+            placeholder={showPlaceholder ? placeholder : ""}
+            aria-label={fieldLabel}
+            aria-describedby={hint ? hintId : undefined}
             aria-autocomplete="list"
             aria-controls={listId}
             aria-expanded={showSuggestions}
             role="combobox"
             autoComplete="off"
-            className="h-20 w-full border-0 bg-transparent px-2 text-center text-xl font-medium text-foreground outline-none placeholder:text-foreground/20 break-words sm:h-24 sm:text-2xl md:text-4xl"
+            className={cn(
+              "h-20 w-full border-0 bg-transparent px-2 text-center text-xl font-medium text-foreground outline-none placeholder:text-muted-foreground/75 break-words sm:h-24 sm:text-2xl md:text-4xl"
+            )}
           />
 
           {showSuggestions ? (
@@ -161,7 +157,11 @@ export function InstitutionAutocomplete({
               className="absolute left-0 right-0 top-full z-20 mt-2 max-h-[40vh] overflow-y-auto rounded-3xl border border-border bg-card py-2 text-left shadow-[0_24px_60px_-32px_rgba(0,0,0,0.35)] sm:max-h-72"
             >
               {suggestions.map((university) => (
-                <li key={`${university.name}-${university.city}`} role="option">
+                <li
+                  key={`${university.name}-${university.city}`}
+                  role="option"
+                  aria-selected={value === university.name}
+                >
                   <button
                     type="button"
                     data-suggestion-item
@@ -184,12 +184,8 @@ export function InstitutionAutocomplete({
       </div>
 
       {hint ? (
-        <p className="mt-5 text-sm text-muted-foreground">
-          {value.trim().length === 0
-            ? hint
-            : suggestions.length === 0
-              ? "Aucune université trouvée — vous pouvez saisir le nom manuellement."
-              : `${suggestions.length} suggestion${suggestions.length > 1 ? "s" : ""}`}
+        <p id={hintId} className="mt-4 text-center text-xs text-muted-foreground/80">
+          {hintText}
         </p>
       ) : null}
     </div>

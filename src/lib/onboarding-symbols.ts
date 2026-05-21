@@ -10,6 +10,7 @@ const symbols = {
   rate: "/onboarding/symbols/onboarding-symbol-rate.png",
   format: "/onboarding/symbols/onboarding-symbol-format.png",
   availability: "/onboarding/symbols/onboarding-symbol-availability.png",
+  connection: "/onboarding/symbols/onboarding-symbol-connection.png",
 } as const;
 
 export type OnboardingSymbolKey = keyof typeof symbols;
@@ -25,6 +26,7 @@ const tutorStepSymbols: Record<number, OnboardingSymbolKey> = {
   6: "rate",
   7: "format",
   8: "availability",
+  9: "connection",
 };
 
 const studentStepSymbols: Record<number, OnboardingSymbolKey> = {
@@ -33,6 +35,7 @@ const studentStepSymbols: Record<number, OnboardingSymbolKey> = {
   3: "education",
   4: "institution",
   5: "subjects",
+  6: "connection",
 };
 
 export function getOnboardingSymbol(
@@ -149,8 +152,10 @@ export function getOnboardingSymbolAlt(role: OnboardingRole, step: number): stri
     rate: "Tarif horaire",
     format: "Format d'enseignement",
     availability: "Disponibilités",
+    connection: "Échanges par e-mail",
   };
   const key = role === "tutor" ? tutorStepSymbols[step] : studentStepSymbols[step];
+  if (key === "connection") return "Échanges par e-mail";
   if (step === 1) return "Prénom";
   return key ? labels[key] : "Étape d'onboarding";
 }
