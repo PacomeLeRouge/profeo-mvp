@@ -107,15 +107,15 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
           ) : null}
         </div>
 
-        <div className="rounded-2xl bg-muted p-3.5">
+        <div className="space-y-2">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
             Disponibilités
           </p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1.5">
             {visibleSlots.map((slot) => (
               <span
                 key={`${tutor.id}-${slot}`}
-                className="rounded-full border border-border bg-card px-2.5 py-1 text-xs text-foreground/65"
+                className="rounded-full border border-border bg-background px-2.5 py-1 text-xs text-foreground/75"
               >
                 {slot}
               </span>

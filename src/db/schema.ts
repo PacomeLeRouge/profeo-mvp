@@ -29,6 +29,8 @@ export const users = pgTable("users", {
   email: text("email").notNull(),
   name: text("name").notNull(),
   role: userRoleEnum("role"),
+  emailContactConsentAt: timestamp("email_contact_consent_at", { withTimezone: true }),
+  emailContactConsentVersion: text("email_contact_consent_version"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

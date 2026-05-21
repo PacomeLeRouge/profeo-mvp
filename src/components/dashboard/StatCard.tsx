@@ -10,6 +10,7 @@ type StatCardProps = {
   accent?: StatAccent;
   /** Chiffres / alertes à mettre en avant (accent violet). */
   emphasis?: boolean;
+  variant?: "default" | "solid";
 };
 
 export function StatCard({
@@ -18,8 +19,29 @@ export function StatCard({
   value,
   accent = "lime",
   emphasis = false,
+  variant = "default",
 }: StatCardProps) {
   const isViolet = accent === "violet";
+
+  if (variant === "solid") {
+    return (
+      <div
+        data-dashboard-stat
+        className={cn(
+          "inline-flex min-w-0 max-w-full items-center gap-2.5 rounded-full px-4 py-2.5",
+          isViolet
+            ? emphasis
+              ? "bg-highlight text-highlight-foreground"
+              : "bg-muted text-foreground"
+            : "bg-primary text-primary-foreground"
+        )}
+      >
+        <Icon className="h-4 w-4 shrink-0" aria-hidden />
+        <span className="text-base font-bold tabular-nums tracking-tight">{value}</span>
+        <span className="truncate text-xs font-medium opacity-90">{label}</span>
+      </div>
+    );
+  }
 
   return (
     <div

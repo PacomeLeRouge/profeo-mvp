@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { gsap, useGSAP, prefersReducedMotion, onboardingEase } from "@/lib/gsap-config";
 import type { SymbolPlacement } from "@/lib/onboarding-symbols";
@@ -15,6 +15,7 @@ type OnboardingSymbolProps = {
   size?: number;
   /** Opacité cible de l’animation d’entrée (défaut onboarding : 0.42). */
   targetOpacity?: number;
+  priority?: boolean;
 };
 
 export function OnboardingSymbol({
@@ -25,15 +26,21 @@ export function OnboardingSymbol({
   className,
   size = 320,
   targetOpacity = 0.42,
+  priority = false,
 }: OnboardingSymbolProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const floatRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [src]);
 
   useGSAP(
     () => {
       const root = rootRef.current;
       const floater = floatRef.current;
-      if (!root || !floater) return;
+      if (!root || !floater || !isLoaded) return;
 
       if (prefersReducedMotion()) {
         gsap.set([root, floater], { clearProps: "all", opacity: 1, y: 0, x: 0, scale: 1, rotation: placement.rotate });
@@ -79,7 +86,7 @@ export function OnboardingSymbol({
         delay: 0.5,
       });
     },
-    { scope: rootRef, dependencies: [stepKey, placement, targetOpacity], revertOnUpdate: true }
+    { scope: rootRef, dependencies: [stepKey, placement, targetOpacity, isLoaded], revertOnUpdate: true }
   );
 
   return (
@@ -87,6 +94,7 @@ export function OnboardingSymbol({
       ref={rootRef}
       className={cn(
         "pointer-events-none absolute z-0 select-none",
+        !isLoaded && "opacity-0",
         className
       )}
       style={{
@@ -104,9 +112,10 @@ export function OnboardingSymbol({
           alt={alt}
           width={size}
           height={size}
+          priority={priority}
+          onLoad={() => setIsLoaded(true)}
           className="h-auto w-[min(92vw,var(--symbol-size))] max-w-none object-contain opacity-90"
           style={{ "--symbol-size": `${size}px` } as React.CSSProperties}
-          priority={false}
         />
       </div>
     </div>

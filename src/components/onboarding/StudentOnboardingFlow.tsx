@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Subject, StudentProfile } from "@/lib/types";
 import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
@@ -11,11 +11,12 @@ import { AnimatedTextField } from "@/components/onboarding/AnimatedTextField";
 import { InstitutionAutocomplete } from "@/components/onboarding/InstitutionAutocomplete";
 import { ChoiceChipGroup } from "@/components/onboarding/ChoiceChip";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
+import { ContactEmailDisclaimer } from "@/components/onboarding/ContactEmailDisclaimer";
 import { SUBJECTS, subjectTranslations } from "@/lib/subjects";
 import { studentEducationLevels } from "@/components/onboarding/onboarding-shared";
 import { Button } from "@/components/ui/button";
 import { onboardingThemeClass } from "@/lib/onboarding-theme";
-import { getOnboardingSymbol, getOnboardingSymbolAlt } from "@/lib/onboarding-symbols";
+import { getOnboardingSymbol, getOnboardingSymbolAlt, getOnboardingSymbolUrlsForRole, prefetchOnboardingSymbols } from "@/lib/onboarding-symbols";
 import {
   isValidAgeStep,
   isValidFirstNameStep,
@@ -30,6 +31,7 @@ type StudentOnboardingFlowProps = {
   accountEmail: string;
   initialFirstName?: string;
   initialProfile?: StudentProfile | null;
+  hasEmailContactConsent?: boolean;
   onSubmit: (data: {
     firstName: string;
     contactEmail: string;
@@ -37,6 +39,7 @@ type StudentOnboardingFlowProps = {
     educationLevel: string;
     institution: string;
     subjectsOfInterest: Subject[];
+    emailContactConsentAccepted?: boolean;
   }) => Promise<void>;
 };
 
@@ -46,11 +49,13 @@ export function StudentOnboardingFlow({
   accountEmail,
   initialFirstName = "",
   initialProfile = null,
+  hasEmailContactConsent = false,
   onSubmit,
 }: StudentOnboardingFlowProps) {
   const router = useRouter();
   const directionRef = useRef<1 | -1>(1);
   const isEditing = !!initialProfile && !preview;
+  const needsEmailConsent = !isEditing && !hasEmailContactConsent;
 
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
@@ -61,6 +66,11 @@ export function StudentOnboardingFlow({
   const [educationLevel, setEducationLevel] = useState(initialProfile?.educationLevel || "");
   const [institution, setInstitution] = useState(initialProfile?.institution || "");
   const [subjects, setSubjects] = useState<Subject[]>(initialProfile?.subjectsOfInterest || []);
+  const [emailConsentAccepted, setEmailConsentAccepted] = useState(false);
+
+  useEffect(() => {
+    prefetchOnboardingSymbols(getOnboardingSymbolUrlsForRole("student"));
+  }, []);
 
   const handleSubjectToggle = (subject: string) => {
     const typedSubject = subject as Subject;
@@ -98,6 +108,7 @@ export function StudentOnboardingFlow({
         educationLevel,
         institution,
         subjectsOfInterest: subjects,
+        emailContactConsentAccepted: needsEmailConsent ? emailConsentAccepted : undefined,
       });
 
       if (preview) {
@@ -123,6 +134,7 @@ export function StudentOnboardingFlow({
     setEducationLevel("");
     setInstitution("");
     setSubjects([]);
+    setEmailConsentAccepted(false);
     directionRef.current = 1;
   };
 
@@ -131,7 +143,7 @@ export function StudentOnboardingFlow({
     (step === 2 && isValidAgeStep(age, 16, 99)) ||
     (step === 3 && !!educationLevel) ||
     (step === 4 && !!institution.trim()) ||
-    (step === 5 && subjects.length > 0);
+    (step === 5 && subjects.length > 0 && (!needsEmailConsent || emailConsentAccepted));
 
   if (completed) {
     return (
@@ -180,6 +192,10 @@ export function StudentOnboardingFlow({
         submitError={submitError}
         isLastStep={step === totalSteps}
         isEditing={isEditing}
+        requireEmailConsent={needsEmailConsent}
+        emailConsentVariant="student"
+        emailConsentAccepted={emailConsentAccepted}
+        onEmailConsentChange={setEmailConsentAccepted}
         submitLabel={preview ? "Terminer (preview)" : undefined}
         onBack={handleBack}
         onNext={handleNext}
@@ -202,6 +218,7 @@ export function StudentOnboardingFlow({
               hint="Au moins 2 caractères."
               aria-label="Votre prénom"
             />
+            {!isEditing ? <ContactEmailDisclaimer variant="student" className="mx-auto max-w-lg" /> : null}
           </OnboardingStepPanel>
         )}
 

@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { OnboardingSymbol } from "@/components/onboarding/OnboardingSymbol";
+import { prefetchOnboardingSymbols } from "@/lib/onboarding-symbols";
 import type { DashboardDecorItem } from "@/lib/dashboard-decor";
 
 type DashboardFloatingDecorProps = {
@@ -8,6 +10,10 @@ type DashboardFloatingDecorProps = {
 };
 
 export function DashboardFloatingDecor({ items }: DashboardFloatingDecorProps) {
+  useEffect(() => {
+    prefetchOnboardingSymbols(items.map((item) => item.src));
+  }, [items]);
+
   return (
     <div
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
@@ -23,6 +29,7 @@ export function DashboardFloatingDecor({ items }: DashboardFloatingDecorProps) {
             placement={item.placement}
             size={item.size ?? 220}
             targetOpacity={0.58}
+            priority={index < 2}
           />
         ))}
       </div>

@@ -33,5 +33,6 @@ export async function getCurrentUserAction() {
     name: user.name,
     role: user.role as Role,
     email: user.email,
+    emailContactConsentAt: user.emailContactConsentAt?.toISOString() ?? null,
   };
 }

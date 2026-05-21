@@ -12,6 +12,7 @@ export interface User {
   name: string;
   email?: string;
   age?: number;
+  emailContactConsentAt?: string | null;
 }
 
 export interface TutorProfile {

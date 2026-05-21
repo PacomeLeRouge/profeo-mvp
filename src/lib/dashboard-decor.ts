@@ -102,7 +102,7 @@ function buildDecor(
 export const studentDashboardDecor = buildDecor(
   [
     { id: "subjects", key: "subjects", alt: "Matières", size: 260 },
-    { id: "connection", key: "connection", alt: "Mise en relation", size: 220 },
+    { id: "education-intro", key: "education", alt: "Mise en relation", size: 220 },
     { id: "education", key: "education", alt: "Parcours", size: 200 },
     { id: "availability", key: "availability", alt: "Disponibilités", size: 180 },
   ],
@@ -112,7 +112,7 @@ export const studentDashboardDecor = buildDecor(
 export const tutorDashboardDecor = buildDecor(
   [
     { id: "rate", key: "rate", alt: "Tarif", size: 240 },
-    { id: "connection", key: "connection", alt: "Demandes", size: 210 },
+    { id: "education-intro", key: "education", alt: "Demandes", size: 210 },
     { id: "institution", key: "institution", alt: "Établissement", size: 190 },
     { id: "format", key: "format", alt: "Format", size: 170 },
   ],

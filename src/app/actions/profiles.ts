@@ -7,6 +7,10 @@ import { lessonRequests, studentProfiles, tutorProfiles, users } from "@/db/sche
 import { ensureDbUser, requireAuthUserId, syncClerkFirstName } from "@/lib/auth";
 import { resolveContactEmail } from "@/lib/contact-email";
 import { listPublishedTutorProfiles } from "@/lib/data/dashboard";
+import {
+  EMAIL_CONTACT_CONSENT_ERROR,
+  EMAIL_CONTACT_CONSENT_VERSION,
+} from "@/lib/legal/email-contact-consent";
 import { mapStudentProfile, mapTutorProfile } from "@/lib/mappers";
 import {
   normalizeFirstName,
@@ -26,6 +30,17 @@ async function syncUserFirstName(userId: string, firstName: string) {
   await syncClerkFirstName(userId, trimmed);
 
   return trimmed;
+}
+
+async function recordEmailContactConsent(userId: string) {
+  await db
+    .update(users)
+    .set({
+      emailContactConsentAt: new Date(),
+      emailContactConsentVersion: EMAIL_CONTACT_CONSENT_VERSION,
+      updatedAt: new Date(),
+    })
+    .where(eq(users.id, userId));
 }
 
 async function syncTutorPublicName(userId: string, displayName: string) {
@@ -85,6 +100,7 @@ export async function saveStudentProfileAction(data: {
   educationLevel: string;
   institution: string;
   subjectsOfInterest: Subject[];
+  emailContactConsentAccepted?: boolean;
 }) {
   const userId = await requireAuthUserId();
   const user = await ensureDbUser();
@@ -120,6 +136,10 @@ export async function saveStudentProfileAction(data: {
     return mapStudentProfile(updated);
   }
 
+  if (!data.emailContactConsentAccepted) {
+    throw new Error(EMAIL_CONTACT_CONSENT_ERROR);
+  }
+
   const [created] = await db
     .insert(studentProfiles)
     .values({
@@ -131,6 +151,8 @@ export async function saveStudentProfileAction(data: {
       subjectsOfInterest: validated.subjectsOfInterest,
     })
     .returning();
+
+  await recordEmailContactConsent(userId);
 
   revalidateAfterProfileSave("student");
   return mapStudentProfile(created);
@@ -147,6 +169,7 @@ export async function saveTutorProfileAction(data: {
   availability: string;
   educationLevel: string;
   institution: string;
+  emailContactConsentAccepted?: boolean;
 }) {
   const userId = await requireAuthUserId();
   const user = await ensureDbUser();
@@ -190,10 +213,16 @@ export async function saveTutorProfileAction(data: {
     return mapTutorProfile(updated);
   }
 
+  if (!data.emailContactConsentAccepted) {
+    throw new Error(EMAIL_CONTACT_CONSENT_ERROR);
+  }
+
   const [created] = await db
     .insert(tutorProfiles)
     .values({ userId, ...payload })
     .returning();
+
+  await recordEmailContactConsent(userId);
 
   revalidateAfterProfileSave("tutor");
   return mapTutorProfile(created);

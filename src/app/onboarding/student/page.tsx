@@ -22,6 +22,7 @@ function StudentOnboardingContent() {
       accountEmail={user.email ?? ""}
       initialFirstName={user.name}
       initialProfile={studentProfile}
+      hasEmailContactConsent={!!user.emailContactConsentAt}
       onSubmit={async (data) => {
         await saveStudentProfileAction(data);
         router.refresh();

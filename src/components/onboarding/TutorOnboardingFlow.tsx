@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Subject, Format, TutorProfile } from "@/lib/types";
 import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
@@ -12,11 +12,12 @@ import { InstitutionAutocomplete } from "@/components/onboarding/InstitutionAuto
 import { ChoiceChipGroup } from "@/components/onboarding/ChoiceChip";
 import { AvailabilityGrid } from "@/components/onboarding/AvailabilityGrid";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
+import { ContactEmailDisclaimer } from "@/components/onboarding/ContactEmailDisclaimer";
 import { SUBJECTS, subjectTranslations } from "@/lib/subjects";
 import { tutorEducationLevels } from "@/components/onboarding/onboarding-shared";
 import { Button } from "@/components/ui/button";
 import { onboardingThemeClass } from "@/lib/onboarding-theme";
-import { getOnboardingSymbol, getOnboardingSymbolAlt } from "@/lib/onboarding-symbols";
+import { getOnboardingSymbol, getOnboardingSymbolAlt, getOnboardingSymbolUrlsForRole, prefetchOnboardingSymbols } from "@/lib/onboarding-symbols";
 import {
   isValidAgeStep,
   isValidFirstNameStep,
@@ -32,6 +33,7 @@ type TutorOnboardingFlowProps = {
   accountEmail: string;
   initialFirstName?: string;
   initialProfile?: TutorProfile | null;
+  hasEmailContactConsent?: boolean;
   onSubmit: (data: {
     firstName: string;
     contactEmail: string;
@@ -43,6 +45,7 @@ type TutorOnboardingFlowProps = {
     availability: string;
     educationLevel: string;
     institution: string;
+    emailContactConsentAccepted?: boolean;
   }) => Promise<void>;
 };
 
@@ -52,11 +55,13 @@ export function TutorOnboardingFlow({
   accountEmail,
   initialFirstName = "",
   initialProfile = null,
+  hasEmailContactConsent = false,
   onSubmit,
 }: TutorOnboardingFlowProps) {
   const router = useRouter();
   const directionRef = useRef<1 | -1>(1);
   const isEditing = !!initialProfile && !preview;
+  const needsEmailConsent = !isEditing && !hasEmailContactConsent;
 
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
@@ -80,6 +85,11 @@ export function TutorOnboardingFlow({
           : [initialProfile.availability]
       : []
   );
+  const [emailConsentAccepted, setEmailConsentAccepted] = useState(false);
+
+  useEffect(() => {
+    prefetchOnboardingSymbols(getOnboardingSymbolUrlsForRole("tutor"));
+  }, []);
 
   const handleSubjectToggle = (subject: string) => {
     const typedSubject = subject as Subject;
@@ -131,6 +141,7 @@ export function TutorOnboardingFlow({
         availability,
         educationLevel,
         institution,
+        emailContactConsentAccepted: needsEmailConsent ? emailConsentAccepted : undefined,
       });
 
       if (preview) {
@@ -159,6 +170,7 @@ export function TutorOnboardingFlow({
     setHourlyRate("");
     setFormat("Online");
     setSelectedSlots([]);
+    setEmailConsentAccepted(false);
     directionRef.current = 1;
   };
 
@@ -170,7 +182,7 @@ export function TutorOnboardingFlow({
     (step === 5 && subjects.length > 0) ||
     (step === 6 && isValidHourlyRateStep(hourlyRate)) ||
     (step === 7 && !!format) ||
-    (step === 8 && selectedSlots.length > 0);
+    (step === 8 && selectedSlots.length > 0 && (!needsEmailConsent || emailConsentAccepted));
 
   if (completed) {
     return (
@@ -219,6 +231,10 @@ export function TutorOnboardingFlow({
         submitError={submitError}
         isLastStep={step === totalSteps}
         isEditing={isEditing}
+        requireEmailConsent={needsEmailConsent}
+        emailConsentVariant="tutor"
+        emailConsentAccepted={emailConsentAccepted}
+        onEmailConsentChange={setEmailConsentAccepted}
         submitLabel={preview ? "Terminer (preview)" : isEditing ? "Enregistrer" : "Publier mon profil"}
         onBack={handleBack}
         onNext={handleNext}
@@ -241,6 +257,7 @@ export function TutorOnboardingFlow({
               hint="Au moins 2 caractères."
               aria-label="Votre prénom"
             />
+            {!isEditing ? <ContactEmailDisclaimer variant="tutor" className="mx-auto max-w-lg" /> : null}
           </OnboardingStepPanel>
         )}
 

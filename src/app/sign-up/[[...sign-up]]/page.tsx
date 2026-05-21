@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AuthClerkSignUp } from "@/components/AuthClerk";
 import { AuthPageHeader } from "@/components/theme/AuthPageHeader";
+import { ContactEmailDisclaimer } from "@/components/onboarding/ContactEmailDisclaimer";
 import { GraduationCap, Shield } from "lucide-react";
 import splashBackground from "@/app/img/splash.png";
 
@@ -81,6 +82,12 @@ export default function SignUpPage() {
             <div className="glass-panel rounded-[1.75rem] p-5 sm:p-7">
               <AuthClerkSignUp />
             </div>
+            <ContactEmailDisclaimer variant="signup" />
+            <p className="text-center text-xs leading-6 text-muted-foreground">
+              <Link href="/legal" className="font-medium text-text-accent underline-offset-4 hover:underline">
+                Informations légales
+              </Link>
+            </p>
             <p className="text-center text-sm text-muted-foreground">
               Déjà un compte ?{" "}
               <Link

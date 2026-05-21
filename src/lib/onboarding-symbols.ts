@@ -10,7 +10,6 @@ const symbols = {
   rate: "/onboarding/symbols/onboarding-symbol-rate.png",
   format: "/onboarding/symbols/onboarding-symbol-format.png",
   availability: "/onboarding/symbols/onboarding-symbol-availability.png",
-  connection: "/onboarding/symbols/onboarding-symbol-connection.png",
 } as const;
 
 export type OnboardingSymbolKey = keyof typeof symbols;
@@ -18,7 +17,7 @@ export type OnboardingSymbolKey = keyof typeof symbols;
 export const onboardingSymbolPaths = symbols;
 
 const tutorStepSymbols: Record<number, OnboardingSymbolKey> = {
-  1: "connection",
+  1: "education",
   2: "age",
   3: "education",
   4: "institution",
@@ -29,7 +28,7 @@ const tutorStepSymbols: Record<number, OnboardingSymbolKey> = {
 };
 
 const studentStepSymbols: Record<number, OnboardingSymbolKey> = {
-  1: "connection",
+  1: "education",
   2: "age",
   3: "education",
   4: "institution",
@@ -42,6 +41,33 @@ export function getOnboardingSymbol(
 ): (typeof symbols)[OnboardingSymbolKey] | undefined {
   const key = role === "tutor" ? tutorStepSymbols[step] : studentStepSymbols[step];
   return key ? symbols[key] : undefined;
+}
+
+/** Unique symbol URLs used across a role's onboarding flow. */
+export function getOnboardingSymbolUrlsForRole(role: OnboardingRole): string[] {
+  const map = role === "tutor" ? tutorStepSymbols : studentStepSymbols;
+  return [...new Set(Object.values(map).map((key) => symbols[key]))];
+}
+
+const prefetched = new Set<string>();
+
+/** Preload symbol PNGs (browser cache) — safe to call multiple times. */
+export function prefetchOnboardingSymbols(urls: string[]) {
+  if (typeof window === "undefined") return;
+
+  for (const url of urls) {
+    if (prefetched.has(url)) continue;
+    prefetched.add(url);
+
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = url;
+    document.head.appendChild(link);
+
+    const img = new window.Image();
+    img.src = url;
+  }
 }
 
 function seeded(n: number) {
@@ -123,8 +149,8 @@ export function getOnboardingSymbolAlt(role: OnboardingRole, step: number): stri
     rate: "Tarif horaire",
     format: "Format d'enseignement",
     availability: "Disponibilités",
-    connection: "Prénom",
   };
   const key = role === "tutor" ? tutorStepSymbols[step] : studentStepSymbols[step];
+  if (step === 1) return "Prénom";
   return key ? labels[key] : "Étape d'onboarding";
 }

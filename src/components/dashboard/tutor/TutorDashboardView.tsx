@@ -13,6 +13,7 @@ import { subjectTranslations } from "@/lib/subjects";
 import type { LessonRequest, TutorProfile, User } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ContactEmailLink } from "@/components/dashboard/ContactEmailLink";
+import { buildTutorToStudentContactMail } from "@/lib/lesson-request-mailto";
 import { BookOpen, Clock, Euro, Sparkles } from "lucide-react";
 
 const formatTranslations: Record<string, string> = {
@@ -207,7 +208,14 @@ export function TutorDashboardView({
                           <p className="font-medium text-foreground">
                             {req.studentName} · {subjectTranslations[req.subject] || req.subject}
                           </p>
-                          <ContactEmailLink email={req.studentContactEmail} label="Contacter l'élève" />
+                          <ContactEmailLink
+                            email={req.studentContactEmail}
+                            label="Contacter l'élève"
+                            href={buildTutorToStudentContactMail({
+                              request: req,
+                              subjectLabel: subjectTranslations[req.subject] || req.subject,
+                            })}
+                          />
                           <p className="text-sm text-muted-foreground">
                             Reçu le{" "}
                             {new Date(req.createdAt).toLocaleDateString("fr-BE", {
@@ -255,7 +263,14 @@ export function TutorDashboardView({
                             {req.studentName} · {subjectTranslations[req.subject] || req.subject}
                           </p>
                           {req.status === "Confirmed" ? (
-                            <ContactEmailLink email={req.studentContactEmail} label="Contacter l'élève" />
+                            <ContactEmailLink
+                            email={req.studentContactEmail}
+                            label="Contacter l'élève"
+                            href={buildTutorToStudentContactMail({
+                              request: req,
+                              subjectLabel: subjectTranslations[req.subject] || req.subject,
+                            })}
+                          />
                           ) : null}
                           <p className="text-sm text-muted-foreground">
                             {new Date(req.createdAt).toLocaleDateString("fr-BE")}

@@ -81,6 +81,11 @@ export function HomeSignIn() {
                 S&apos;inscrire gratuitement
               </Link>
             </p>
+            <p className="text-center text-xs leading-6 text-muted-foreground">
+              <Link href="/legal" className="font-medium text-text-accent underline-offset-4 hover:underline">
+                Informations légales
+              </Link>
+            </p>
           </div>
         </div>
       </div>

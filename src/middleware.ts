@@ -5,6 +5,7 @@ const isDev = process.env.NODE_ENV === "development";
 const isPublicRoute = createRouteMatcher([
   "/",
   "/sign-up(.*)",
+  "/legal(.*)",
   "/api/webhooks(.*)",
   ...(isDev ? ["/dev(.*)"] : []),
 ]);

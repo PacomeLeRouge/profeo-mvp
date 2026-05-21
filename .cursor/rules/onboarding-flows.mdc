@@ -1,0 +1,50 @@
+---
+description: Règles onboarding étudiant/tuteur, consentement e-mail, édition profil
+globs: src/components/onboarding/**,src/app/onboarding/**,src/app/sign-up/**
+alwaysApply: false
+---
+
+# Onboarding Clutch
+
+## Shell partagé
+
+- `OnboardingShell` — progress, symbole GSAP, back/next/submit
+- Symboles : `src/lib/onboarding-symbols.ts` — prefetch au mount
+- Validation par étape : `src/lib/onboarding-step-validation.ts`
+
+## Étapes
+
+| Rôle | Steps | Dernière étape |
+|------|-------|----------------|
+| Student | 5 | Matières recherchées |
+| Tutor | 8 | Disponibilités (grille) |
+
+## Disclaimer vs consentement
+
+- **Étape 1** : `ContactEmailDisclaimer` — info seulement, sauf `isEditing`
+- **Dernière étape** : `ContactEmailConsent` — checkbox **obligatoire** si consentement requis (`needsEmailConsent`)
+- Sign-up : disclaimer `signup` + lien `/legal`
+
+Ne pas fusionner disclaimer et checkbox sur la même étape sans décision produit.
+
+## Édition profil
+
+Quand `initialProfile` existe et pas preview :
+
+- `isEditing = true`
+- Pas de disclaimer étape 1, pas de consentement dernière étape
+- Submit label : « Enregistrer »
+
+## Contact e-mail
+
+- `contactEmail` = e-mail Clerk passé en prop `accountEmail`
+- Sauvegarde via `saveStudentProfileAction` / `saveTutorProfileAction`
+
+## Previews dev
+
+- `preview={true}` sur flows — pas de persistance BDD, banner `DevPreviewBanner`
+- Routes : `/dev/preview/student`, `/dev/preview/tutor`
+
+## Skill associée
+
+Pour copy légal : `.cursor/skills/clutch-legal/SKILL.md`

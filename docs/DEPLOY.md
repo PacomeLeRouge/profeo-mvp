@@ -36,16 +36,35 @@ ngrok http 3000
 
 ## 3. Neon — base de données
 
+### Via Vercel Marketplace (recommandé)
+
+1. Installez l'intégration Neon sur le projet Vercel (`vercel integration add neon`).
+2. `DATABASE_URL` est provisionnée automatiquement dans les env Vercel.
+3. Appliquez le schéma en local avec les variables Vercel :
+
+```bash
+npx vercel link --project profeo-mvp
+npx vercel env pull .env.local
+npm run db:push
+npm run db:seed   # tuteurs de démo (optionnel)
+```
+
+### Setup manuel (fallback)
+
 1. Créez un projet Neon (région proche de vos utilisateurs).
 2. Copiez `DATABASE_URL` dans `.env.local`.
 3. Appliquez le schéma :
 
 ```bash
-cp .env.example .env.local
+cp env.example .env.local
 # Remplissez DATABASE_URL
 npm run db:push
 npm run db:seed   # tuteurs de démo (optionnel)
 ```
+
+### Après une modification du schéma Drizzle
+
+Même flux que ci-dessus : `vercel env pull` puis `npm run db:push` contre la base Neon liée au projet Vercel. Le déploiement applicatif se fait séparément (git push ou `npx vercel deploy --prod`).
 
 ## 4. Resend — notifications par e-mail
 
@@ -78,13 +97,23 @@ Ouvrez [http://localhost:3000](http://localhost:3000).
 
 ## 6. Déployer sur Vercel
 
+Le flux habituel :
+
+1. **Git** — push sur `main` → déploiement production automatique (si l'intégration GitHub est active)
+2. **CLI** — déploiement manuel depuis le repo :
+
 ```bash
-vercel link
-vercel env pull .env.local   # après avoir ajouté les variables sur Vercel
-git push
+npx vercel link --project profeo-mvp
+npx vercel deploy --prod
 ```
 
-Ou connectez le dépôt GitHub dans le dashboard Vercel.
+Projet lié : **profeo-mvp** · production : [profeo-mvp.vercel.app](https://profeo-mvp.vercel.app)
+
+Variables locales synchronisées depuis Vercel :
+
+```bash
+npx vercel env pull .env.local
+```
 
 Variables d'environnement à définir sur Vercel (Production + Preview) :
 

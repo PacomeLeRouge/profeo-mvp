@@ -22,6 +22,7 @@ function TutorOnboardingContent() {
       accountEmail={user.email ?? ""}
       initialFirstName={user.name}
       initialProfile={tutorProfile}
+      hasEmailContactConsent={!!user.emailContactConsentAt}
       onSubmit={async (data) => {
         await saveTutorProfileAction(data);
         router.refresh();

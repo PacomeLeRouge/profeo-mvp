@@ -6,6 +6,7 @@ import {
   requestStatusLabels,
 } from "@/lib/dashboard-status-styles";
 import { ContactEmailLink } from "@/components/dashboard/ContactEmailLink";
+import { buildStudentToTutorContactMail } from "@/lib/lesson-request-mailto";
 import { LessonRequest } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -45,6 +46,10 @@ export function RequestList({ requests }: RequestListProps) {
                 <ContactEmailLink
                   email={request.tutorContactEmail}
                   label="Contacter le tuteur"
+                  href={buildStudentToTutorContactMail({
+                    request,
+                    subjectLabel: subjectTranslations[request.subject] ?? request.subject,
+                  })}
                 />
               ) : request.status === "Pending" ? (
                 <p className="text-xs text-muted-foreground">

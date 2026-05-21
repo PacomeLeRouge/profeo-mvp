@@ -1,0 +1,44 @@
+---
+description: Conventions code et stack pour le projet Clutch (profeo-mvp)
+alwaysApply: true
+---
+
+# Conventions Clutch
+
+## Langue & produit
+
+- UI et copy utilisateur en **français**
+- Nom produit : **Clutch** (package `clutch-mvp`, repo `profeo-mvp`)
+
+## Stack
+
+- Next.js App Router — Server Components par défaut, `"use client"` seulement si nécessaire
+- Auth : Clerk (`@clerk/nextjs`) — jamais bypasser `auth()` / middleware
+- BDD : Drizzle + Neon — schéma dans `src/db/schema.ts`, pas de SQL ad hoc sans migration
+- Mutations : server actions dans `src/app/actions/`, avec `revalidatePath`
+
+## Code
+
+- TypeScript strict — types app dans `src/lib/types.ts`, mappers dans `src/lib/mappers.ts`
+- Imports alias `@/` depuis `src/`
+- Changements **minimaux** — réutiliser composants existants avant d'en créer
+- Pas de commentaires évidents ; commenter seulement la logique métier non triviale
+
+## UI
+
+- Toujours lire `.cursor/skills/clutch-design-system/SKILL.md` avant d'écrire de l'UI
+- Tokens sémantiques (`text-foreground`, `bg-primary`, `border-border`) — pas de couleurs hardcodées sauf hero landing
+- Boutons : `@/components/ui/button` (pill `rounded-full`)
+- Flows plein écran : `onboardingThemeClass` depuis `@/lib/onboarding-theme`
+
+## Données & sécurité
+
+- Vérifier le rôle et la propriété dans les server actions (étudiant vs tuteur)
+- E-mail contact : `resolveContactEmail` / `contact-email.ts`
+- Ne pas committer `.env.local` ni secrets
+
+## Documentation
+
+- Doc humaine : `docs/`
+- Index agent : `AGENTS.md`
+- Skills projet : `.cursor/skills/`

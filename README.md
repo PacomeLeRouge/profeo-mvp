@@ -24,11 +24,13 @@ Plateforme de mise en relation entre étudiants et tuteurs pour des cours partic
 
 ```bash
 npm install
-cp env.example .env.local
-# Renseignez Clerk + DATABASE_URL (voir docs/DEPLOY.md)
+npx vercel link --project profeo-mvp
+npx vercel env pull .env.local
 npm run db:push
-npm run db:seed   # optionnel — tuteurs de démo
+npm run dev
 ```
+
+Guide complet : [docs/DEPLOY.md](docs/DEPLOY.md) · production : [profeo-mvp.vercel.app](https://profeo-mvp.vercel.app)
 
 ## Développement
 
@@ -39,6 +41,19 @@ npm run dev
 Ouvrir [http://localhost:3000](http://localhost:3000)
 
 Guide complet : [docs/DEPLOY.md](docs/DEPLOY.md)
+
+## Documentation
+
+| Document | Contenu |
+|----------|---------|
+| [AGENTS.md](AGENTS.md) | Index pour l'agent Cursor |
+| [docs/product.md](docs/product.md) | Parcours, rôles, demandes de cours |
+| [docs/architecture.md](docs/architecture.md) | Stack, auth, BDD, server actions |
+| [docs/DEPLOY.md](docs/DEPLOY.md) | Vercel, Clerk, Neon, Resend |
+| [docs/legal/email-consent.md](docs/legal/email-consent.md) | Consentement e-mail |
+| [/legal](/legal) | Page publique informations légales |
+| `.cursor/skills/` | Skills agent (design, produit, légal) |
+| `.cursor/rules/` | Règles Cursor persistantes |
 
 ## Build production
 
@@ -51,19 +66,20 @@ npm run build
 ```
 src/
   app/                    # Routes Next.js App Router
-    page.tsx              # Page de connexion
-    signup/name/          # Inscription (nom)
+    page.tsx              # Connexion
+    sign-up/              # Inscription Clerk
+    auth/continue/        # Redirection post-auth
     role-selection/       # Choix étudiant/tuteur
-    onboarding/student/   # Onboarding étudiant
-    onboarding/tutor/     # Onboarding tuteur
-    dashboard/student/    # Dashboard étudiant
-    dashboard/tutor/      # Dashboard tuteur
-  components/
-    Navbar.tsx            # Navigation principale
-    ui/                   # Composants shadcn/ui
-  lib/
-    store/                # State management Zustand
-    types.ts              # Types TypeScript
+    onboarding/           # Profils étudiant / tuteur
+    dashboard/            # Dashboards
+    actions/              # Server actions
+  components/             # UI (onboarding, dashboard, theme, ui/)
+  lib/                    # Auth, types, email, validation
+  db/                     # Schéma Drizzle + client Neon
+docs/                     # Documentation équipe
+.cursor/skills/           # Connaissances agent (design, produit, légal)
+.cursor/rules/            # Règles Cursor
+AGENTS.md                 # Index agent
 ```
 
 ## Flow utilisateur

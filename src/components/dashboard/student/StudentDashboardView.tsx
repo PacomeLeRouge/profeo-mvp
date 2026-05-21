@@ -10,10 +10,10 @@ import { StatCard } from "@/components/dashboard/StatCard";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
 import { Button } from "@/components/ui/button";
 import { gsap, useGSAP, prefersReducedMotion, onboardingEase } from "@/lib/gsap-config";
-import { SUBJECTS, type Subject } from "@/lib/subjects";
+import { type Subject } from "@/lib/subjects";
 import { Format, LessonRequest, TutorProfile, User } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { BookOpen, Search, Users } from "lucide-react";
+import { Search, Users } from "lucide-react";
 
 type StudentDashboardViewProps = {
   tutors: TutorProfile[];
@@ -142,21 +142,21 @@ export function StudentDashboardView({
           ) : null}
         </header>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="flex flex-wrap gap-2">
           <StatCard
             icon={Users}
             label="Tuteurs disponibles"
             value={String(filteredTutors.length)}
-            accent="violet"
-            emphasis
+            accent="lime"
+            variant="solid"
           />
-          <StatCard icon={BookOpen} label="Matières" value={String(SUBJECTS.length)} accent="lime" />
           <StatCard
             icon={Search}
             label="Demandes en attente"
             value={String(pendingCount)}
             accent="violet"
             emphasis={pendingCount > 0}
+            variant="solid"
           />
         </div>
 
