@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (event.type === "user.updated") {
-      const { id, email_addresses } = event.data;
+      const { id, email_addresses, first_name, last_name, username } = event.data;
 
       const email =
         email_addresses.find((e) => e.id === event.data.primary_email_address_id)
@@ -47,11 +47,20 @@ export async function POST(req: NextRequest) {
         return new Response("OK", { status: 200 });
       }
 
-      // Ne pas écraser le prénom choisi en onboarding — email uniquement.
+      const name = resolveClerkDisplayName({
+        firstName: first_name,
+        lastName: last_name,
+        username,
+        email,
+      });
+
       await db
-        .update(users)
-        .set({ email, updatedAt: new Date() })
-        .where(eq(users.id, id));
+        .insert(users)
+        .values({ id, email, name })
+        .onConflictDoUpdate({
+          target: users.id,
+          set: { email, updatedAt: new Date() },
+        });
     }
 
     if (event.type === "user.deleted") {

@@ -7,14 +7,18 @@ import { completeAuthContinueAction } from "@/app/actions/user";
 import { onboardingThemeClass } from "@/lib/onboarding-theme";
 import { cn } from "@/lib/utils";
 
-const MAX_ATTEMPTS = 6;
-const RETRY_MS = 1000;
+const MAX_ATTEMPTS = 12;
+const BASE_RETRY_MS = 600;
+
+function retryDelay(attempt: number) {
+  return Math.min(BASE_RETRY_MS * 1.5 ** (attempt - 1), 4000);
+}
 
 /** Attend la session Clerk côté client, sync Neon, puis redirige. */
 export function AuthContinueClient() {
   const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
-  const attempts = useRef(0);
+  const startedRef = useRef(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,16 +29,22 @@ export function AuthContinueClient() {
       return;
     }
 
+    if (startedRef.current) return;
+    startedRef.current = true;
+
     let cancelled = false;
+    let attempt = 0;
 
     async function syncAndRedirect() {
       try {
         const path = await completeAuthContinueAction();
-        if (!cancelled) router.replace(path);
+        if (!cancelled) {
+          window.location.assign(path);
+        }
       } catch (err) {
-        attempts.current += 1;
-        if (attempts.current < MAX_ATTEMPTS && !cancelled) {
-          window.setTimeout(syncAndRedirect, RETRY_MS);
+        attempt += 1;
+        if (attempt < MAX_ATTEMPTS && !cancelled) {
+          window.setTimeout(syncAndRedirect, retryDelay(attempt));
           return;
         }
         if (!cancelled) {

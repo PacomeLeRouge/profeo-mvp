@@ -45,7 +45,8 @@ export async function requireAuthUserId() {
 }
 
 export async function ensureDbUser() {
-  const { userId } = await auth();
+  const authState = await auth();
+  const { userId } = authState;
   if (!userId) return null;
 
   const existing = await db.query.users.findFirst({
@@ -87,7 +88,18 @@ export async function ensureDbUser() {
       });
     } catch (err) {
       console.error("[ensureDbUser] clerkClient.getUser failed:", err);
-      return null;
+    }
+  }
+
+  if (!email && authState.sessionClaims) {
+    const claims = authState.sessionClaims as Record<string, unknown>;
+    const claimEmail =
+      (typeof claims.email === "string" && claims.email) ||
+      (typeof claims.primary_email_address === "string" && claims.primary_email_address) ||
+      "";
+    if (claimEmail) {
+      email = claimEmail;
+      name = resolveClerkDisplayName({ email: claimEmail });
     }
   }
 

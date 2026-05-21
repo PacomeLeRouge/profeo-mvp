@@ -32,7 +32,9 @@ type RequestDialogProps = {
   tutor: TutorProfile | null;
   subject: Subject | "";
   onSubjectChange: (subject: Subject) => void;
-  onSubmit: () => void;
+  onSubmit: () => void | Promise<void>;
+  isSubmitting?: boolean;
+  error?: string | null;
 };
 
 export function RequestDialog({
@@ -42,6 +44,8 @@ export function RequestDialog({
   subject,
   onSubjectChange,
   onSubmit,
+  isSubmitting = false,
+  error = null,
 }: RequestDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -81,12 +85,27 @@ export function RequestDialog({
           ) : null}
         </div>
 
+        {error ? (
+          <p role="alert" className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {error}
+          </p>
+        ) : null}
+
         <DialogFooter className="flex-col-reverse gap-2 sm:flex-row sm:gap-0">
-          <Button variant="outline" className="rounded-full" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="outline"
+            className="rounded-full"
+            onClick={() => onOpenChange(false)}
+            disabled={isSubmitting}
+          >
             Annuler
           </Button>
-          <Button className="rounded-full" onClick={onSubmit} disabled={!subject}>
-            Envoyer la demande
+          <Button
+            className="rounded-full"
+            onClick={() => void onSubmit()}
+            disabled={!subject || isSubmitting}
+          >
+            {isSubmitting ? "Envoi en cours…" : "Envoyer la demande"}
           </Button>
         </DialogFooter>
       </DialogContent>

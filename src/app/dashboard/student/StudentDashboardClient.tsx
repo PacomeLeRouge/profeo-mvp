@@ -19,7 +19,6 @@ export function StudentDashboardClient({ initialData }: Props) {
   const refresh = async () => {
     const next = await refreshStudentDashboardAction();
     setData(next);
-    router.refresh();
   };
 
   return (

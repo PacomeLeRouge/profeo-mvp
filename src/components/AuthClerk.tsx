@@ -18,6 +18,7 @@ export function AuthClerkSignIn() {
 
   return (
     <div className={cn("clutch-clerk-auth w-full", isDark && "clutch-clerk-auth--dark")}>
+      <AuthSessionRedirect />
       <SignIn
         appearance={isDark ? clerkAppearanceDark : clerkAppearanceLight}
         routing="hash"

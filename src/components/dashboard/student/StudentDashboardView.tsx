@@ -47,6 +47,8 @@ export function StudentDashboardView({
   const [selectedTutor, setSelectedTutor] = useState<TutorProfile | null>(null);
   const [requestSubject, setRequestSubject] = useState<Subject | "">("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isRequestSubmitting, setIsRequestSubmitting] = useState(false);
+  const [requestError, setRequestError] = useState<string | null>(null);
 
   const myRequests = requests.filter((r) => r.studentId === user.id);
   const pendingCount = myRequests.filter((r) => r.status === "Pending").length;
@@ -102,22 +104,37 @@ export function StudentDashboardView({
   };
 
   const handleOpenRequest = (tutor: TutorProfile) => {
+    setRequestError(null);
     setSelectedTutor(tutor);
     setRequestSubject(tutor.subjects[0] ?? "");
     setIsDialogOpen(true);
   };
 
   const handleSendRequest = async () => {
-    if (!selectedTutor || !requestSubject || !onSendRequest) return;
+    if (!selectedTutor || !requestSubject || !onSendRequest || isRequestSubmitting) return;
 
-    await onSendRequest({
-      tutor: selectedTutor,
-      subject: requestSubject,
-    });
+    setIsRequestSubmitting(true);
+    setRequestError(null);
 
-    setIsDialogOpen(false);
-    setSelectedTutor(null);
-    setRequestSubject("");
+    try {
+      await onSendRequest({
+        tutor: selectedTutor,
+        subject: requestSubject,
+      });
+
+      setIsDialogOpen(false);
+      setSelectedTutor(null);
+      setRequestSubject("");
+    } catch (err) {
+      console.error("[StudentDashboard] request failed:", err);
+      setRequestError(
+        err instanceof Error
+          ? err.message
+          : "Impossible d'envoyer la demande. Réessayez."
+      );
+    } finally {
+      setIsRequestSubmitting(false);
+    }
   };
 
   if (isLoading) return null;
@@ -215,11 +232,18 @@ export function StudentDashboardView({
 
         <RequestDialog
           open={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
+          onOpenChange={(open) => {
+            if (!isRequestSubmitting) {
+              setIsDialogOpen(open);
+              if (!open) setRequestError(null);
+            }
+          }}
           tutor={selectedTutor}
           subject={requestSubject}
           onSubjectChange={setRequestSubject}
           onSubmit={handleSendRequest}
+          isSubmitting={isRequestSubmitting}
+          error={requestError}
         />
         </div>
       </div>
