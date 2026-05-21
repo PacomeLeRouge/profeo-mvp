@@ -7,6 +7,7 @@ import {
   tutorProfiles,
   users,
 } from "@/db/schema";
+import { isDemoSeedUserId } from "@/lib/demo-seed";
 import { ensureDbUser, getOnboardingRedirectPath } from "@/lib/auth";
 import { mapLessonRequest, mapStudentProfile, mapTutorProfile } from "@/lib/mappers";
 import type { LessonRequest, Role, StudentProfile, TutorProfile, User } from "@/lib/types";
@@ -24,7 +25,7 @@ export async function listPublishedTutorProfiles() {
   const rows = await db.query.tutorProfiles.findMany({
     orderBy: [desc(tutorProfiles.createdAt)],
   });
-  return rows.map(mapTutorProfile);
+  return rows.filter((row) => !isDemoSeedUserId(row.userId)).map(mapTutorProfile);
 }
 
 async function listStudentRequests(studentUserId: string): Promise<LessonRequest[]> {

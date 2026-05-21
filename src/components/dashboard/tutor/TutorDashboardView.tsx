@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
-import { SwitchRoleLink } from "@/components/dashboard/SwitchRoleLink";
 import { DevPreviewBanner } from "@/components/onboarding/DevPreviewBanner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -89,29 +88,13 @@ export function TutorDashboardView({
         {preview ? <DevPreviewBanner /> : null}
 
         <div className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-none">
-                Bonjour {user.name}
-              </h1>
-              <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">
-                Gérez votre profil publié et répondez aux demandes des étudiants.
-              </p>
-            </div>
-            {!preview ? (
-              <div className="flex flex-wrap items-center gap-2">
-                <SwitchRoleLink currentRole="tutor" />
-                {onEditProfile ? (
-                  <Button variant="outline" className="rounded-full" onClick={onEditProfile}>
-                    Modifier mon profil
-                  </Button>
-                ) : null}
-              </div>
-            ) : onEditProfile ? (
-              <Button variant="outline" className="rounded-full" onClick={onEditProfile}>
-                Modifier mon profil
-              </Button>
-            ) : null}
+          <header className="space-y-2">
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-none">
+              Bonjour {user.name}
+            </h1>
+            <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">
+              Gérez votre profil publié et répondez aux demandes des étudiants.
+            </p>
           </header>
 
           <div className="grid gap-3 sm:grid-cols-3">
