@@ -139,7 +139,23 @@ export function TutorCard({ tutor, index, onRequest }: TutorCardProps) {
   );
 }
 
-export function TutorEmptyState({ onReset }: { onReset: () => void }) {
+export function TutorEmptyState({
+  onReset,
+  hasActiveFilters = false,
+  hasCatalogTutors = false,
+}: {
+  onReset: () => void;
+  hasActiveFilters?: boolean;
+  hasCatalogTutors?: boolean;
+}) {
+  const title = hasCatalogTutors && hasActiveFilters
+    ? "Aucun tuteur ne correspond à vos filtres"
+    : "Aucun tuteur disponible pour le moment";
+
+  const description = hasCatalogTutors && hasActiveFilters
+    ? "Élargissez votre budget ou changez de matière pour voir plus de profils."
+    : "Revenez bientôt : de nouveaux tuteurs rejoignent Clutch régulièrement.";
+
   return (
     <div className="col-span-full rounded-[1.75rem] border border-dashed border-border bg-muted px-6 py-16 text-center">
       <div className="mx-auto flex max-w-md flex-col items-center gap-4">
@@ -147,14 +163,14 @@ export function TutorEmptyState({ onReset }: { onReset: () => void }) {
           <Sparkles className="h-5 w-5" />
         </div>
         <div className="space-y-2">
-          <p className="text-lg font-semibold">Aucun tuteur ne correspond</p>
-          <p className="text-sm leading-6 text-muted-foreground">
-            Essaie une autre matière ou élargis ton budget pour voir plus de profils.
-          </p>
+          <p className="text-lg font-semibold">{title}</p>
+          <p className="text-sm leading-6 text-muted-foreground">{description}</p>
         </div>
-        <Button variant="outline" className="rounded-full" onClick={onReset}>
-          Réinitialiser les filtres
-        </Button>
+        {hasActiveFilters ? (
+          <Button variant="outline" className="rounded-full" onClick={onReset}>
+            Réinitialiser les filtres
+          </Button>
+        ) : null}
       </div>
     </div>
   );

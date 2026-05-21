@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { desc, eq, notLike } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import {
   lessonRequests,
@@ -8,7 +8,6 @@ import {
   users,
 } from "@/db/schema";
 import { ensureDbUser, getOnboardingRedirectPath } from "@/lib/auth";
-import { DEMO_SEED_USER_PREFIX } from "@/lib/demo-seed";
 import { mapLessonRequest, mapStudentProfile, mapTutorProfile } from "@/lib/mappers";
 import type { LessonRequest, Role, StudentProfile, TutorProfile, User } from "@/lib/types";
 
@@ -23,7 +22,6 @@ function mapUser(row: typeof users.$inferSelect): User & { email: string } {
 
 export async function listPublishedTutorProfiles() {
   const rows = await db.query.tutorProfiles.findMany({
-    where: notLike(tutorProfiles.userId, `${DEMO_SEED_USER_PREFIX}%`),
     orderBy: [desc(tutorProfiles.createdAt)],
   });
   return rows.map(mapTutorProfile);

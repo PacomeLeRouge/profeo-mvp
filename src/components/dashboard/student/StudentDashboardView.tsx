@@ -56,14 +56,20 @@ export function StudentDashboardView({
     (maxPrice !== "" ? 1 : 0) +
     (formatFilter !== "All" ? 1 : 0);
 
-  const filteredTutors = useMemo(() => {
-    return tutors.filter((tutor) => {
-      if (tutor.userId === user.id) return false;
+  const catalogTutors = useMemo(
+    () => tutors.filter((tutor) => tutor.userId !== user.id),
+    [tutors, user.id]
+  );
 
+  const filteredTutors = useMemo(() => {
+    const maxBudget = maxPrice === "" ? null : Number(maxPrice);
+
+    return catalogTutors.filter((tutor) => {
       const matchesSubject =
         subjectFilter === "All" || tutor.subjects.includes(subjectFilter);
 
-      const matchesPrice = maxPrice === "" || tutor.hourlyRate <= Number(maxPrice);
+      const matchesPrice =
+        maxBudget === null || !Number.isFinite(maxBudget) || tutor.hourlyRate <= maxBudget;
 
       const matchesFormat =
         formatFilter === "All" ||
@@ -72,7 +78,7 @@ export function StudentDashboardView({
 
       return matchesSubject && matchesPrice && matchesFormat;
     });
-  }, [tutors, subjectFilter, maxPrice, formatFilter, user.id]);
+  }, [catalogTutors, subjectFilter, maxPrice, formatFilter]);
 
   useGSAP(
     () => {
@@ -151,7 +157,7 @@ export function StudentDashboardView({
           <StatCard
             icon={Users}
             label="Tuteurs disponibles"
-            value={String(filteredTutors.length)}
+            value={String(catalogTutors.length)}
             accent="lime"
             variant="solid"
           />
@@ -195,7 +201,13 @@ export function StudentDashboardView({
             {filteredTutors.map((tutor, index) => (
               <TutorCard key={tutor.id} tutor={tutor} index={index} onRequest={handleOpenRequest} />
             ))}
-            {filteredTutors.length === 0 ? <TutorEmptyState onReset={resetFilters} /> : null}
+            {filteredTutors.length === 0 ? (
+              <TutorEmptyState
+                onReset={resetFilters}
+                hasActiveFilters={activeFiltersCount > 0}
+                hasCatalogTutors={catalogTutors.length > 0}
+              />
+            ) : null}
           </div>
         </section>
 
