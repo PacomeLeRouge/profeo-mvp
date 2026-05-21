@@ -79,7 +79,7 @@ export default function SignUpPage() {
                 parcours.
               </p>
             </header>
-            <div className="glass-panel rounded-[1.75rem] p-5 sm:p-7">
+            <div className="glass-panel overflow-hidden rounded-[1.75rem] p-5 sm:p-7">
               <AuthClerkSignUp />
             </div>
             <ContactEmailDisclaimer variant="signup" />

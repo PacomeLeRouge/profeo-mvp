@@ -19,14 +19,14 @@ export const clerkAppearanceDark = {
     fontFamilyButtons: "inherit",
   },
   elements: {
-    rootBox: "w-full",
-    cardBox: "w-full shadow-none",
-    card: "bg-transparent shadow-none p-0 gap-6 w-full",
+    rootBox: "w-full max-w-full mx-auto",
+    cardBox: "w-full max-w-full mx-auto shadow-none",
+    card: "bg-transparent shadow-none p-0 gap-6 w-full max-w-full mx-auto",
     header: "hidden",
     headerTitle: "hidden",
     headerSubtitle: "hidden",
     logoBox: "hidden",
-    main: "gap-5",
+    main: "gap-5 w-full max-w-full mx-auto flex flex-col items-stretch",
     socialButtons: "flex flex-col gap-2.5 w-full",
     socialButtonsIconButton:
       "flex! h-12! w-full! justify-center! gap-3! rounded-full! border! border-white/12! bg-white/[0.04]! text-white! shadow-none! hover:bg-white/[0.08]! hover:border-white/20!",
@@ -37,13 +37,14 @@ export const clerkAppearanceDark = {
     dividerRow: "my-0 gap-3",
     dividerLine: "bg-white/12 flex-1",
     dividerText: "text-white/35 text-[11px] tracking-wider",
-    form: "gap-4",
-    formField: "gap-1",
-    formFieldLabel: "text-[13px] font-medium text-white/50",
+    form: "gap-4 w-full max-w-full items-stretch text-center",
+    formField: "gap-1 w-full max-w-full items-stretch text-center",
+    formFieldRow: "w-full max-w-full items-stretch text-center",
+    formFieldLabel: "text-[13px] font-medium text-white/50 text-center w-full",
     formFieldInput:
-      "border-0 border-b-2 border-white/15 bg-transparent shadow-none rounded-none px-0 py-0 focus:border-[#CCFF00] focus:ring-0",
+      "w-full border-0 border-b-2 border-white/15 bg-transparent shadow-none rounded-none px-0 py-0 focus:border-[#CCFF00] focus:ring-0",
     formFieldInput__input:
-      "h-14! bg-transparent! border-0! rounded-none! px-0! text-left! text-lg! font-medium! text-[#E8E2D6]! shadow-none! placeholder:text-white/22! focus:ring-0! focus:outline-none!",
+      "h-14! w-full! bg-transparent! border-0! rounded-none! px-0! text-center! text-lg! font-medium! text-[#E8E2D6]! shadow-none! placeholder:text-white/22! focus:ring-0! focus:outline-none!",
     formButtonPrimary:
       "mt-1! h-12! w-full! rounded-full! bg-[#CCFF00]! text-[15px]! font-semibold! text-black! shadow-none! hover:bg-[#CCFF00]/90!",
     formButtonReset: "text-white/60 hover:text-white",
@@ -89,11 +90,11 @@ export const clerkAppearanceLight = {
     socialButtonsBlockButtonText: "text-sm! font-medium! text-foreground!",
     dividerLine: "bg-border flex-1",
     dividerText: "text-muted-foreground text-[11px] tracking-wider",
-    formFieldLabel: "text-[13px] font-medium text-muted-foreground",
+    formFieldLabel: "text-[13px] font-medium text-muted-foreground text-center w-full",
     formFieldInput:
-      "border-0 border-b-2 border-border bg-transparent shadow-none rounded-none px-0 py-0 focus:border-primary focus:ring-0",
+      "w-full border-0 border-b-2 border-border bg-transparent shadow-none rounded-none px-0 py-0 focus:border-primary focus:ring-0",
     formFieldInput__input:
-      "h-14! bg-transparent! border-0! rounded-none! px-0! text-left! text-lg! font-medium! text-foreground! shadow-none! placeholder:text-muted-foreground/50! focus:ring-0! focus:outline-none!",
+      "h-14! w-full! bg-transparent! border-0! rounded-none! px-0! text-center! text-lg! font-medium! text-foreground! shadow-none! placeholder:text-muted-foreground/50! focus:ring-0! focus:outline-none!",
     formButtonPrimary:
       "mt-1! h-12! w-full! rounded-full! bg-primary! text-[15px]! font-semibold! text-primary-foreground! shadow-none! hover:bg-primary/90!",
     formButtonReset: "text-muted-foreground hover:text-foreground",

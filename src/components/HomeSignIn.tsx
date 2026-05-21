@@ -69,7 +69,7 @@ export function HomeSignIn() {
                 La plateforme de tutorat entre étudiants — créez un compte en quelques minutes ou connectez-vous pour accéder à votre espace.
               </p>
             </header>
-            <div className="glass-panel rounded-[1.75rem] p-5 sm:p-7">
+            <div className="glass-panel overflow-hidden rounded-[1.75rem] p-5 sm:p-7">
               <AuthClerkSignIn />
             </div>
             <p className="text-center text-sm text-muted-foreground">
