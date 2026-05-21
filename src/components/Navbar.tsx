@@ -55,7 +55,7 @@ export function Navbar() {
                 Clutch
               </span>
             </button>
-            {isDashboard && role ? <RoleBadge role={role} size="sm" className="hidden sm:inline-flex" /> : null}
+            {isDashboard && role ? <RoleBadge role={role} size="sm" /> : null}
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {isDashboard ? <ThemeToggle /> : null}

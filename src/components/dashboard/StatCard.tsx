@@ -54,14 +54,13 @@ export function StatCard({
       <div className="flex items-center gap-3">
         <div
           className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-xl",
-            isViolet ? "bg-highlight/15" : "bg-primary/12"
+            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+            isViolet
+              ? "bg-highlight/15 text-highlight"
+              : "bg-primary text-primary-foreground"
           )}
         >
-          <Icon
-            className={cn("h-4 w-4", isViolet ? "text-highlight" : "text-primary")}
-            aria-hidden
-          />
+          <Icon className="h-4 w-4" aria-hidden />
         </div>
         <div>
           <p
