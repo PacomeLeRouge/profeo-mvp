@@ -43,6 +43,16 @@ async function recordEmailContactConsent(userId: string) {
     .where(eq(users.id, userId));
 }
 
+function assertEmailContactConsentForNewProfile(
+  user: { emailContactConsentAt: Date | null },
+  accepted: boolean | undefined
+) {
+  if (user.emailContactConsentAt) return;
+  if (!accepted) {
+    throw new Error(EMAIL_CONTACT_CONSENT_ERROR);
+  }
+}
+
 async function syncTutorPublicName(userId: string, displayName: string) {
   const tutor = await db.query.tutorProfiles.findFirst({
     where: eq(tutorProfiles.userId, userId),
@@ -136,9 +146,7 @@ export async function saveStudentProfileAction(data: {
     return mapStudentProfile(updated);
   }
 
-  if (!data.emailContactConsentAccepted) {
-    throw new Error(EMAIL_CONTACT_CONSENT_ERROR);
-  }
+  assertEmailContactConsentForNewProfile(user, data.emailContactConsentAccepted);
 
   const [created] = await db
     .insert(studentProfiles)
@@ -152,7 +160,9 @@ export async function saveStudentProfileAction(data: {
     })
     .returning();
 
-  await recordEmailContactConsent(userId);
+  if (!user.emailContactConsentAt) {
+    await recordEmailContactConsent(userId);
+  }
 
   revalidateAfterProfileSave("student");
   return mapStudentProfile(created);
@@ -213,16 +223,16 @@ export async function saveTutorProfileAction(data: {
     return mapTutorProfile(updated);
   }
 
-  if (!data.emailContactConsentAccepted) {
-    throw new Error(EMAIL_CONTACT_CONSENT_ERROR);
-  }
+  assertEmailContactConsentForNewProfile(user, data.emailContactConsentAccepted);
 
   const [created] = await db
     .insert(tutorProfiles)
     .values({ userId, ...payload })
     .returning();
 
-  await recordEmailContactConsent(userId);
+  if (!user.emailContactConsentAt) {
+    await recordEmailContactConsent(userId);
+  }
 
   revalidateAfterProfileSave("tutor");
   return mapTutorProfile(created);
