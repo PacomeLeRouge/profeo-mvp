@@ -16,6 +16,7 @@ const formatLabels: Record<string, string> = {
 };
 
 export async function notifyTutorOfNewLessonRequest(params: {
+  requestId: string;
   tutorUserId: string;
   tutorContactEmail: string;
   studentName: string;
@@ -31,6 +32,7 @@ export async function notifyTutorOfNewLessonRequest(params: {
 
   const subjectLabel = subjectTranslations[params.subject] ?? params.subject;
   const message = newLessonRequestEmail({
+    requestId: params.requestId,
     tutorName: tutorUser.name,
     studentName: params.studentName,
     studentContactEmail: params.studentContactEmail,

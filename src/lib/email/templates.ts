@@ -1,4 +1,5 @@
 import { getAppUrl } from "@/lib/app-url";
+import { buildLessonRequestRespondUrl } from "@/lib/lesson-request-token";
 
 function layout(title: string, body: string, ctaLabel: string, ctaHref: string): string {
   return `<!DOCTYPE html>
@@ -40,7 +41,12 @@ function contactBlock(label: string, name: string, email: string): string {
   `;
 }
 
+function actionButton(label: string, href: string, background: string, color = "#000"): string {
+  return `<a href="${href}" style="display:inline-block;background:${background};color:${color};text-decoration:none;font-weight:600;font-size:14px;padding:12px 22px;border-radius:999px;margin-right:8px;">${label}</a>`;
+}
+
 export function newLessonRequestEmail(params: {
+  requestId: string;
   tutorName: string;
   studentName: string;
   studentContactEmail: string;
@@ -49,7 +55,10 @@ export function newLessonRequestEmail(params: {
   formatLabel: string;
   institution: string;
 }) {
-  const dashboardUrl = `${getAppUrl()}/dashboard/tutor`;
+  const appUrl = getAppUrl();
+  const dashboardUrl = `${appUrl}/dashboard/tutor`;
+  const acceptUrl = buildLessonRequestRespondUrl(params.requestId, "Confirmed", appUrl);
+  const declineUrl = buildLessonRequestRespondUrl(params.requestId, "Declined", appUrl);
   const title = "Nouvelle demande de prise de contact";
   const body = `
     <p style="margin:0 0 12px;">Bonjour <strong>${escapeHtml(params.tutorName)}</strong>,</p>
@@ -60,7 +69,12 @@ export function newLessonRequestEmail(params: {
       <tr><td style="padding:10px 16px;font-size:14px;"><span style="color:#5c564e;">Format</span><br/><strong>${escapeHtml(params.formatLabel)}</strong></td></tr>
       <tr><td style="padding:10px 16px;font-size:14px;"><span style="color:#5c564e;">Établissement</span><br/><strong>${escapeHtml(params.institution)}</strong></td></tr>
     </table>
-    <p style="margin:16px 0 0;">Répondez à l'élève par e-mail ou acceptez la demande depuis votre tableau de bord.</p>
+    <p style="margin:16px 0 12px;">Acceptez ou refusez directement depuis cet e-mail, ou gérez la demande sur Clutch.</p>
+    <p style="margin:0 0 16px;">
+      ${actionButton("Accepter", acceptUrl, "#ccff00")}
+      ${actionButton("Refuser", declineUrl, "#1a1a1a", "#fff")}
+    </p>
+    <p style="margin:0;">Vous pouvez aussi répondre à l'élève par e-mail pour échanger avant de confirmer.</p>
   `;
 
   return {
@@ -74,6 +88,9 @@ export function newLessonRequestEmail(params: {
       `Tarif : ${params.hourlyRate} €/h`,
       `Format : ${params.formatLabel}`,
       `Établissement : ${params.institution}`,
+      "",
+      `Accepter : ${acceptUrl}`,
+      `Refuser : ${declineUrl}`,
       "",
       `Tableau de bord : ${dashboardUrl}`,
     ]),

@@ -1,15 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { lessonRequests, studentProfiles, tutorProfiles, users } from "@/db/schema";
 import { resolveContactEmail } from "@/lib/contact-email";
 import { requireAuthUserId } from "@/lib/auth";
+import { notifyTutorOfNewLessonRequest } from "@/lib/email/lesson-requests";
 import {
-  notifyStudentOfLessonRequestStatus,
-  notifyTutorOfNewLessonRequest,
-} from "@/lib/email/lesson-requests";
+  updateLessonRequestStatusForTutor,
+  type LessonRequestStatusOutcome,
+} from "@/lib/lesson-request-status";
 import { mapLessonRequest } from "@/lib/mappers";
 import { isSubject } from "@/lib/subjects";
 import type { Subject } from "@/lib/types";
@@ -95,6 +96,7 @@ export async function createLessonRequestAction(data: {
   revalidatePath("/dashboard/tutor");
 
   void notifyTutorOfNewLessonRequest({
+    requestId: created.id,
     tutorUserId: tutor.userId,
     tutorContactEmail,
     studentName: user.name,
@@ -115,30 +117,18 @@ export async function updateLessonRequestStatusAction(
   });
   if (!tutor) throw new Error("Tutor profile required");
 
-  const [updated] = await db
-    .update(lessonRequests)
-    .set({ status })
-    .where(
-      and(
-        eq(lessonRequests.id, requestId),
-        eq(lessonRequests.tutorProfileId, tutor.id)
-      )
-    )
-    .returning();
-
-  if (!updated) throw new Error("Request not found");
-
-  revalidatePath("/dashboard/tutor");
-  revalidatePath("/dashboard/student");
-
-  void notifyStudentOfLessonRequestStatus({
-    studentContactEmail: updated.studentContactEmail,
-    studentName: updated.studentName,
-    tutorName: updated.tutorName,
-    tutorContactEmail: updated.tutorContactEmail,
-    subject: updated.subject as Subject,
+  const result = await updateLessonRequestStatusForTutor({
+    requestId,
     status,
-  }).catch((err) => console.error("[email] notify student:", err));
+    tutorProfileId: tutor.id,
+  });
 
-  return mapLessonRequest(updated);
+  return assertLessonRequestStatusOutcome(result);
+}
+
+function assertLessonRequestStatusOutcome(result: LessonRequestStatusOutcome) {
+  if (!result.ok) {
+    throw new Error(result.message);
+  }
+  return result.request;
 }

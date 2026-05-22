@@ -13,6 +13,12 @@ import {
   validateStudentProfileInput,
   validateTutorProfileInput,
 } from "../src/lib/profile-validation";
+import {
+  buildLessonRequestRespondUrl,
+  createLessonRequestActionToken,
+  verifyLessonRequestActionToken,
+} from "../src/lib/lesson-request-token";
+import { lessonRequestStatusEmail, newLessonRequestEmail } from "../src/lib/email/templates";
 
 config({ path: ".env.local" });
 
@@ -62,6 +68,50 @@ async function main() {
   } catch {
     ok("e-mail invalide rejeté");
   }
+
+  console.log("\n— Boucle demande de cours (tokens + e-mails) —\n");
+
+  process.env.CLERK_SECRET_KEY ||= "smoke-test-secret";
+
+  const requestId = "00000000-0000-4000-8000-000000000001";
+  const acceptToken = createLessonRequestActionToken(requestId, "Confirmed");
+  assert(
+    verifyLessonRequestActionToken(requestId, "Confirmed", acceptToken).valid,
+    "token acceptation valide"
+  );
+  assert(
+    !verifyLessonRequestActionToken(requestId, "Declined", acceptToken).valid,
+    "token refus rejeté si mauvais statut"
+  );
+
+  const respondUrl = buildLessonRequestRespondUrl(requestId, "Confirmed", "https://clutch.test");
+  assert(respondUrl.includes("/requests/respond?"), "URL de réponse e-mail générée");
+
+  const tutorMail = newLessonRequestEmail({
+    requestId,
+    tutorName: "Sam",
+    studentName: "Alex",
+    studentContactEmail: "alex@student.be",
+    subjectLabel: "Mathématiques",
+    hourlyRate: 25,
+    formatLabel: "En ligne",
+    institution: "UCLouvain",
+  });
+  assert(tutorMail.html.includes("Accepter"), "e-mail tuteur contient CTA accepter");
+  assert(tutorMail.text.includes("Accepter :"), "e-mail tuteur contient lien acceptation");
+
+  const studentMail = lessonRequestStatusEmail({
+    studentName: "Alex",
+    tutorName: "Sam",
+    tutorContactEmail: "sam@tutor.be",
+    subjectLabel: "Mathématiques",
+    status: "Confirmed",
+  });
+  assert(studentMail.html.includes("sam@tutor.be"), "e-mail étudiant révèle le contact tuteur");
+  assert(
+    studentMail.subject.includes("a accepté"),
+    "e-mail étudiant confirme l'acceptation"
+  );
 
   console.log("\n— Profils (payload type onboarding) —\n");
 
