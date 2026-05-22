@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 type SwitchRoleLinkProps = {
   currentRole: AppRole;
   className?: string;
-  variant?: "button" | "text" | "icon";
+  variant?: "button" | "text" | "icon" | "navbar";
 };
 
 export function SwitchRoleLink({
@@ -18,19 +18,37 @@ export function SwitchRoleLink({
 }: SwitchRoleLinkProps) {
   const otherRole = getOtherRole(currentRole);
   const otherMeta = roleMeta[otherRole];
+  const switchLabel = `Passer en ${otherMeta.label.toLowerCase()}`;
 
   if (variant === "icon") {
     return (
       <Link
         href="/role-selection?switch=1"
-        aria-label="Changer de parcours"
-        title="Changer de parcours"
+        aria-label={switchLabel}
+        title={switchLabel}
         className={cn(
           "inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm transition-colors hover:border-primary/30 hover:bg-muted",
           className
         )}
       >
         <ArrowLeftRight className="size-4 shrink-0" aria-hidden />
+      </Link>
+    );
+  }
+
+  if (variant === "navbar") {
+    return (
+      <Link
+        href="/role-selection?switch=1"
+        aria-label={switchLabel}
+        title={switchLabel}
+        className={cn(
+          "inline-flex h-9 max-w-[11rem] shrink-0 items-center justify-center gap-1.5 rounded-full border border-border bg-card px-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-primary/30 hover:bg-muted sm:max-w-none sm:px-4",
+          className
+        )}
+      >
+        <ArrowLeftRight className="size-4 shrink-0" aria-hidden />
+        <span className="truncate">{switchLabel}</span>
       </Link>
     );
   }
@@ -59,7 +77,7 @@ export function SwitchRoleLink({
       )}
     >
       <ArrowLeftRight className="size-4 shrink-0" aria-hidden />
-      Changer de parcours
+      {switchLabel}
     </Link>
   );
 }

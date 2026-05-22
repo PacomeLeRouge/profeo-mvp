@@ -63,7 +63,7 @@ export function Navbar() {
             {isDashboard ? <ThemeToggle className="size-9 px-0" /> : null}
             {isDashboard && role ? (
               <>
-                <SwitchRoleLink currentRole={role} variant="icon" />
+                <SwitchRoleLink currentRole={role} variant="navbar" />
                 <Link
                   href={profileHref}
                   aria-label="Modifier mon profil"
