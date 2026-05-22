@@ -30,6 +30,7 @@ vercel deploy --prod
 | Besoin | Emplacement |
 |--------|-------------|
 | Handoff client (fresh stack) | [docs/HANDOFF.md](docs/HANDOFF.md) · skill `clutch-bootstrap` |
+| Handoff sans MCP / dashboards | [docs/HANDOFF-DASHBOARD.md](docs/HANDOFF-DASHBOARD.md) |
 | Parcours produit, statuts, UX | [docs/product.md](docs/product.md) · skill `.cursor/skills/clutch-product/` |
 | Architecture, auth, données | [docs/architecture.md](docs/architecture.md) |
 | Déploiement Vercel / Clerk / Neon | [docs/DEPLOY.md](docs/DEPLOY.md) |

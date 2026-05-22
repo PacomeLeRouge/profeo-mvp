@@ -33,7 +33,7 @@ npm run db:push
 npm run dev
 ```
 
-Guide handoff agent : [docs/HANDOFF.md](docs/HANDOFF.md) · détails : [docs/DEPLOY.md](docs/DEPLOY.md)
+Guide handoff agent : [docs/HANDOFF.md](docs/HANDOFF.md) · sans MCP : [docs/HANDOFF-DASHBOARD.md](docs/HANDOFF-DASHBOARD.md) · détails : [docs/DEPLOY.md](docs/DEPLOY.md)
 
 ## Développement
 
@@ -48,6 +48,7 @@ Ouvrir [http://localhost:3000](http://localhost:3000)
 | Document | Contenu |
 |----------|---------|
 | [docs/HANDOFF.md](docs/HANDOFF.md) | Checklist plug-and-play client (Antigravity + Vercel) |
+| [docs/HANDOFF-DASHBOARD.md](docs/HANDOFF-DASHBOARD.md) | Parcours dashboards sans MCP Vercel |
 | [AGENTS.md](AGENTS.md) | Index pour l'agent Cursor |
 | [docs/product.md](docs/product.md) | Parcours, rôles, demandes de cours |
 | [docs/architecture.md](docs/architecture.md) | Stack, auth, BDD, server actions |

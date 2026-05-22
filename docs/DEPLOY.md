@@ -1,6 +1,6 @@
 # Déploiement Clutch (Vercel + Clerk + Neon)
 
-Pour un **premier déploiement client** (fresh stack), commencer par [HANDOFF.md](HANDOFF.md).
+Pour un **premier déploiement client** (fresh stack), commencer par [HANDOFF.md](HANDOFF.md). Sans MCP Vercel : [HANDOFF-DASHBOARD.md](HANDOFF-DASHBOARD.md).
 
 ## 1. Comptes à créer
 

@@ -15,9 +15,14 @@
 9. `NEXT_PUBLIC_APP_URL` sur Vercel
 10. `npm run build` + `npm run test:smoke`
 
+## Sans MCP Vercel
+
+Parcours dashboards (client non technique) : [docs/HANDOFF-DASHBOARD.md](../docs/HANDOFF-DASHBOARD.md)
+
 ## Docs complètes
 
 - [docs/HANDOFF.md](../docs/HANDOFF.md)
+- [docs/HANDOFF-DASHBOARD.md](../docs/HANDOFF-DASHBOARD.md)
 - [.cursor/skills/clutch-bootstrap/SKILL.md](../.cursor/skills/clutch-bootstrap/SKILL.md)
 - [docs/DEPLOY.md](../docs/DEPLOY.md)
 

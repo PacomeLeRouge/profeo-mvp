@@ -1,6 +1,8 @@
 # Handoff client — Clutch (fresh stack)
 
-Guide exécutable pour un **nouveau déploiement** : le client clone le repo GitHub, ouvre le projet dans **Antigravity / Cursor** (plugin Vercel activé), et laisse un agent suivre cette checklist.
+Guide exécutable pour un **nouveau déploiement** : le client clone le repo GitHub, ouvre le projet dans **Antigravity / Cursor**, et laisse un agent suivre cette checklist.
+
+**Sans MCP Vercel ou sans CLI** → parcours dashboards : [HANDOFF-DASHBOARD.md](HANDOFF-DASHBOARD.md)
 
 Pour les détails Clerk, Neon et Resend, voir [DEPLOY.md](DEPLOY.md).
 
@@ -8,8 +10,8 @@ Pour les détails Clerk, Neon et Resend, voir [DEPLOY.md](DEPLOY.md).
 
 - Node.js 20+
 - Compte [Vercel](https://vercel.com) avec accès au **Marketplace** (Clerk + Neon)
-- Plugin **Vercel** activé dans Cursor (MCP)
-- Vercel CLI installée et authentifiée :
+- Plugin **Vercel** dans Cursor (MCP) — optionnel ; voir [HANDOFF-DASHBOARD.md](HANDOFF-DASHBOARD.md) sans MCP
+- Vercel CLI installée et authentifiée (recommandé pour ce guide) :
 
 ```bash
 npm i -g vercel
