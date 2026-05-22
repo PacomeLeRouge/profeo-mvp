@@ -1,0 +1,16 @@
+---
+description: When the user asks to set up, deploy, hand off, bootstrap, or "mettre en place" the Clutch project, read docs/HANDOFF.md and follow the clutch-bootstrap skill before changing application code.
+alwaysApply: false
+---
+
+# Client bootstrap
+
+For setup, deployment, handoff, or fresh-stack provisioning:
+
+1. Read [docs/HANDOFF.md](../../docs/HANDOFF.md)
+2. Follow [.cursor/skills/clutch-bootstrap/SKILL.md](../skills/clutch-bootstrap/SKILL.md)
+3. Use the Vercel plugin / CLI — do not hardcode another team's project name
+4. Run `npm run bootstrap:check` after `vercel env pull`
+5. Never print secret env values
+
+Only modify application code if bootstrap verification reveals a product bug, not as part of initial provisioning.

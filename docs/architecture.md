@@ -125,7 +125,7 @@ E-mails de contact snapshotés : `studentContactEmail`, `tutorContactEmail`, nom
 
 ## Variables d'environnement
 
-Voir `env.example` et [DEPLOY.md](DEPLOY.md).
+Voir `.env.example` et [DEPLOY.md](DEPLOY.md). Handoff client : [HANDOFF.md](HANDOFF.md).
 
 | Variable | Requis | Notes |
 |----------|--------|-------|

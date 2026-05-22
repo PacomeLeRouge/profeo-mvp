@@ -20,17 +20,20 @@ Plateforme de mise en relation entre étudiants et tuteurs pour des cours partic
 - **E-mails** : Resend (notifications de demandes de cours)
 - **Icons** : Lucide React
 
-## Installation
+## Installation (client / fresh stack)
 
 ```bash
 npm install
-npx vercel link --project profeo-mvp
-npx vercel env pull .env.local
+vercel link
+vercel integration add clerk
+vercel integration add neon
+vercel env pull .env.local --yes
+npm run bootstrap:check
 npm run db:push
 npm run dev
 ```
 
-Guide complet : [docs/DEPLOY.md](docs/DEPLOY.md) · production : [profeo-mvp.vercel.app](https://profeo-mvp.vercel.app)
+Guide handoff agent : [docs/HANDOFF.md](docs/HANDOFF.md) · détails : [docs/DEPLOY.md](docs/DEPLOY.md)
 
 ## Développement
 
@@ -40,20 +43,20 @@ npm run dev
 
 Ouvrir [http://localhost:3000](http://localhost:3000)
 
-Guide complet : [docs/DEPLOY.md](docs/DEPLOY.md)
-
 ## Documentation
 
 | Document | Contenu |
 |----------|---------|
+| [docs/HANDOFF.md](docs/HANDOFF.md) | Checklist plug-and-play client (Antigravity + Vercel) |
 | [AGENTS.md](AGENTS.md) | Index pour l'agent Cursor |
 | [docs/product.md](docs/product.md) | Parcours, rôles, demandes de cours |
 | [docs/architecture.md](docs/architecture.md) | Stack, auth, BDD, server actions |
 | [docs/DEPLOY.md](docs/DEPLOY.md) | Vercel, Clerk, Neon, Resend |
 | [docs/legal/email-consent.md](docs/legal/email-consent.md) | Consentement e-mail |
 | [/legal](/legal) | Page publique informations légales |
-| `.cursor/skills/` | Skills agent (design, produit, légal) |
+| `.cursor/skills/` | Skills agent (bootstrap, design, produit, légal) |
 | `.cursor/rules/` | Règles Cursor persistantes |
+| `.context/handoff.md` | Résumé handoff pour Antigravity |
 
 ## Build production
 
@@ -77,7 +80,8 @@ src/
   lib/                    # Auth, types, email, validation
   db/                     # Schéma Drizzle + client Neon
 docs/                     # Documentation équipe
-.cursor/skills/           # Connaissances agent (design, produit, légal)
+.context/                 # Contexte agent Antigravity
+.cursor/skills/           # Connaissances agent
 .cursor/rules/            # Règles Cursor
 AGENTS.md                 # Index agent
 ```

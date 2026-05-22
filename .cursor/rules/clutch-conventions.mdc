@@ -1,5 +1,5 @@
 ---
-description: Conventions code et stack pour le projet Clutch (profeo-mvp)
+description: Conventions code et stack pour le projet Clutch
 alwaysApply: true
 ---
 
@@ -8,7 +8,7 @@ alwaysApply: true
 ## Langue & produit
 
 - UI et copy utilisateur en **français**
-- Nom produit : **Clutch** (package `clutch-mvp`, repo `profeo-mvp`)
+- Nom produit : **Clutch** (package npm `clutch-mvp`)
 
 ## Stack
 

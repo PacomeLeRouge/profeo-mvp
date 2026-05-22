@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "bootstrap:check": "tsx scripts/verify-env.ts",
     "test:smoke": "tsx scripts/smoke-onboarding.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",

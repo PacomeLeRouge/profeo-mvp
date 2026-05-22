@@ -4,7 +4,7 @@ description: >-
   Clutch product domain — user roles, onboarding steps, dashboards, lesson request
   lifecycle, tutor discovery, and off-platform email contact. Use when implementing or
   changing business logic, user flows, server actions for profiles/requests, or
-  dashboard behavior in profeo-mvp.
+  dashboard behavior in Clutch.
 ---
 
 # Clutch — Produit

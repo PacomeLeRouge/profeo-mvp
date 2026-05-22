@@ -1,7 +1,7 @@
 ---
 name: clutch-design-system
 description: >-
-  Clutch (profeo-mvp) UI design system — sable/lime light mode, Neon Noir dark mode,
+  Clutch UI design system — sable/lime light mode, Neon Noir dark mode,
   typography, color roles, surfaces, and component patterns. Use when creating or editing
   pages, components, layouts, forms, cards, onboarding flows, dashboards, or any UI in
   this repository. Always read this skill before writing new UI code.
@@ -9,7 +9,7 @@ description: >-
 
 # Clutch Design System
 
-Read this skill **before** creating or editing any page or component in `profeo-mvp`.
+Read this skill **before** creating or editing any page or component in this repository.
 
 ## Brand
 

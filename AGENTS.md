@@ -1,15 +1,35 @@
 # Clutch — guide agent
 
-Index pour travailler sur **profeo-mvp** (produit : **Clutch**). Lire ce fichier en premier, puis les skills et règles selon la tâche.
+Index pour travailler sur **Clutch** (repo Next.js). Lire ce fichier en premier, puis les skills et règles selon la tâche.
 
 ## Quoi / pour qui
 
 Plateforme de tutorat entre étudiants d'une même université. Deux rôles : **étudiant** (cherche de l'aide) et **tuteur** (propose des cours). Le matching passe par des **demandes de cours** avec statuts ; le contact se fait **par e-mail hors plateforme** une fois une demande acceptée.
 
+## Premier setup client (handoff)
+
+Pour un **nouveau déploiement** (clone GitHub → Vercel + Clerk + Neon) :
+
+1. Lire [docs/HANDOFF.md](docs/HANDOFF.md)
+2. Suivre le skill `.cursor/skills/clutch-bootstrap/`
+3. Règle `.cursor/rules/client-bootstrap.mdc` si setup / déploiement demandé
+
+```bash
+npm install
+vercel link                    # nouveau projet client
+vercel integration add clerk
+vercel integration add neon
+vercel env pull .env.local --yes
+npm run bootstrap:check
+npm run db:push
+vercel deploy --prod
+```
+
 ## Où chercher quoi
 
 | Besoin | Emplacement |
 |--------|-------------|
+| Handoff client (fresh stack) | [docs/HANDOFF.md](docs/HANDOFF.md) · skill `clutch-bootstrap` |
 | Parcours produit, statuts, UX | [docs/product.md](docs/product.md) · skill `.cursor/skills/clutch-product/` |
 | Architecture, auth, données | [docs/architecture.md](docs/architecture.md) |
 | Déploiement Vercel / Clerk / Neon | [docs/DEPLOY.md](docs/DEPLOY.md) |
@@ -24,16 +44,16 @@ Plateforme de tutorat entre étudiants d'une même université. Deux rôles : **
 ## Commandes utiles
 
 ```bash
-npm run dev          # http://localhost:3000 — previews /dev en dev only
+npm run dev              # http://localhost:3000 — previews /dev en dev only
 npm run build
-npm run db:push      # appliquer le schéma Drizzle sur Neon
-npm run db:seed      # tuteurs de démo (optionnel)
-npm run test:smoke   # smoke test onboarding
+npm run bootstrap:check  # vérifie les clés requises dans .env.local
+npm run db:push          # appliquer le schéma Drizzle sur Neon
+npm run test:smoke       # smoke test onboarding
 ```
 
-Copier `env.example` → `.env.local`, ou préférer `npx vercel env pull .env.local` si le projet est lié à Vercel. Variables obligatoires : Clerk + `DATABASE_URL`. Resend optionnel.
+Copier `.env.example` → `.env.local`, ou préférer `vercel env pull .env.local --yes` si le projet est lié à Vercel. Variables obligatoires : Clerk + `DATABASE_URL`. Resend optionnel.
 
-**Ops Vercel** : schéma BDD → `vercel env pull` + `npm run db:push` · app → git push ou `npx vercel deploy --prod` · prod [profeo-mvp.vercel.app](https://profeo-mvp.vercel.app)
+**Ops Vercel** : schéma BDD → `vercel env pull` + `npm run db:push` · app → git push ou `vercel deploy --prod`
 
 ## Parcours utilisateur (résumé)
 
@@ -47,11 +67,13 @@ Logique de redirection : `src/lib/auth.ts` → `getOnboardingRedirectPath()`.
 
 - `clutch-conventions.mdc` — conventions code, stack, patterns
 - `onboarding-flows.mdc` — étapes onboarding, consentement, édition profil
+- `client-bootstrap.mdc` — setup / handoff / déploiement client
 
 ## Skills projet (`.cursor/skills/`)
 
 | Skill | Quand l'utiliser |
 |-------|------------------|
+| `clutch-bootstrap` | Setup client, handoff, premier déploiement Vercel |
 | `clutch-design-system` | Toute UI / CSS / composant |
 | `clutch-product` | Logique métier, dashboards, demandes |
 | `clutch-legal` | Disclaimer, consentement, contact e-mail |
@@ -70,6 +92,6 @@ Routes `/dev/*` accessibles uniquement si `NODE_ENV === "development"` (`src/lib
 
 ## Fichiers sensibles au produit
 
-- Consentement : `ContactEmailDisclaimer.tsx`, `ContactEmailConsent.tsx`, `OnboardingShell.tsx`
+- Consentement : `ContactEmailDisclaimer.tsx`, `ContactEmailConsentStep.tsx`, `OnboardingShell.tsx`
 - Contact après match : `ContactEmailLink.tsx`, `lesson-request-mailto.ts`
 - E-mails transactionnels : `src/lib/email/` (Resend, optionnel)
